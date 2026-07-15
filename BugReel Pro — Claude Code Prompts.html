@@ -1,0 +1,3189 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)file:///C:/Users/Jay/Downloads/BugReel_Pro_Claude_Code_Prompts.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BugReel Pro — Claude Code Prompts</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a1a18;font-size:14px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:240px;flex-shrink:0;background:#fff;border-right:1px solid #e5e5e2;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-header{padding:16px;border-bottom:1px solid #e5e5e2;background:#11284A}
+.sidebar-title{font-size:14px;font-weight:600;color:#fff;line-height:1.2}
+.sidebar-sub{font-size:11px;color:#93b8d4;margin-top:2px}
+.sidebar-filter{padding:8px;border-bottom:1px solid #e5e5e2;display:flex;flex-wrap:wrap;gap:4px}
+.filter-btn{font-size:10px;padding:3px 7px;border-radius:4px;border:1px solid #e5e5e2;background:#f5f5f3;color:#555;cursor:pointer;font-family:inherit}
+.filter-btn.active{font-weight:700;border-color:currentColor}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-section{margin-bottom:4px}
+.nav-section-label{font-size:10px;font-weight:600;color:#aaa;padding:6px 12px 2px;text-transform:uppercase;letter-spacing:.05em}
+.nav-item{display:flex;align-items:center;gap:7px;padding:5px 12px;cursor:pointer;border-radius:0;transition:background .1s;font-size:12px;color:#444;border-left:2px solid transparent}
+.nav-item:hover{background:#f5f5f3;color:#1a1a18}
+.nav-item.active-nav{background:#f0f4fb;color:#1a5fa0;border-left-color:#1a5fa0;font-weight:500}
+.nav-item.done-nav{color:#aaa;text-decoration:line-through}
+.nav-check{width:13px;height:13px;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.nav-id{font-size:10px;font-weight:600;color:inherit;opacity:.7;flex-shrink:0;min-width:26px}
+.main{flex:1;padding:24px;max-width:800px}
+.progress-bar-wrap{background:#fff;border-radius:10px;border:1px solid #e5e5e2;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.prog-text{font-size:13px;color:#555;white-space:nowrap}
+.prog-bar{flex:1;height:5px;background:#e5e5e2;border-radius:99px}
+.prog-fill{height:100%;background:#2a7fd4;border-radius:99px;transition:width .3s}
+.prog-count{font-size:13px;font-weight:500;white-space:nowrap}
+.prompt-card{background:#fff;border-radius:12px;border:1px solid #e5e5e2;margin-bottom:16px;overflow:hidden;scroll-margin-top:16px}
+.card-header{padding:14px 16px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid #f0f0ee;cursor:pointer}
+.card-done-check{width:20px;height:20px;border-radius:5px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .12s;cursor:pointer}
+.card-done-check.checked{border:none;color:#fff}
+.card-meta{flex:1;min-width:0}
+.card-badges{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.phase-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;color:#fff}
+.id-badge{font-size:11px;font-weight:600;color:#888}
+.card-title{font-size:15px;font-weight:600;color:#1a1a18;line-height:1.3}
+.prereq-box{margin:0 16px 12px;padding:9px 12px;background:#fffbeb;border-radius:6px;border-left:3px solid #d97706;font-size:12px;color:#7c5500}
+.prereq-label{font-weight:600;margin-right:4px}
+.prompt-section{padding:0 16px 14px}
+.section-label{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+.prompt-text{background:#f5f5f3;border-radius:8px;border:1px solid #e5e5e2;padding:12px;font-family:'SF Mono','Fira Code',monospace;font-size:11.5px;color:#2a2a28;line-height:1.7;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow-y:auto}
+.copy-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:5px;border:1px solid #ccc;background:#fff;color:#555;font-size:11px;cursor:pointer;font-family:inherit;transition:all .12s}
+.copy-btn:hover{border-color:#888}
+.copy-btn.ok{background:#e8f5ec;color:#2a7040;border-color:#b6dfc8}
+.outputs-row{display:flex;gap:12px;flex-wrap:wrap}
+.mini-box{flex:1;min-width:180px;background:#f9f9f7;border-radius:6px;border:1px solid #e5e5e2;padding:8px 10px;font-size:11.5px}
+.mini-label{font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;margin-bottom:3px}
+.verify-box{background:#f0f4fb;border-radius:6px;padding:8px 10px;font-family:'SF Mono',monospace;font-size:11px;color:#1a4f80}
+.star{color:#d97706;font-size:11px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">BugReel Pro</div>
+    <div class="sidebar-sub">Claude Code Prompts — 26 sessions</div>
+  </div>
+  <div class="sidebar-filter" id="filters"><button class="filter-btn active" id="fb-all" onclick="setFilter(&#39;all&#39;)" style="color:#333;border-color:#888">All</button><button class="filter-btn" id="fb-pre" onclick="setFilter(&#39;pre&#39;)" style="color:#555">Phase 0</button><button class="filter-btn" id="fb-s1" onclick="setFilter(&#39;s1&#39;)" style="color:#1a7bd4">Sprint 1</button><button class="filter-btn" id="fb-s2" onclick="setFilter(&#39;s2&#39;)" style="color:#2a8a4e">Sprint 2</button><button class="filter-btn" id="fb-s3" onclick="setFilter(&#39;s3&#39;)" style="color:#7b3fd4">Sprint 3</button><button class="filter-btn" id="fb-s4" onclick="setFilter(&#39;s4&#39;)" style="color:#b07800">Sprint 4</button><button class="filter-btn" id="fb-s5" onclick="setFilter(&#39;s5&#39;)" style="color:#0d7a6b">Sprint 5</button><button class="filter-btn" id="fb-meta" onclick="setFilter(&#39;meta&#39;)" style="color:#888">Meta</button></div>
+  <nav class="sidebar-nav" id="nav"><div class="nav-section"><div class="nav-section-label">Phase 0 — Pre-Sprint Setup</div><div class="nav-item" id="nav-P0.1" onclick="scrollTo(&#39;P0.1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">P0.1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Environment Verification</span></div><div class="nav-item" id="nav-P0.2" onclick="scrollTo(&#39;P0.2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">P0.2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Project Scaffold &amp; Git Setup</span></div><div class="nav-item" id="nav-P0.3" onclick="scrollTo(&#39;P0.3&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">P0.3</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Gradle Build Configuration</span></div></div><div class="nav-section"><div class="nav-section-label">Sprint 1 — Capture Engine</div><div class="nav-item" id="nav-S1.1" onclick="scrollTo(&#39;S1.1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Core Domain Models &amp; Enums</span></div><div class="nav-item" id="nav-S1.2" onclick="scrollTo(&#39;S1.2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Room Entities, DAOs &amp; Database</span></div><div class="nav-item" id="nav-S1.3" onclick="scrollTo(&#39;S1.3&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.3</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">DI Modules, OemCompat &amp; PermissionManager</span></div><div class="nav-item" id="nav-S1.4" onclick="scrollTo(&#39;S1.4&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.4</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Capture Service Layer</span></div><div class="nav-item" id="nav-S1.5" onclick="scrollTo(&#39;S1.5&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.5</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Capture Feature — Domain, Data &amp; UI</span></div><div class="nav-item" id="nav-S1.6" onclick="scrollTo(&#39;S1.6&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.6</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sprint 1 Tests</span></div><div class="nav-item" id="nav-S1.7" onclick="scrollTo(&#39;S1.7&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S1.7</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sprint 1 Architecture Verification</span></div></div><div class="nav-section"><div class="nav-section-label">Sprint 2 — Report Builder</div><div class="nav-item" id="nav-S2.1" onclick="scrollTo(&#39;S2.1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S2.1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Firebase &amp; Sync Infrastructure</span></div><div class="nav-item" id="nav-S2.2" onclick="scrollTo(&#39;S2.2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S2.2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Report Feature — Domain, Data &amp; UI</span></div><div class="nav-item" id="nav-S2.3" onclick="scrollTo(&#39;S2.3&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S2.3</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sprint 2 Tests &amp; Verification</span></div></div><div class="nav-section"><div class="nav-section-label">Sprint 3 — Quality Engine</div><div class="nav-item" id="nav-S3.1" onclick="scrollTo(&#39;S3.1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S3.1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Quality Engine Core</span></div><div class="nav-item" id="nav-S3.2" onclick="scrollTo(&#39;S3.2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S3.2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Quality UI, Tests &amp; Verification</span></div></div><div class="nav-section"><div class="nav-section-label">Sprint 4 — AI Assistant</div><div class="nav-item" id="nav-S4.1" onclick="scrollTo(&#39;S4.1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S4.1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">AI Infrastructure — DTOs, Service &amp; Prompts</span></div><div class="nav-item" id="nav-S4.2" onclick="scrollTo(&#39;S4.2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S4.2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Safety Validator, AI Feature &amp; OutcomeFeedback Wiring</span></div><div class="nav-item" id="nav-S4.3" onclick="scrollTo(&#39;S4.3&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S4.3</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sprint 4 Tests &amp; Verification</span></div></div><div class="nav-section"><div class="nav-section-label">Sprint 5 — Analytics</div><div class="nav-item" id="nav-S5.1" onclick="scrollTo(&#39;S5.1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S5.1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Flywheel — Outcome Recording &amp; Analytics Domain</span></div><div class="nav-item" id="nav-S5.2" onclick="scrollTo(&#39;S5.2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S5.2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Legal Screens, Empty States &amp; Hardening</span></div><div class="nav-item" id="nav-S5.3" onclick="scrollTo(&#39;S5.3&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">S5.3</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Sprint 5 Tests &amp; Launch Readiness Gate</span></div></div><div class="nav-section"><div class="nav-section-label">Meta — Meta Prompts</div><div class="nav-item" id="nav-M1" onclick="scrollTo(&#39;M1&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">M1</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Debug a Failing Test</span></div><div class="nav-item" id="nav-M2" onclick="scrollTo(&#39;M2&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">M2</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Fix an Architecture Violation</span></div><div class="nav-item" id="nav-M3" onclick="scrollTo(&#39;M3&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">M3</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Dependency Version Update</span></div><div class="nav-item" id="nav-M4" onclick="scrollTo(&#39;M4&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">M4</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Architectural Audit</span></div><div class="nav-item" id="nav-M5" onclick="scrollTo(&#39;M5&#39;)"><div class="nav-check" style="border:1.5px solid #ccc"></div><span class="nav-id">M5</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Performance Investigation</span></div></div></nav>
+</div>
+<div class="main" id="main">
+  <div class="progress-bar-wrap">
+    <span class="prog-text">Sessions completed</span>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="prog-count" id="prog-count">0 / 26</span>
+  </div>
+  <div id="cards"><div class="prompt-card" id="card-P0.1" data-phase="pre">
+        <div class="card-header" onclick="scrollTo(&#39;P0.1&#39;)">
+          <div class="card-done-check" id="chk-P0.1" style="" onclick="event.stopPropagation();markDone(&#39;P0.1&#39;,!done[&#39;P0.1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#555">Phase 0</span>
+              <span class="id-badge">P0.1</span>
+              
+            </div>
+            <div class="card-title">Environment Verification</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>Android Studio Quail 1, JDK 17, Git, and Claude Code must be installed. Repo cloned locally.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-P0.1" onclick="copyPrompt(&#39;P0.1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md at the repo root first. Do not proceed until confirmed.
+
+Verify the development environment. Run each check and report PASS or FAIL.
+
+CHECK 1 — Java version:
+  java -version
+  Expected: openjdk version "17.x.x"
+
+CHECK 2 — Gradle JVM:
+  .\gradlew --version    (Windows PowerShell)
+  ./gradlew --version     (Mac/Linux)
+  Expected: JVM 17.x.x on the JVM line
+
+CHECK 3 — JAVA_HOME:
+  echo %JAVA_HOME%        (Windows)
+  echo $JAVA_HOME         (Mac/Linux)
+  Expected: path pointing to JDK 17
+
+CHECK 4 — Git config:
+  git config user.name
+  git config user.email
+  Expected: both non-empty
+
+CHECK 5 — CLAUDE.md presence:
+  Confirm CLAUDE.md exists at the repo root.
+
+CHECK 6 — local.properties keys:
+  Confirm OPENAI_API_KEY and OPENAI_ORG_ID are present.
+  Do NOT print the values.
+
+CHECK 7 — google-services.json:
+  Confirm google-services.json exists in /app/ directory.
+
+If any check fails: stop, report what is missing, do not proceed.
+Only continue when all 7 checks PASS.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>7 checks PASS or list of failures</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">N/A — this session is the verification</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-P0.2" data-phase="pre">
+        <div class="card-header" onclick="scrollTo(&#39;P0.2&#39;)">
+          <div class="card-done-check" id="chk-P0.2" style="" onclick="event.stopPropagation();markDone(&#39;P0.2&#39;,!done[&#39;P0.2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#555">Phase 0</span>
+              <span class="id-badge">P0.2</span>
+              
+            </div>
+            <div class="card-title">Project Scaffold &amp; Git Setup</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>P0.1 all 7 checks PASS.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-P0.2" onclick="copyPrompt(&#39;P0.2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 3 (Directory Structure).
+
+Create the full directory scaffold for BugReel Pro.
+Directories only — no Kotlin files yet.
+
+STEP 1 — Create all directories from CLAUDE.md Section 3.
+Use mkdir -p for nested paths. Every directory must exist.
+
+STEP 2 — Create configuration files:
+
+.gitignore — must exclude:
+  google-services.json
+  local.properties
+  *.jks
+  /build
+  /.gradle
+
+gradle.properties:
+  org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+  android.useAndroidX=true
+  kotlin.code.style=official
+  org.gradle.parallel=true
+  org.gradle.caching=true
+
+settings.gradle.kts:
+  pluginManagement with Google + Gradle plugin repositories
+  dependencyResolutionManagement with mavenCentral + google
+  rootProject.name = "bugreel-pro"
+  include(":app")
+
+buildSrc/Dependencies.kt:
+  Stub with version constants (versions from CLAUDE.md Section 2)
+
+STEP 3 — Verify:
+  find . -type d | sort
+  Confirm every directory from CLAUDE.md Section 3 is present.
+
+STEP 4 — Initial commit:
+  git add .
+  git commit -m "chore(scaffold): create project directory structure"
+
+Report any directories missing from the expected structure.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>All directories from CLAUDE.md §3 created. Initial commit made.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">find . -type d | sort</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-P0.3" data-phase="pre">
+        <div class="card-header" onclick="scrollTo(&#39;P0.3&#39;)">
+          <div class="card-done-check" id="chk-P0.3" style="" onclick="event.stopPropagation();markDone(&#39;P0.3&#39;,!done[&#39;P0.3&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#555">Phase 0</span>
+              <span class="id-badge">P0.3</span>
+              
+            </div>
+            <div class="card-title">Gradle Build Configuration</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>P0.2 complete. Directory scaffold exists.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-P0.3" onclick="copyPrompt(&#39;P0.3&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 2 (Tech Stack) and Section 22 (Environment Variables).
+
+Create Gradle build configuration. After each file, run ./gradlew assembleDebug and fix errors before proceeding.
+
+CREATE buildSrc/Dependencies.kt:
+  object Versions { all version constants from CLAUDE.md Section 2 }
+  object Libs { all dependency strings as Versions.X references }
+
+CREATE root build.gradle.kts:
+  All plugins declared with apply false.
+  Kotlin DSL syntax throughout.
+
+CREATE app/build.gradle.kts:
+  compileSdk = 35, minSdk = 28, targetSdk = 35
+  applicationId = "com.bugreel.pro"
+  versionCode = 1, versionName = "0.1.0-alpha"
+  
+  All BuildConfig fields from CLAUDE.md Section 22:
+    AI_MODEL_STANDARD, AI_MODEL_SAFETY, QUALITY_SCORE_UPGRADE,
+    AI_RATE_LIMIT_RPM, SYNC_INTERVAL_MINUTES, FLYWHEEL_ENABLED
+  
+  All dependencies from CLAUDE.md Section 2.
+  KSP (not KAPT) for Hilt and Room.
+  JUnit5 via mannodermaus android-junit5 plugin.
+  Room schema export: schemaDirectory("$projectDir/../schemas")
+  Jacoco configuration.
+
+CREATE AndroidManifest.xml:
+  Application class: .BugReelApplication
+  Permissions: INTERNET, FOREGROUND_SERVICE, RECORD_AUDIO,
+               POST_NOTIFICATIONS, SYSTEM_ALERT_WINDOW
+  CaptureService:
+    android:process=":capture"
+    android:foregroundServiceType="mediaProjection"
+    android:exported="false"
+
+FINAL VERIFICATION:
+  ./gradlew assembleDebug
+  Expected: BUILD SUCCESSFUL
+
+Fix all errors before stopping.
+Commit: chore(build): configure gradle build with all dependencies</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Empty project compiles. BUILD SUCCESSFUL.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleDebug</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.1" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.1&#39;)">
+          <div class="card-done-check" id="chk-S1.1" style="" onclick="event.stopPropagation();markDone(&#39;S1.1&#39;,!done[&#39;S1.1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.1</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Core Domain Models &amp; Enums</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>P0.3 complete. ./gradlew assembleDebug passes on empty project.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.1" onclick="copyPrompt(&#39;S1.1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. We are in Sprint 1, Session 1: Core Domain Models.
+
+Pure Kotlin only — zero Android imports, zero framework dependencies.
+
+Create in this exact order:
+
+1. core/domain/model/enums/Severity.kt
+   enum: CRITICAL, HIGH, MEDIUM, LOW, COSMETIC
+   Add displayName: String property.
+
+2. core/domain/model/enums/Frequency.kt
+   enum: ALWAYS, SOMETIMES, RARELY, ONCE
+
+3. core/domain/model/enums/ReportStatus.kt
+   enum: DRAFT, SUBMITTED, ACCEPTED, REJECTED
+
+4. core/domain/model/enums/PlatformOutcome.kt  ★ FLYWHEEL
+   enum: ACCEPTED, REJECTED, PENDING
+
+5. core/domain/model/enums/TestPlatform.kt
+   enum: UTEST, TESTLIO, TEST_IO, OTHER
+   Add displayName: String property.
+
+6. core/domain/model/DeviceProfile.kt
+   data class: brand, model, osVersion (String), apiLevel (Int),
+   ramMb (Long), screenResolution (String), networkType (String)
+
+7. core/domain/model/EvidenceBundle.kt
+   data class: recordingUri (String?), screenshots (List&lt;String&gt;),
+   logText (String?), eventLog (String?)
+
+8. core/domain/model/CoachingHint.kt — per CLAUDE.md Section 6
+9. core/domain/model/QualityScore.kt — per CLAUDE.md Section 6
+10. core/domain/model/AiOutput.kt
+    data class: generatedTitle (String?), generatedSummary (String?),
+    formattedReproSteps (List&lt;String&gt;), safetyPassed (Boolean),
+    blockedReason (String?)
+
+11. core/domain/model/OutcomeFeedback.kt — per CLAUDE.md Section 6 ★ FLYWHEEL
+    ALL fields required. Do not remove or make nullable any field.
+
+12. core/domain/model/BugReportDraft.kt
+    All BugReport fields nullable except id and createdAt.
+
+13. core/domain/model/BugReport.kt — per CLAUDE.md Section 6
+
+14. core/domain/repository/ReportRepository.kt — interface only
+15. core/domain/repository/DraftRepository.kt — interface only
+16. core/domain/repository/OutcomeFeedbackRepository.kt — interface only ★ FLYWHEEL
+
+VERIFY — must return 0 results:
+  grep -rn "import android" core/domain/ --include="*.kt"
+
+Do not create Room entities yet — that is Session 2.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>16 pure Kotlin domain model files. Zero Android imports.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">grep -rn "import android" core/domain/ --include="*.kt"</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.2" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.2&#39;)">
+          <div class="card-done-check" id="chk-S1.2" style="" onclick="event.stopPropagation();markDone(&#39;S1.2&#39;,!done[&#39;S1.2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.2</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Room Entities, DAOs &amp; Database</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S1.1 complete. All 16 domain model files exist.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.2" onclick="copyPrompt(&#39;S1.2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 1, Session 2: Room Entities, DAOs and Database.
+
+Entities map FROM domain models — they are separate @Entity classes.
+
+ENTITIES in core/data/local/entity/:
+1. ReportEntity.kt — @Entity(tableName="reports"), @PrimaryKey on id (String)
+2. EvidenceEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+3. DraftEntity.kt — @Entity(tableName="drafts"), nullable fields
+4. QualityScoreEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+5. AiOutputEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+6. DeviceProfileEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+7. OutcomeFeedbackEntity.kt — @ForeignKey to reports, onDelete=CASCADE ★ FLYWHEEL
+   Fields: reportId, platformOutcome (String), rejectionReason (String?),
+   reportedByTesterAt (Long), preAiQualityScore (Int), postAiQualityScore (Int),
+   testerOverrodeSuggestion (Boolean), aiSuggestionsAccepted (String JSON),
+   aiSuggestionsRejected (String JSON)
+
+DAOs in core/data/local/dao/:
+8. ReportDao.kt — insert/update/delete (suspend), getById (suspend), getAllReports (Flow)
+9. EvidenceDao.kt — insert (suspend), getByReportId (suspend)
+10. DraftDao.kt — upsert (suspend), getById (suspend), deleteById (suspend), getAllDrafts (Flow)
+11. QualityScoreDao.kt — insert (suspend), getByReportId returning null if absent (suspend)
+12. AiOutputDao.kt — insert (suspend), getByReportId (suspend)
+13. DeviceProfileDao.kt — insert (suspend), getByReportId (suspend)
+14. OutcomeFeedbackDao.kt — insert (suspend), queryByReportId (suspend), getAll (Flow) ★
+
+CONVERTERS:
+15. core/data/local/Converters.kt — @TypeConverters:
+    Instant&lt;-&gt;Long, List&lt;String&gt;&lt;-&gt;JSON, all 5 enums&lt;-&gt;String
+
+DATABASE:
+16. core/data/local/BugReelDatabase.kt
+    @Database(version=1, exportSchema=true)
+    ALL 7 entities registered — OutcomeFeedbackEntity MUST be present
+    Abstract accessor for each of the 7 DAOs
+
+VERIFY schema export:
+  ./gradlew :app:kaptDebugKotlin
+  Confirm schemas/.../1.json exists and contains 7 tables including "outcome_feedback"
+
+Commit: feat(flywheel): add Room schema version 1 with OutcomeFeedbackEntity</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>7 entities, 7 DAOs, Converters, BugReelDatabase, schema JSON at schemas/...1.json</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew :app:kaptDebugKotlin</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.3" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.3&#39;)">
+          <div class="card-done-check" id="chk-S1.3" style="" onclick="event.stopPropagation();markDone(&#39;S1.3&#39;,!done[&#39;S1.3&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.3</span>
+              
+            </div>
+            <div class="card-title">DI Modules, OemCompat &amp; PermissionManager</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S1.2 complete. Room schema exported and confirmed.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.3" onclick="copyPrompt(&#39;S1.3&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 1, Session 3: DI Infrastructure and Utilities.
+
+1. core/util/OemCompat.kt — object (not class)
+   ALL OEM checks live here exclusively.
+   requiresManualBatteryOptimizationWhitelist(): Boolean
+     true if Build.MANUFACTURER.lowercase() in ["xiaomi","oppo","vivo","huawei"]
+   overlayPermissionGrantIntent(context: Context): Intent
+     Settings.ACTION_MANAGE_OVERLAY_PERMISSION intent for this package
+   foregroundServiceSurvivesBatterySaver(): Boolean
+     false for xiaomi/oppo; true otherwise
+   mediaProjectionReprompts(): Boolean
+     true for samsung/xiaomi
+   needsPiPFallback(): Boolean
+     false — placeholder; add TODO: Update when Play Console review lands
+
+2. core/util/PermissionManager.kt — @Singleton class
+   ALL runtime permission requests go through here.
+   No Composable ever calls permission APIs directly.
+   requestMediaProjection(activity, launcher)
+   requestOverlayPermission(context)
+   requestNotificationPermission(launcher)
+   isOverlayPermissionGranted(context): Boolean
+   isMediaProjectionPermissionGranted(): Boolean
+
+3. core/util/Extensions.kt
+   fun String.toInstant(): Instant
+   fun Long.toInstant(): Instant
+   fun Context.showToast(message: String)
+
+4. core/di/DatabaseModule.kt — @Module @InstallIn(SingletonComponent)
+   Provides BugReelDatabase @Singleton using Room.databaseBuilder
+   .fallbackToDestructiveMigration() for DEBUG builds only
+   Separate @Provides for each of the 7 DAOs
+
+5. core/di/AppModule.kt — @Module @InstallIn(SingletonComponent)
+   Provides OemCompat
+   Provides PermissionManager @Singleton
+
+6. BugReelApplication.kt — @HiltAndroidApp
+   Notification channel in onCreate():
+   ID: "bugreel_capture", Importance: IMPORTANCE_LOW
+
+VERIFY — no OEM checks outside OemCompat:
+  grep -rn "Build.MANUFACTURER\|Build.BRAND\|MIUI" --include="*.kt" | grep -v OemCompat.kt
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>OemCompat, PermissionManager, Extensions, 2 DI modules, BugReelApplication</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">grep -rn "Build.MANUFACTURER" --include="*.kt" | grep -v OemCompat</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.4" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.4&#39;)">
+          <div class="card-done-check" id="chk-S1.4" style="" onclick="event.stopPropagation();markDone(&#39;S1.4&#39;,!done[&#39;S1.4&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.4</span>
+              
+            </div>
+            <div class="card-title">Capture Service Layer</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S1.3 complete. ./gradlew assembleDebug passes.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.4" onclick="copyPrompt(&#39;S1.4&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 1, Session 4: Capture Engine Service Layer.
+
+CaptureService runs in :capture process. Nothing here runs on the main thread.
+
+1. feature/capture/service/BugReelEventLogger.kt
+   Captures BugReel's OWN interaction events — NOT the test app's logcat.
+   Sealed class BugReelEvent: AppLaunched, ScreenViewed(screenName), UserTapped(x,y,description),
+   UserSwiped(direction), RecordingStarted, RecordingStopped, ReportDraftOpened, ReportDraftSaved
+   Thread-safe storage: CopyOnWriteArrayList&lt;BugReelEvent&gt;
+   fun logEvent(event), fun getEvents(): List&lt;BugReelEvent&gt;, fun clearEvents()
+   No permissions required.
+
+2. feature/capture/service/MediaProjectionHandler.kt
+   constructor(mediaProjection: MediaProjection, scope: CoroutineScope)
+   fun startRecording(outputFile: File): Boolean
+   fun stopRecording(): File?
+   fun isRecording(): Boolean
+   Uses VirtualDisplay and MediaRecorder.
+   Add TODO: OemCompat.mediaProjectionReprompts() handling on service restart.
+
+3. feature/capture/service/BubbleOverlayManager.kt — ADR-005: BOTH modes from Day 1
+   enum class BubbleMode { PRIMARY, FALLBACK }
+   @Named("bubbleMode") mode: BubbleMode injected via constructor
+   
+   PRIMARY: WindowManager overlay (SYSTEM_ALERT_WINDOW)
+     72dp FAB, bottom-right, tap=capture, long-press=stop
+   FALLBACK: Persistent notification with "Start/Stop Capture" action
+   
+   fun show(): Boolean — false if PRIMARY and permission denied
+   fun hide()
+   fun updateCaptureState(isCapturing: Boolean)
+
+4. feature/capture/service/CaptureService.kt — @AndroidEntryPoint ForegroundService
+   android:process=":capture" already in AndroidManifest.xml
+   private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+   startForeground() immediately on startCommand
+   Inner LocalBinder: startCapture(mediaProjection), stopCapture(): CaptureResult?, isCapturing()
+   onDestroy: serviceScope.cancel(), stop recording, hide bubble
+   On create: check OemCompat.requiresManualBatteryOptimizationWhitelist()
+
+VERIFY:
+  grep -rn "getFirestore\|Firebase" feature/capture/ --include="*.kt"
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>BugReelEventLogger, MediaProjectionHandler, BubbleOverlayManager (dual-mode), CaptureService</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">grep -rn "getFirestore" feature/capture/ --include="*.kt"</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.5" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.5&#39;)">
+          <div class="card-done-check" id="chk-S1.5" style="" onclick="event.stopPropagation();markDone(&#39;S1.5&#39;,!done[&#39;S1.5&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.5</span>
+              
+            </div>
+            <div class="card-title">Capture Feature — Domain, Data &amp; UI</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S1.4 complete. CaptureService compiles.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.5" onclick="copyPrompt(&#39;S1.5&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 1, Session 5: Capture Feature Domain, Data and UI.
+
+1. feature/capture/data/DeviceProfiler.kt
+   fun getDeviceProfile(context: Context): DeviceProfile
+   Reads: Build.MANUFACTURER + " " + Build.MODEL, Build.VERSION.RELEASE,
+   Build.VERSION.SDK_INT, ActivityManager.MemoryInfo, WindowMetrics bounds,
+   ConnectivityManager networkType. No special permissions.
+
+2. feature/capture/domain/CaptureRepository.kt — interface
+   suspend fun startCapture(mediaProjection: MediaProjection): Result&lt;Unit&gt;
+   suspend fun stopCapture(): Result&lt;CaptureResult&gt;
+   fun isCaptureActive(): Flow&lt;Boolean&gt;
+   data class CaptureResult(recordingFile: File?, eventLog: List&lt;BugReelEvent&gt;)
+
+3. feature/capture/data/CaptureRepositoryImpl.kt
+   Communicates with CaptureService via ServiceConnection + LocalBinder.
+
+4. feature/capture/domain/StartCaptureUseCase.kt
+   Returns failure if already capturing or permission not granted.
+
+5. feature/capture/domain/StopCaptureUseCase.kt
+   Returns CaptureResult. Failure if no capture was active.
+
+6. feature/capture/ui/CaptureViewModel.kt
+   sealed class CaptureUiState: Idle, RequestingPermission, Capturing, CaptureComplete(result)
+   sealed class CaptureUiEvent: NavigateToReport(result), ShowPermissionDenied, ShowOemSetup
+
+7. feature/capture/ui/CaptureScreen.kt
+   Show value-first education before requesting MediaProjection permission.
+   Start Capture button → system consent dialog.
+   Recording indicator (pulsing dot) when active.
+   Stop button → navigate to ReportBuilder with CaptureResult.
+   OEM setup guide card when requiresManualBatteryOptimizationWhitelist() is true.
+
+UPDATE navigation/AppNavGraph.kt:
+   CaptureScreen as start destination.
+   Stub route for ReportBuilderScreen (Sprint 2).
+
+Run: ./gradlew assembleDebug &amp;&amp; ./gradlew lint
+Commit: feat(capture): complete capture engine with dual-mode bubble overlay</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>DeviceProfiler, CaptureRepository, 2 UseCases, ViewModel, CaptureScreen, Navigation</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleDebug &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.6" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.6&#39;)">
+          <div class="card-done-check" id="chk-S1.6" style="" onclick="event.stopPropagation();markDone(&#39;S1.6&#39;,!done[&#39;S1.6&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.6</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Sprint 1 Tests</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S1.1–S1.5 complete. All production code compiles.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.6" onclick="copyPrompt(&#39;S1.6&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 12 (Testing Architecture). Sprint 1, Session 6: Tests.
+
+Test naming: fun `description in plain english`() — backtick format always.
+Never mock Room — use Room.inMemoryDatabaseBuilder for persistence tests.
+
+UNIT TESTS (src/test/):
+
+1. BugReelEventLoggerTest.kt
+   `all event subtypes can be logged without error`
+   `getEvents returns events in chronological order`
+   `clearEvents results in empty list`
+   `concurrent logging does not lose events`
+
+2. OemCompatTest.kt
+   `requiresManualBatteryOptimizationWhitelist returns true for xiaomi regardless of case`
+   `needsPiPFallback returns false by default`
+   `all methods callable without throwing`
+
+3. DeviceProfilerTest.kt (Robolectric)
+   `getDeviceProfile returns non-null DeviceProfile`
+   `brand and model are non-empty strings`
+
+4. StartCaptureUseCaseTest.kt
+   `returns failure when capture is already active`
+
+5. StopCaptureUseCaseTest.kt
+   `returns failure when no capture was active`
+
+INTEGRATION TESTS (src/androidTest/) — in-memory Room always:
+
+6. DraftDaoIntegrationTest.kt
+   `insert draft and retrieve by id returns same entity`
+   `update draft reflects updated fields on next read`
+   `delete draft returns null on subsequent getById`
+   `getAllDrafts flow emits when draft is inserted`
+
+7. OutcomeFeedbackDaoIntegrationTest.kt ★ FLYWHEEL
+   `insert and queryByReportId returns correct entity`
+   `preAiQualityScore and postAiQualityScore are persisted correctly`
+   `getAll flow emits when new record is inserted`
+
+8. BugReelDatabaseTest.kt
+   `database opens and all 7 DAOs are non-null`
+   `OutcomeFeedbackDao is accessible from database instance`
+
+RUN:
+  ./gradlew test
+  ./gradlew connectedAndroidTest
+  ./gradlew lint
+  ./gradlew jacocoTestReport
+
+All pass with 0 failures. Report coverage.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>8 test files. 0 failures. 0 lint errors.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew test &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S1.7" data-phase="s1">
+        <div class="card-header" onclick="scrollTo(&#39;S1.7&#39;)">
+          <div class="card-done-check" id="chk-S1.7" style="" onclick="event.stopPropagation();markDone(&#39;S1.7&#39;,!done[&#39;S1.7&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#1a7bd4">Sprint 1</span>
+              <span class="id-badge">S1.7</span>
+              
+            </div>
+            <div class="card-title">Sprint 1 Architecture Verification</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S1.1–S1.6 complete. All tests pass.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S1.7" onclick="copyPrompt(&#39;S1.7&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Sections 4 and 19. Sprint 1 Architecture Verification.
+
+Run each check. Fix any violations. All 7 must PASS before Sprint 1 is declared done.
+
+CHECK 1 — No Firebase in capture feature:
+  grep -rn "getFirestore\|Firebase" feature/capture/ --include="*.kt"
+  Expected: 0 results
+
+CHECK 2 — No OEM checks outside OemCompat:
+  grep -rn "Build.MANUFACTURER\|MIUI\|ColorOS" --include="*.kt" | grep -v OemCompat.kt
+  Expected: 0 results
+
+CHECK 3 — No Android imports in domain layer:
+  grep -rn "import android" core/domain/ --include="*.kt"
+  Expected: 0 results
+
+CHECK 4 — OutcomeFeedbackEntity in Room schema JSON:
+  Verify schemas/.../1.json entities array contains "outcome_feedback" table
+  Expected: present
+
+CHECK 5 — BubbleOverlayManager has both modes:
+  grep -n "PRIMARY\|FALLBACK" feature/capture/service/BubbleOverlayManager.kt
+  Expected: both enum values AND both code paths present
+
+CHECK 6 — No cross-feature imports:
+  grep -rn "import com.bugreel.pro.feature" feature/ --include="*.kt"
+  Expected: 0 results
+
+CHECK 7 — Schema file committed:
+  git status schemas/
+  Expected: schema JSON is tracked
+
+Run: ./gradlew test &amp;&amp; ./gradlew lint
+
+If all 7 PASS:
+  git add .
+  git commit -m "feat(sprint-1): complete capture engine and database schema"
+  Print: "Sprint 1 stop conditions MET. Ready for human device-test sign-off."
+
+Do NOT start Sprint 2. Wait for human checklist sign-off on PRD V4.0 Sprint 1 checklist.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>7 architecture checks PASS. Sprint 1 committed.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">All 7 grep checks return 0 results</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S2.1" data-phase="s2">
+        <div class="card-header" onclick="scrollTo(&#39;S2.1&#39;)">
+          <div class="card-done-check" id="chk-S2.1" style="" onclick="event.stopPropagation();markDone(&#39;S2.1&#39;,!done[&#39;S2.1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#2a8a4e">Sprint 2</span>
+              <span class="id-badge">S2.1</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Firebase &amp; Sync Infrastructure</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>Sprint 1 checklist signed off by human. S1.7 all 7 checks PASS.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S2.1" onclick="copyPrompt(&#39;S2.1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 2, Session 1: Firebase and Sync Infrastructure.
+Sprint 1 human sign-off confirmed? If not confirmed, stop and request it first.
+
+1. core/data/remote/ai/AIService.kt — interface per CLAUDE.md Section 9
+   (Implementation Sprint 4. Create interface now for complete DI graph.)
+
+2. core/data/remote/ai/PromptRepository.kt — interface per CLAUDE.md Section 9
+   (Implementation Sprint 4.)
+
+3. core/data/remote/firebase/FirestoreSource.kt — @Singleton
+   The ONLY class that calls FirebaseFirestore.
+   suspend fun pushReport(reportId: String, reportJson: String): Result&lt;Unit&gt;
+   suspend fun pushOutcomeFeedback(feedbackJson: String): Result&lt;Unit&gt;  ★ FLYWHEEL
+   suspend fun pullAllReports(userId: String): Result&lt;List&lt;String&gt;&gt;
+   Wrap all Firebase calls in try/catch -&gt; Result&lt;T&gt;.
+
+4. core/data/remote/firebase/StorageSource.kt — @Singleton
+   The ONLY class that calls FirebaseStorage.
+   suspend fun uploadRecording(uri: Uri, reportId: String): Result&lt;String&gt;
+   suspend fun uploadScreenshot(uri: Uri, reportId: String, index: Int): Result&lt;String&gt;
+   suspend fun deleteReportFiles(reportId: String): Result&lt;Unit&gt;
+
+5. core/data/sync/SyncMapper.kt — uses kotlinx.serialization
+   fun reportEntityToJson(entity: ReportEntity): String
+   fun jsonToReportEntity(json: String): ReportEntity?
+   fun outcomeFeedbackEntityToJson(entity: OutcomeFeedbackEntity): String  ★ FLYWHEEL
+
+6. core/data/sync/SyncWorker.kt — @HiltWorker
+   NetworkType.CONNECTED constraint. Exponential backoff: 30s, max 5 retries.
+   Pushes unsynced reports AND OutcomeFeedback records to Firebase.  ★ FLYWHEEL
+   Updates syncedAt in Room on success.
+
+7. core/di/FirebaseModule.kt
+   FirebaseFirestore, FirebaseStorage, FirebaseAuth, FirestoreSource, StorageSource — all @Singleton
+
+8. core/di/NetworkModule.kt
+   OkHttpClient (logging interceptor in debug only)
+   @Named("aiBaseUrl") = "https://api.openai.com/v1/"
+   @Named("aiModelStandard") from BuildConfig.AI_MODEL_STANDARD
+   @Named("aiModelSafety") from BuildConfig.AI_MODEL_SAFETY
+   Stub binding for AIService: throws NotImplementedError("AIService implemented Sprint 4")
+
+VERIFY:
+  grep -rn "getFirestore\|collection(" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>AI interfaces, Firebase sources, SyncWorker, 2 DI modules</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">grep -rn "getFirestore" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S2.2" data-phase="s2">
+        <div class="card-header" onclick="scrollTo(&#39;S2.2&#39;)">
+          <div class="card-done-check" id="chk-S2.2" style="" onclick="event.stopPropagation();markDone(&#39;S2.2&#39;,!done[&#39;S2.2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#2a8a4e">Sprint 2</span>
+              <span class="id-badge">S2.2</span>
+              
+            </div>
+            <div class="card-title">Report Feature — Domain, Data &amp; UI</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S2.1 complete. Firebase infrastructure compiles.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S2.2" onclick="copyPrompt(&#39;S2.2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 2, Session 2: Report Feature.
+
+1. feature/report/domain/PlatformTemplateRepository.kt — interface
+   fun getTemplate(platform: TestPlatform): ReportTemplate
+   data class ReportTemplate(requiredFields: List&lt;String&gt;, optionalFields: List&lt;String&gt;, formatInstructions: String)
+
+2. feature/report/data/PlatformTemplateRepositoryImpl.kt
+   Data-driven: store templates as companion object map — not if/when blocks.
+   UTEST: title, environment, severity, frequency, reproSteps, expectedResult, actualResult
+   TESTLIO: title, severity, steps, expectedVsActual, deviceInfo
+   TEST_IO: bugTitle, severity, stepsToReproduce, actualBehavior, expectedBehavior
+
+3. feature/report/data/EvidenceManager.kt
+   validateAndAttachRecording(uri): Result&lt;Uri&gt; — reject non-MP4
+   validateAndAttachScreenshot(uri): Result&lt;Uri&gt; — reject non-PNG/JPG; compress &gt; 2MB
+   attachLogText(text): Result&lt;Unit&gt;
+   getEvidenceBundle(): EvidenceBundle
+   clearAll()
+
+4. feature/report/data/ZipGenerator.kt
+   fun generateZip(report: BugReport, evidence: EvidenceBundle): Result&lt;File&gt;
+   Fixed structure: /recording.mp4, /screenshots/screenshot_N.png, /log.txt, /report.json
+
+5. feature/report/data/ReportRepositoryImpl.kt
+   All writes: Room first, then trigger SyncWorker.
+
+6. feature/report/domain/BuildReportUseCase.kt
+   Returns List&lt;ValidationError&gt; per field — not a single Boolean.
+
+7. feature/report/domain/ExportReportUseCase.kt
+
+8. feature/report/ui/ReportBuilderViewModel.kt
+   UiState: Loading, BuildingReport(draft, errors), Submitting, Submitted, Error
+
+9. feature/report/ui/ReportBuilderScreen.kt — 5-step form:
+   Step 1: Title + Description
+   Step 2: Severity + Frequency
+   Step 3: Repro Steps (add/remove/reorder)
+   Step 4: Evidence (attached files)
+   Step 5: Review + Submit
+   Required fields block submit with inline errors.
+
+10. feature/report/ui/ReportListScreen.kt
+    LazyColumn. REQUIRED empty state:
+    "Your first report will appear here. Start by recording a test session."
+    + "Try Practice Mode first -&gt;" (stub, Sprint 5)
+
+11. feature/report/ui/EvidencePickerScreen.kt
+
+UPDATE AppNavGraph.kt: add all report routes.
+Run: ./gradlew assembleDebug &amp;&amp; ./gradlew lint</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Report feature: templates, evidence, ZIP, repository, 4 UI screens</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleDebug &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S2.3" data-phase="s2">
+        <div class="card-header" onclick="scrollTo(&#39;S2.3&#39;)">
+          <div class="card-done-check" id="chk-S2.3" style="" onclick="event.stopPropagation();markDone(&#39;S2.3&#39;,!done[&#39;S2.3&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#2a8a4e">Sprint 2</span>
+              <span class="id-badge">S2.3</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Sprint 2 Tests &amp; Verification</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S2.1 and S2.2 complete. ./gradlew assembleDebug passes.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S2.3" onclick="copyPrompt(&#39;S2.3&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 2, Session 3: Tests and Verification.
+
+UNIT TESTS:
+
+1. ZipGeneratorTest.kt
+   `generated ZIP contains recording.mp4 at root`
+   `generated ZIP contains screenshots directory with numbered files`
+   `generated ZIP contains log.txt and report.json`
+   `report.json deserializes back to BugReport with all fields intact`
+
+2. EvidenceManagerTest.kt
+   `validateAndAttachRecording rejects non-MP4 URI`
+   `validateAndAttachScreenshot rejects non-PNG non-JPG URI`
+   `getEvidenceBundle returns correct URIs after attachment`
+
+3. BuildReportUseCaseTest.kt
+   `returns validation error for missing title`
+   `returns validation error when reproSteps is empty`
+   `returns empty errors when all required fields present`
+
+4. ReportRepositoryImplTest.kt (mock Firebase, real in-memory Room)
+   `createReport stores to Room`
+   `getAllReports flow emits when report inserted`
+
+INTEGRATION TESTS:
+
+5. ReportDaoIntegrationTest.kt
+   `full CRUD round-trip for ReportEntity`
+   `getAllReports flow emits on insert and delete`
+
+6. SyncWorkerIntegrationTest.kt
+   `worker executes when network available`
+   `OutcomeFeedback records synced alongside reports`  ★ FLYWHEEL
+
+ARCHITECTURE CHECKS:
+  grep -rn "getFirestore\|collection(" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource
+  Expected: 0 results
+  
+  grep -rn "import com.bugreel.pro.feature" feature/report/ --include="*.kt"
+  Expected: 0 results
+
+RUN: ./gradlew test &amp;&amp; ./gradlew connectedAndroidTest &amp;&amp; ./gradlew lint
+
+Commit: feat(sprint-2): complete report builder and firebase sync
+Do NOT start Sprint 3. Wait for human sign-off.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>6 test files. All Sprint 2 stop conditions met.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew test &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S3.1" data-phase="s3">
+        <div class="card-header" onclick="scrollTo(&#39;S3.1&#39;)">
+          <div class="card-done-check" id="chk-S3.1" style="" onclick="event.stopPropagation();markDone(&#39;S3.1&#39;,!done[&#39;S3.1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#7b3fd4">Sprint 3</span>
+              <span class="id-badge">S3.1</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Quality Engine Core</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>Sprint 2 checklist signed off by human.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S3.1" onclick="copyPrompt(&#39;S3.1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 10 (Quality Scorer Contract) in full before writing any code.
+Sprint 3, Session 1: Quality Engine Core.
+
+CRITICAL: After writing QualityScorer, run this BEFORE anything else:
+  grep -rn "import android\|suspend\|Flow\|AIService\|coroutine" feature/quality/domain/QualityScorer.kt
+  Expected: 0 results. Refactor until 0.
+
+1. feature/quality/domain/CoachingHintStrings.kt — object
+   ALL coaching text as constants. No hint strings elsewhere.
+   2-3 hints per scoring dimension. All &lt;= 120 characters.
+   fun verify() { all strings.forEach { check(it.length &lt;= 120) } }
+
+2. feature/quality/domain/QualityScorer.kt — pure function, per CLAUDE.md Section 10
+   fun score(report: BugReport): QualityScore
+   
+   Reproduction (max 25):
+   +10 reproSteps.isNotEmpty()
+   +5 reproSteps.size &gt;= 2
+   +5 reproSteps.all { it.length &gt; 10 }
+   +5 summary contains "expected" or "actual" (case-insensitive)
+   
+   Evidence (max 25):
+   +15 recordingUri != null
+   +7 screenshots.size &gt;= 2
+   +3 logText != null or eventLog != null
+   
+   Description (max 20):
+   +10 summary.length &gt;= 50
+   +5 summary.length &lt;= 500
+   +5 no placeholder text (\[.*?\]|TODO|placeholder)
+   
+   Severity (max 15):
+   +10 severity not null/default
+   +5 severity consistent with evidence
+   
+   Metadata (max 15):
+   +10 deviceProfile.brand and model non-empty
+   +5 platform fields populated
+   
+   Coaching: generate for dimensions &lt; 80% of max.
+   Max 3 returned, sorted by scoreImpact descending.
+   All hint text from CoachingHintStrings only.
+
+3. feature/quality/domain/SeverityAdvisor.kt — pure function
+   fun advise(evidence: EvidenceBundle, current: Severity?): SeverityAdvice
+   data class SeverityAdvice(recommended: Severity, reasoning: String, confidence: Float)
+
+4. feature/quality/domain/CompletenessChecker.kt — pure function
+   fun check(report: BugReport): CompletenessResult
+   data class CompletenessResult(missingFields: List&lt;String&gt;, isComplete: Boolean)
+
+5. feature/quality/domain/DuplicateDetector.kt
+   &gt; 60% word overlap in normalized titles = potential duplicate.
+
+6. feature/quality/domain/ScoreReportUseCase.kt
+   Calls QualityScorer.score(). Saves to QualityScoreDao.
+   Records preAiQualityScore in OutcomeFeedbackDao.  ★ FLYWHEEL DATA STARTS HERE
+
+7. feature/quality/data/QualityRepositoryImpl.kt
+
+Run: ./gradlew assembleDebug</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>QualityScorer (pure function verified), SeverityAdvisor, CompletenessChecker, DuplicateDetector</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">grep -rn "import android\|suspend\|Flow\|AIService" feature/quality/domain/QualityScorer.kt</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S3.2" data-phase="s3">
+        <div class="card-header" onclick="scrollTo(&#39;S3.2&#39;)">
+          <div class="card-done-check" id="chk-S3.2" style="" onclick="event.stopPropagation();markDone(&#39;S3.2&#39;,!done[&#39;S3.2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#7b3fd4">Sprint 3</span>
+              <span class="id-badge">S3.2</span>
+              
+            </div>
+            <div class="card-title">Quality UI, Tests &amp; Verification</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S3.1 complete. QualityScorer grep check returns 0.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S3.2" onclick="copyPrompt(&#39;S3.2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 3, Session 2: Quality UI, Tests and Verification.
+
+UI:
+1. feature/quality/ui/QualityScoreViewModel.kt
+   UiState: Loading, Scoring, ScoreReady(score, coaching, showUpgradePrompt), Error
+
+2. feature/quality/ui/QualityScoreScreen.kt
+   Animated score count-up 0 -&gt; final value (300ms). Radial progress indicator.
+   Breakdown by dimension. Up to 3 coaching hints sorted by scoreImpact.
+   Upgrade prompt when score &lt; BuildConfig.QUALITY_SCORE_UPGRADE.
+   Dismiss button — persisted in DataStore.
+
+UNIT TESTS:
+3. QualityScorerTest.kt
+   `empty report scores zero`
+   `full report scores 100`
+   `same input 1000 times always produces same output`
+   `coaching hints generated when reproduction sub-score below 20`
+   `coaching hints generated when evidence sub-score below 20`
+   `no more than 3 coaching hints returned`
+   `coaching hints sorted by scoreImpact descending`
+   `partial evidence gives partial credit not zero`
+
+4. SeverityAdvisorTest.kt — 25 test cases (5 levels x 5 evidence scenarios)
+
+5. CompletenessCheckerTest.kt — each missing field caught independently
+
+6. DuplicateDetectorTest.kt
+   `10 non-duplicate pairs produce no false positives`
+   `identical title flagged as duplicate`
+
+ARCHITECTURE CHECKS:
+  grep -rn "import android\|suspend\|Flow\|AIService" feature/quality/domain/QualityScorer.kt
+  Expected: 0 results
+
+RUN:
+  ./gradlew test
+  ./gradlew jacocoTestReport
+  Target: &gt;= 90% coverage on feature/quality/domain/
+  ./gradlew lint
+
+Commit: feat(sprint-3): complete quality engine with deterministic scorer
+Do NOT start Sprint 4. Wait for human sign-off.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Quality UI, 4 test files. &gt;=90% coverage on quality/domain.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew test &amp;&amp; ./gradlew jacocoTestReport</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S4.1" data-phase="s4">
+        <div class="card-header" onclick="scrollTo(&#39;S4.1&#39;)">
+          <div class="card-done-check" id="chk-S4.1" style="" onclick="event.stopPropagation();markDone(&#39;S4.1&#39;,!done[&#39;S4.1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#b07800">Sprint 4</span>
+              <span class="id-badge">S4.1</span>
+              
+            </div>
+            <div class="card-title">AI Infrastructure — DTOs, Service &amp; Prompts</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>Sprint 3 signed off. Confirm per-report AI cost at P90 &lt; $0.20 from Sprint 0 Track 4 memo.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S4.1" onclick="copyPrompt(&#39;S4.1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Sections 9 and 17. Sprint 4, Session 1: AI Infrastructure.
+
+BEFORE STARTING: Confirm P90 AI cost from Sprint 0 Track 4 memo is &lt; $0.20/report.
+If not, stop and flag to human before writing any AI code.
+
+1. core/data/remote/ai/dto/ChatRequest.kt — @Serializable
+   model: String, messages: List&lt;Message&gt;, max_tokens: Int = 1000, temperature: Float = 0.3f
+   @Serializable data class Message(role: String, content: String)
+
+2. core/data/remote/ai/dto/ChatResponse.kt — @Serializable
+   id: String, choices: List&lt;Choice&gt;, usage: Usage?
+   @Serializable data class Choice(message: Message, finish_reason: String)
+   @Serializable data class Usage(prompt_tokens: Int, completion_tokens: Int, total_tokens: Int)
+
+3. core/data/remote/ai/dto/VisionRequest.kt — @Serializable
+   Same as ChatRequest with ContentPart support for image_url
+
+4. core/data/remote/ai/DefaultPromptRepository.kt — implements PromptRepository
+   ALL prompt strings defined as private constants here. None exist elsewhere.
+   titlePrompt: return ONLY the title, no quotes, max 80 chars
+   summaryPrompt: return ONLY improved summary, 50-200 chars
+   reproStepsPrompt: return ONLY a JSON array of numbered steps
+   safetyValidationPrompt: return ONLY {"passed":bool,"reason":"string"}
+   Private: fun String.fillPlaceholders(vararg pairs: Pair&lt;String,String&gt;): String
+
+5. core/data/remote/ai/OpenAIService.kt — implements AIService
+   The ONLY file making HTTP calls.
+   AI_MODEL_STANDARD for title, summary, reproSteps.
+   AI_MODEL_SAFETY for validateSafety.
+   Log token counts per call for cost monitoring.
+   sealed class AIResult&lt;T&gt;: Success(data), Failure(error), RateLimited(retryAfterSeconds)
+
+6. feature/ai/domain/AiRateLimiter.kt — @Singleton, token bucket
+   fun acquire(): AcquireResult (Acquired | Denied(retryAfterMs))
+   Refills at BuildConfig.AI_RATE_LIMIT_RPM per minute. AtomicLong for thread safety.
+
+UPDATE NetworkModule.kt:
+   Remove NotImplementedError stub.
+   Bind OpenAIService to AIService.
+   Bind DefaultPromptRepository to PromptRepository.
+
+VERIFY:
+  grep -rn '"gpt-4\|"gpt-5' --include="*.kt" | grep -v BuildConfig
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>3 DTOs, DefaultPromptRepository, OpenAIService, AiRateLimiter. Zero hardcoded model strings.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">grep -rn '"gpt-4' --include="*.kt" | grep -v BuildConfig</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S4.2" data-phase="s4">
+        <div class="card-header" onclick="scrollTo(&#39;S4.2&#39;)">
+          <div class="card-done-check" id="chk-S4.2" style="" onclick="event.stopPropagation();markDone(&#39;S4.2&#39;,!done[&#39;S4.2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#b07800">Sprint 4</span>
+              <span class="id-badge">S4.2</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Safety Validator, AI Feature &amp; OutcomeFeedback Wiring</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S4.1 complete. Zero hardcoded model strings confirmed.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S4.2" onclick="copyPrompt(&#39;S4.2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 9 (SafetyValidator criteria). Sprint 4, Session 2.
+
+1. feature/ai/domain/SafetyValidator.kt
+   fun validate(context: ReportContext, output: AiOutput): SafetyResult
+   sealed class SafetyResult: Pass(output), Blocked(reason: String)
+   
+   CRITERION A: output mentions UI element not in context.evidence.eventLog
+     -&gt; Blocked("Ungrounded UI element reference")
+   CRITERION B: output claims crash/critical with no crash log and no recording
+     -&gt; Blocked("Severity not supported by evidence")
+   CRITERION C: generated repro step action not in event log
+     -&gt; Blocked("Repro step not in evidence")
+   CRITERION D: output device name mismatches context.deviceProfile
+     -&gt; Blocked("Device metadata inconsistency")
+   THEN: call AIService.validateSafety() for LLM-based check.
+   BOTH must pass. Log all blocks to analytics.
+   NO bypass path exists anywhere.
+
+2. feature/ai/domain/GenerateTitleUseCase.kt
+   acquire(AiRateLimiter) -&gt; if Denied: RateLimitError
+   call AIService.generateTitle() -&gt; if failure: Error
+   run SafetyValidator.validate() -&gt; if Blocked: return original tester title + emit SafetyBlockEvent
+   if Pass: return generated title
+
+3. feature/ai/domain/GenerateSummaryUseCase.kt — same pattern
+4. feature/ai/domain/FormatReproStepsUseCase.kt — same pattern
+5. feature/ai/data/AiRepositoryImpl.kt
+
+6. feature/ai/ui/AiAssistViewModel.kt
+   Track accepted vs rejected fields for OutcomeFeedback.
+   On edit: set testerOverrodeSuggestion = true.
+
+7. feature/ai/ui/AiAssistScreen.kt
+   3 cards: Title, Summary, Repro Steps. Each with Generate button.
+   Skeleton loading -&gt; side-by-side: "Your text" vs "AI suggestion" (distinct backgrounds)
+   Accept / Edit per card.
+   Rate limit: countdown timer. Network error: fallback to original, never blank.
+
+WIRE OutcomeFeedback:
+   After AI suggestions: re-run QualityScorer, store postAiQualityScore  ★ FLYWHEEL
+   Track aiSuggestionsAccepted and aiSuggestionsRejected per field  ★ FLYWHEEL
+
+Run: ./gradlew assembleDebug &amp;&amp; ./gradlew lint</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>SafetyValidator (4 criteria), 3 UseCases, AI UI, OutcomeFeedback fully wired</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleDebug &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S4.3" data-phase="s4">
+        <div class="card-header" onclick="scrollTo(&#39;S4.3&#39;)">
+          <div class="card-done-check" id="chk-S4.3" style="" onclick="event.stopPropagation();markDone(&#39;S4.3&#39;,!done[&#39;S4.3&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#b07800">Sprint 4</span>
+              <span class="id-badge">S4.3</span>
+              
+            </div>
+            <div class="card-title">Sprint 4 Tests &amp; Verification</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S4.1 and S4.2 complete. All AI feature code compiles.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S4.3" onclick="copyPrompt(&#39;S4.3&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 4, Session 3: Tests and Verification.
+
+UNIT TESTS:
+
+1. SafetyValidatorTest.kt — one test per criterion plus pass case:
+   `criterion A blocks when title references element absent from event log`
+   `criterion A passes when element present in event log`
+   `criterion B blocks when Critical severity with no crash log and no recording`
+   `criterion C blocks when repro step action not in event log`
+   `criterion D blocks when device name mismatches DeviceProfile`
+   `correct grounded output returns SafetyResult.Pass`
+   Mock AIService.validateSafety() to return pass for all above tests.
+
+2. DefaultPromptRepositoryTest.kt:
+   `all 4 prompt methods return non-empty strings for valid ReportContext`
+   `no unfilled placeholder tokens after fillPlaceholders called`
+   `all prompts under 2000 characters`
+
+3. AiRateLimiterTest.kt:
+   `20 consecutive acquire calls return Acquired`
+   `21st call in same minute returns Denied with positive retryAfterMs`
+
+4. GenerateTitleUseCaseTest.kt:
+   `returns AI title when safety passes`
+   `returns original tester title when safety blocks`
+
+5. OpenAIServiceTest.kt — MockWebServer (no real network):
+   `sends correct model string from BuildConfig not hardcoded`
+   `parses 200 response to AIResult.Success`
+   `returns AIResult.RateLimited on 429 response`
+
+ARCHITECTURE CHECKS:
+  grep -rn '"gpt-4\|"gpt-5' --include="*.kt" | grep -v BuildConfig
+  Expected: 0
+  
+  grep -rn "OkHttp\|HttpClient" --include="*.kt" | grep -v OpenAIService | grep -v NetworkModule
+  Expected: 0
+  
+  grep -rn "skipSafety\|bypassSafety" --include="*.kt"
+  Expected: 0
+
+RUN: ./gradlew test &amp;&amp; ./gradlew lint
+
+Commit: feat(sprint-4): complete AI assistant with safety validator
+Do NOT start Sprint 5. Wait for human sign-off.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>5 SafetyValidator tests. All Sprint 4 stop conditions met.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew test &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S5.1" data-phase="s5">
+        <div class="card-header" onclick="scrollTo(&#39;S5.1&#39;)">
+          <div class="card-done-check" id="chk-S5.1" style="" onclick="event.stopPropagation();markDone(&#39;S5.1&#39;,!done[&#39;S5.1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#0d7a6b">Sprint 5</span>
+              <span class="id-badge">S5.1</span>
+              <span class="star">★ flywheel</span>
+            </div>
+            <div class="card-title">Flywheel — Outcome Recording &amp; Analytics Domain</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>Sprint 4 checklist signed off by human.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S5.1" onclick="copyPrompt(&#39;S5.1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 23 (Flywheel Instrumentation). Sprint 5, Session 1.
+
+1. feature/analytics/domain/RecordOutcomeUseCase.kt  ★ THE FLYWHEEL COMPLETES HERE
+   fun recordOutcome(reportId: String, outcome: PlatformOutcome, reason: String?): Result&lt;Unit&gt;
+   Validate reportId exists in Room. Write to OutcomeFeedbackDao.
+   Trigger SyncWorker for Firebase sync. Log warning if REJECTED with no reason.
+
+2. feature/analytics/domain/AcceptanceRateUseCase.kt
+   fun getAcceptanceRate(period: AcceptancePeriod): Flow&lt;AcceptanceStats&gt;
+   enum: LAST_7_DAYS, LAST_30_DAYS, ALL_TIME
+   data class AcceptanceStats(totalSubmitted, totalAccepted, acceptanceRate, trend, qualityScoreTrend)
+   Reads OutcomeFeedbackDao only. Zero Firestore reads.
+
+3. feature/analytics/domain/PracticeModeUseCase.kt
+   5 preset scenarios. fun startPracticeSession(scenario). fun scoreSession(session): QualityScore.
+
+4. feature/analytics/data/AnalyticsRepositoryImpl.kt
+
+5. feature/analytics/ui/OutcomeFeedbackScreen.kt  ★ FLYWHEEL UI
+   Reachable from report list in &lt;= 2 taps for PENDING reports.
+   ACCEPTED / REJECTED radio. Rejection reason field when REJECTED.
+   Submit -&gt; RecordOutcomeUseCase -&gt; "Thanks — this helps improve BugReel."
+   UPDATE ReportListScreen: "Got a result? Update -&gt;" prompt on PENDING reports.
+
+6. feature/analytics/ui/AnalyticsDashboardViewModel.kt
+
+7. feature/analytics/ui/AnalyticsDashboardScreen.kt
+   Acceptance Rate, Quality Score trend, Time Saved, Rejection analysis.
+   REQUIRED EMPTY STATES (both must be present):
+   0 reports: "Your acceptance rate appears here. Top testers average 87%."
+   0 outcomes: "Update your report outcomes to unlock your acceptance rate."
+
+8. feature/analytics/ui/PracticeModeScreen.kt
+   Choose scenario -&gt; fill report -&gt; score reveal -&gt; Try Again / Next Scenario.
+   Must feel like a game. Immediate feedback. Retry loop. NOT a tutorial.
+
+Run: ./gradlew assembleDebug &amp;&amp; ./gradlew lint</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>RecordOutcomeUseCase, AcceptanceRate, PracticeMode, OutcomeFeedbackScreen, Dashboard with empty states</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleDebug &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S5.2" data-phase="s5">
+        <div class="card-header" onclick="scrollTo(&#39;S5.2&#39;)">
+          <div class="card-done-check" id="chk-S5.2" style="" onclick="event.stopPropagation();markDone(&#39;S5.2&#39;,!done[&#39;S5.2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#0d7a6b">Sprint 5</span>
+              <span class="id-badge">S5.2</span>
+              
+            </div>
+            <div class="card-title">Legal Screens, Empty States &amp; Hardening</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S5.1 complete. Consent copy counsel-approved (Sprint 0 Track 3).</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S5.2" onclick="copyPrompt(&#39;S5.2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md. Sprint 5, Session 2: Legal Screens and Launch Hardening.
+
+1. feature/onboarding/ui/ConsentScreen.kt — shown ONCE on first install
+   Checkbox 1 (required): "I accept the Terms of Service and Privacy Policy" + links
+   Checkbox 2 (required): "I may process pre-release app footage and confirm right to do so"
+   Checkbox 3 (optional): "Allow BugReel to use my anonymised data to improve AI"  ★ SEPARATE
+   Continue: enabled only when 1 + 2 checked.
+   Save consent state + AI opt-in state to DataStore separately.
+
+2. feature/onboarding/ui/AiTrainingOptInScreen.kt
+   Non-blocking, shown 7 days post-install if Checkbox 3 was skipped.
+
+3. Settings screen additions:
+   AI training opt-in toggle. "Delete all my data" with confirmation dialog.
+
+EMPTY STATE AUDIT:
+4. Verify ReportListScreen empty state present (Sprint 2)
+5. Verify both AnalyticsDashboard empty states present (S5.1)
+6. Add first-report callout to QualityScoreScreen:
+   "Your quality score. Higher scores get accepted faster."
+
+STARTUP VERIFICATION — add to BugReelApplication.onCreate():
+   if (BuildConfig.DEBUG) {
+     CoachingHintStrings.verify()
+     check(BuildConfig.FLYWHEEL_ENABLED) { "FLYWHEEL_ENABLED must be true" }
+     check(BuildConfig.AI_MODEL_STANDARD != BuildConfig.AI_MODEL_SAFETY) { "Use different models" }
+   }
+
+HARDENING:
+7. grep -rn "TODO\|FIXME\|NotImplementedError" --include="*.kt"
+   Implement or document each. Zero NotImplementedError in release code paths.
+
+8. ./gradlew assembleRelease
+   Add ProGuard/R8 rules for: Hilt, Room, OkHttp, kotlinx.serialization.
+   Fix all R8 stripping issues.
+
+9. Move all user-facing strings to res/values/strings.xml.
+
+Run: ./gradlew assembleDebug &amp;&amp; ./gradlew assembleRelease &amp;&amp; ./gradlew lint</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Consent screens, AI opt-in, hardened release build, all TODOs resolved.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleRelease &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-S5.3" data-phase="s5">
+        <div class="card-header" onclick="scrollTo(&#39;S5.3&#39;)">
+          <div class="card-done-check" id="chk-S5.3" style="" onclick="event.stopPropagation();markDone(&#39;S5.3&#39;,!done[&#39;S5.3&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#0d7a6b">Sprint 5</span>
+              <span class="id-badge">S5.3</span>
+              
+            </div>
+            <div class="card-title">Sprint 5 Tests &amp; Launch Readiness Gate</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>S5.1 and S5.2 complete. ./gradlew assembleRelease passes.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-S5.3" onclick="copyPrompt(&#39;S5.3&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 18 (Launch Readiness Gate). Sprint 5 final session.
+
+UNIT TESTS:
+1. RecordOutcomeUseCaseTest.kt
+   `recording outcome links correctly to existing reportId`
+   `recording outcome for non-existent reportId returns error`
+   `REJECTED without reason is allowed with warning`
+
+2. AcceptanceRateUseCaseTest.kt
+   `correct rate from seeded OutcomeFeedback data`
+   `last 7 days filter excludes older records`
+
+3. OutcomeFeedbackEndToEndTest.kt
+   `submit report -&gt; update outcome -&gt; OutcomeFeedbackDao has correct row with all fields`
+   `preAiQualityScore differs from postAiQualityScore after AI suggestions applied`
+
+LAUNCH READINESS GATE — run all 12 checks, report PASS / FAIL:
+
+1. ./gradlew test -&gt; 0 failures
+2. ./gradlew lint -&gt; 0 errors
+3. ./gradlew assembleRelease -&gt; BUILD SUCCESSFUL
+4. FLYWHEEL: grep -rn "FLYWHEEL_ENABLED" app/build.gradle.kts -&gt; "true" all variants
+5. No hardcoded models: grep -rn '"gpt-4' --include="*.kt" | grep -v BuildConfig -&gt; 0
+6. No Firebase outside SyncWorker: grep -rn "getFirestore" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource -&gt; 0
+7. No cross-feature imports: grep -rn "import com.bugreel.pro.feature" feature/ --include="*.kt" -&gt; 0
+8. QualityScorer pure: grep -rn "import android\|suspend\|AIService" feature/quality/domain/QualityScorer.kt -&gt; 0
+9. Room 7 entities: verify schemas/.../1.json has 7 tables including "outcome_feedback"
+10. Consent screen exists: ls feature/onboarding/ui/ConsentScreen.kt -&gt; present
+11. Models differ: verify AI_MODEL_STANDARD != AI_MODEL_SAFETY in build.gradle.kts
+12. OutcomeFeedback wired: grep -rn "preAiQualityScore\|postAiQualityScore" --include="*.kt" | wc -l -&gt; &gt; 3
+
+If all 12 PASS:
+  git add .
+  git commit -m "feat(sprint-5): complete analytics flywheel and launch readiness"
+  Print: "All automated Launch Readiness Gate checks PASS. Ready for human device sign-off."
+
+List any FAIL. Do not send alpha invites until human confirms 6 device checks.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>3 test files. All 12 Launch Readiness checks PASS.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">All 12 grep/gradle checks</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-M1" data-phase="meta">
+        <div class="card-header" onclick="scrollTo(&#39;M1&#39;)">
+          <div class="card-done-check" id="chk-M1" style="" onclick="event.stopPropagation();markDone(&#39;M1&#39;,!done[&#39;M1&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#888">Meta</span>
+              <span class="id-badge">M1</span>
+              
+            </div>
+            <div class="card-title">Debug a Failing Test</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>A specific test is failing. Have the test name and error output ready to paste.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-M1" onclick="copyPrompt(&#39;M1&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md.
+
+A test is failing. Diagnose and fix the production code.
+Do not change the test unless it is provably wrong.
+
+FAILING TEST:
+[PASTE TEST NAME AND FULL ERROR OUTPUT HERE]
+
+DEBUGGING PROTOCOL:
+1. Read the failing test to understand what it asserts
+2. Read the production code it exercises
+3. Identify root cause — not surface symptom
+4. Classify:
+   (a) Production code bug -&gt; fix production code
+   (b) Test setup issue -&gt; fix mocks or in-memory DB state
+   (c) Architecture violation -&gt; fix violation first
+   (d) Test expectation wrong (rare) -&gt; document why before changing
+
+CONSTRAINTS:
+- Do not suppress assertions or add try/catch to hide failures
+- Do not mock Room to avoid a real Room failure — the failure is the signal
+- If fix requires &gt; 3 files, stop and report — likely an architectural issue
+
+VERIFICATION:
+  ./gradlew test --tests "[TestClassName.testMethodName]"
+  Expected: PASSED
+  
+  ./gradlew test
+  Expected: 0 failures
+
+Report: root cause, fix applied, architectural concern if any.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Root cause identified. Failing test passes. Full suite green.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew test</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-M2" data-phase="meta">
+        <div class="card-header" onclick="scrollTo(&#39;M2&#39;)">
+          <div class="card-done-check" id="chk-M2" style="" onclick="event.stopPropagation();markDone(&#39;M2&#39;,!done[&#39;M2&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#888">Meta</span>
+              <span class="id-badge">M2</span>
+              
+            </div>
+            <div class="card-title">Fix an Architecture Violation</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>An architecture check grep returned results it should not. Have the violation details ready.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-M2" onclick="copyPrompt(&#39;M2&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Sections 4 and 19.
+
+An architecture violation has been found:
+[DESCRIBE THE VIOLATION — file, line, nature of problem]
+
+FIX PROTOCOL:
+1. Identify exact violation (file, line, which anti-pattern from CLAUDE.md Section 19)
+2. Identify what SHOULD be happening per CLAUDE.md
+3. Implement the correct pattern
+4. Remove the violation
+5. Run the relevant architecture check:
+   [PASTE THE GREP COMMAND FROM CLAUDE.md SECTION 19]
+   Expected: 0 results
+
+6. Verify nothing broke:
+   ./gradlew test
+   ./gradlew lint
+
+7. Write a test that would catch this class of violation in future.
+   If a test already exists: verify it would have caught this.
+
+Report: the violation, the fix, grep now returns 0, regression test added.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Violation fixed. Architecture check returns 0. Regression test present.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">[relevant grep from CLAUDE.md Section 19]</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-M3" data-phase="meta">
+        <div class="card-header" onclick="scrollTo(&#39;M3&#39;)">
+          <div class="card-done-check" id="chk-M3" style="" onclick="event.stopPropagation();markDone(&#39;M3&#39;,!done[&#39;M3&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#888">Meta</span>
+              <span class="id-badge">M3</span>
+              
+            </div>
+            <div class="card-title">Dependency Version Update</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>A specific library needs updating. One dependency at a time only.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-M3" onclick="copyPrompt(&#39;M3&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Section 2 (Tech Stack) and Section 24 (Living Document Protocol).
+
+Update this dependency:
+[NAME THE DEPENDENCY AND ITS NEW VERSION]
+
+UPDATE PROTOCOL:
+1. Update the version constant in buildSrc/Dependencies.kt
+2. Run: ./gradlew assembleDebug
+   Fix any breaking API changes — do not suppress them
+3. Run: ./gradlew test
+   Fix behavioral regressions
+4. Run: ./gradlew lint
+5. Update CLAUDE.md Section 2 with the new verified version
+6. Commit: chore(deps): bump [library] from [old] to [new]
+
+CONSTRAINTS:
+- One dependency per session
+- Major version bumps (X.0.0) require human approval before proceeding
+- If update breaks &gt; 5 files: stop and report
+
+Report: old version, new version, files changed, API differences.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Dependency updated. Tests pass. CLAUDE.md Section 2 updated. Committed.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew assembleDebug &amp;&amp; ./gradlew test &amp;&amp; ./gradlew lint</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-M4" data-phase="meta">
+        <div class="card-header" onclick="scrollTo(&#39;M4&#39;)">
+          <div class="card-done-check" id="chk-M4" style="" onclick="event.stopPropagation();markDone(&#39;M4&#39;,!done[&#39;M4&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#888">Meta</span>
+              <span class="id-badge">M4</span>
+              
+            </div>
+            <div class="card-title">Architectural Audit</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>Run periodically or before any major PR. Does not modify code — audit only.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-M4" onclick="copyPrompt(&#39;M4&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md Sections 4 and 19. Perform architectural audit. Report only — do not fix.
+
+Run all 10 checks and report PASS (0 results) or FAIL (list violations):
+
+CHECK 1: grep -rn "getFirestore\|collection(" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource
+CHECK 2: grep -rn "Build.MANUFACTURER\|MIUI\|ColorOS" --include="*.kt" | grep -v OemCompat.kt
+CHECK 3: grep -rn "import android" core/domain/ --include="*.kt"
+CHECK 4: grep -rn "import com.bugreel.pro.feature" feature/ --include="*.kt"
+CHECK 5: grep -rn '"gpt-4\|"gpt-5' --include="*.kt" | grep -v BuildConfig
+CHECK 6: grep -rn "import android\|suspend\|Flow\|AIService" feature/quality/domain/QualityScorer.kt
+CHECK 7: grep -rn "OkHttp\|HttpClient" --include="*.kt" | grep -v OpenAIService | grep -v NetworkModule
+CHECK 8: grep -rn "skipSafety\|bypassSafety" --include="*.kt"
+CHECK 9: grep -rn "FLYWHEEL_ENABLED.*false" --include="*.kt" --include="*.kts"
+CHECK 10: verify every schema version &gt; 1 has a corresponding Migration class
+
+FINAL REPORT:
+"X of 10 architectural checks PASS. Violations in: [list]."
+Each violation: file name and line number.
+
+This session does not fix violations. Human prioritises follow-up.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Audit report: 10 checks with PASS/FAIL and all violation details.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">N/A — this session is the audit</div></div>
+          </div>
+        </div>
+      </div><div class="prompt-card" id="card-M5" data-phase="meta">
+        <div class="card-header" onclick="scrollTo(&#39;M5&#39;)">
+          <div class="card-done-check" id="chk-M5" style="" onclick="event.stopPropagation();markDone(&#39;M5&#39;,!done[&#39;M5&#39;])"></div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:#888">Meta</span>
+              <span class="id-badge">M5</span>
+              
+            </div>
+            <div class="card-title">Performance Investigation</div>
+          </div>
+        </div>
+        <div class="prereq-box"><span class="prereq-label">Prerequisites:</span>A specific performance issue observed on device. Have symptom and screen name ready.</div>
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-M5" onclick="copyPrompt(&#39;M5&#39;)">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">Read CLAUDE.md.
+
+Investigate this performance issue:
+[DESCRIBE: screen name, symptom, when it occurs, which device]
+
+INVESTIGATION PROTOCOL:
+
+1. DATABASE — missing indexes on queried fields:
+   grep -rn "@Index" core/data/local/entity/ --include="*.kt"
+   For frequently queried fields (createdAt, reportId, syncedAt): add @Index if missing.
+   Each new @Index = new Room schema migration required.
+
+2. UI RENDERING — unnecessary recompositions:
+   Unstable lambdas -&gt; wrap in remember {}
+   Missing key= in LazyColumn -&gt; add key = { item.id }
+   Heavy computation in composition -&gt; move to ViewModel
+   Objects recreated each composition -&gt; remember {} or derivedStateOf {}
+
+3. FLOW — over-emission:
+   Missing distinctUntilChanged() on frequently updating flows
+   collectAsState() instead of collectAsStateWithLifecycle() -&gt; change it
+   Large lists emitted on small changes -&gt; consider diffing
+
+4. COIL — image loading:
+   Verify disk cache enabled (Coil 3.x default)
+   Screenshots &gt; 2MB not compressed -&gt; EvidenceManager.validateAndAttachScreenshot()
+
+5. NETWORK — AI calls on wrong thread:
+   grep -rn "Dispatchers.Main" feature/ai/ --include="*.kt"
+   AI calls must use Dispatchers.IO.
+
+After fix: ./gradlew test -&gt; verify 0 regressions.
+Report: root cause, fix applied, expected improvement, test verifying fix.</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs &amp; verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>Performance root cause identified. Fix applied. Tests pass.</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">./gradlew test</div></div>
+          </div>
+        </div>
+      </div></div>
+</div>
+</div>
+<script>
+const PROMPTS=[
+{
+  id:"P0.1",
+  phase:"pre",
+  color:"#555",
+  title:"Environment Verification",
+  prereqs:"Android Studio Quail 1, JDK 17, Git, and Claude Code must be installed. Repo cloned locally.",
+  text:`Read CLAUDE.md at the repo root first. Do not proceed until confirmed.
+
+Verify the development environment. Run each check and report PASS or FAIL.
+
+CHECK 1 — Java version:
+  java -version
+  Expected: openjdk version "17.x.x"
+
+CHECK 2 — Gradle JVM:
+  .\\gradlew --version    (Windows PowerShell)
+  ./gradlew --version     (Mac/Linux)
+  Expected: JVM 17.x.x on the JVM line
+
+CHECK 3 — JAVA_HOME:
+  echo %JAVA_HOME%        (Windows)
+  echo $JAVA_HOME         (Mac/Linux)
+  Expected: path pointing to JDK 17
+
+CHECK 4 — Git config:
+  git config user.name
+  git config user.email
+  Expected: both non-empty
+
+CHECK 5 — CLAUDE.md presence:
+  Confirm CLAUDE.md exists at the repo root.
+
+CHECK 6 — local.properties keys:
+  Confirm OPENAI_API_KEY and OPENAI_ORG_ID are present.
+  Do NOT print the values.
+
+CHECK 7 — google-services.json:
+  Confirm google-services.json exists in /app/ directory.
+
+If any check fails: stop, report what is missing, do not proceed.
+Only continue when all 7 checks PASS.`,
+  outputs:"7 checks PASS or list of failures",
+  verify:"N/A \u2014 this session is the verification"
+},
+{
+  id:"P0.2",
+  phase:"pre",
+  color:"#555",
+  title:"Project Scaffold & Git Setup",
+  prereqs:"P0.1 all 7 checks PASS.",
+  text:`Read CLAUDE.md Section 3 (Directory Structure).
+
+Create the full directory scaffold for BugReel Pro.
+Directories only — no Kotlin files yet.
+
+STEP 1 — Create all directories from CLAUDE.md Section 3.
+Use mkdir -p for nested paths. Every directory must exist.
+
+STEP 2 — Create configuration files:
+
+.gitignore — must exclude:
+  google-services.json
+  local.properties
+  *.jks
+  /build
+  /.gradle
+
+gradle.properties:
+  org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+  android.useAndroidX=true
+  kotlin.code.style=official
+  org.gradle.parallel=true
+  org.gradle.caching=true
+
+settings.gradle.kts:
+  pluginManagement with Google + Gradle plugin repositories
+  dependencyResolutionManagement with mavenCentral + google
+  rootProject.name = "bugreel-pro"
+  include(":app")
+
+buildSrc/Dependencies.kt:
+  Stub with version constants (versions from CLAUDE.md Section 2)
+
+STEP 3 — Verify:
+  find . -type d | sort
+  Confirm every directory from CLAUDE.md Section 3 is present.
+
+STEP 4 — Initial commit:
+  git add .
+  git commit -m "chore(scaffold): create project directory structure"
+
+Report any directories missing from the expected structure.`,
+  outputs:"All directories from CLAUDE.md \u00a73 created. Initial commit made.",
+  verify:"find . -type d | sort"
+},
+{
+  id:"P0.3",
+  phase:"pre",
+  color:"#555",
+  title:"Gradle Build Configuration",
+  prereqs:"P0.2 complete. Directory scaffold exists.",
+  text:`Read CLAUDE.md Section 2 (Tech Stack) and Section 22 (Environment Variables).
+
+Create Gradle build configuration. After each file, run ./gradlew assembleDebug and fix errors before proceeding.
+
+CREATE buildSrc/Dependencies.kt:
+  object Versions { all version constants from CLAUDE.md Section 2 }
+  object Libs { all dependency strings as Versions.X references }
+
+CREATE root build.gradle.kts:
+  All plugins declared with apply false.
+  Kotlin DSL syntax throughout.
+
+CREATE app/build.gradle.kts:
+  compileSdk = 35, minSdk = 28, targetSdk = 35
+  applicationId = "com.bugreel.pro"
+  versionCode = 1, versionName = "0.1.0-alpha"
+  
+  All BuildConfig fields from CLAUDE.md Section 22:
+    AI_MODEL_STANDARD, AI_MODEL_SAFETY, QUALITY_SCORE_UPGRADE,
+    AI_RATE_LIMIT_RPM, SYNC_INTERVAL_MINUTES, FLYWHEEL_ENABLED
+  
+  All dependencies from CLAUDE.md Section 2.
+  KSP (not KAPT) for Hilt and Room.
+  JUnit5 via mannodermaus android-junit5 plugin.
+  Room schema export: schemaDirectory("$projectDir/../schemas")
+  Jacoco configuration.
+
+CREATE AndroidManifest.xml:
+  Application class: .BugReelApplication
+  Permissions: INTERNET, FOREGROUND_SERVICE, RECORD_AUDIO,
+               POST_NOTIFICATIONS, SYSTEM_ALERT_WINDOW
+  CaptureService:
+    android:process=":capture"
+    android:foregroundServiceType="mediaProjection"
+    android:exported="false"
+
+FINAL VERIFICATION:
+  ./gradlew assembleDebug
+  Expected: BUILD SUCCESSFUL
+
+Fix all errors before stopping.
+Commit: chore(build): configure gradle build with all dependencies`,
+  outputs:"Empty project compiles. BUILD SUCCESSFUL.",
+  verify:"./gradlew assembleDebug"
+},
+{
+  id:"S1.1",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"Core Domain Models & Enums",
+  prereqs:"P0.3 complete. ./gradlew assembleDebug passes on empty project.",
+  text:`Read CLAUDE.md. We are in Sprint 1, Session 1: Core Domain Models.
+
+Pure Kotlin only — zero Android imports, zero framework dependencies.
+
+Create in this exact order:
+
+1. core/domain/model/enums/Severity.kt
+   enum: CRITICAL, HIGH, MEDIUM, LOW, COSMETIC
+   Add displayName: String property.
+
+2. core/domain/model/enums/Frequency.kt
+   enum: ALWAYS, SOMETIMES, RARELY, ONCE
+
+3. core/domain/model/enums/ReportStatus.kt
+   enum: DRAFT, SUBMITTED, ACCEPTED, REJECTED
+
+4. core/domain/model/enums/PlatformOutcome.kt  ★ FLYWHEEL
+   enum: ACCEPTED, REJECTED, PENDING
+
+5. core/domain/model/enums/TestPlatform.kt
+   enum: UTEST, TESTLIO, TEST_IO, OTHER
+   Add displayName: String property.
+
+6. core/domain/model/DeviceProfile.kt
+   data class: brand, model, osVersion (String), apiLevel (Int),
+   ramMb (Long), screenResolution (String), networkType (String)
+
+7. core/domain/model/EvidenceBundle.kt
+   data class: recordingUri (String?), screenshots (List<String>),
+   logText (String?), eventLog (String?)
+
+8. core/domain/model/CoachingHint.kt — per CLAUDE.md Section 6
+9. core/domain/model/QualityScore.kt — per CLAUDE.md Section 6
+10. core/domain/model/AiOutput.kt
+    data class: generatedTitle (String?), generatedSummary (String?),
+    formattedReproSteps (List<String>), safetyPassed (Boolean),
+    blockedReason (String?)
+
+11. core/domain/model/OutcomeFeedback.kt — per CLAUDE.md Section 6 ★ FLYWHEEL
+    ALL fields required. Do not remove or make nullable any field.
+
+12. core/domain/model/BugReportDraft.kt
+    All BugReport fields nullable except id and createdAt.
+
+13. core/domain/model/BugReport.kt — per CLAUDE.md Section 6
+
+14. core/domain/repository/ReportRepository.kt — interface only
+15. core/domain/repository/DraftRepository.kt — interface only
+16. core/domain/repository/OutcomeFeedbackRepository.kt — interface only ★ FLYWHEEL
+
+VERIFY — must return 0 results:
+  grep -rn "import android" core/domain/ --include="*.kt"
+
+Do not create Room entities yet — that is Session 2.`,
+  outputs:"16 pure Kotlin domain model files. Zero Android imports.",
+  verify:"grep -rn \"import android\" core/domain/ --include=\"*.kt\""
+},
+{
+  id:"S1.2",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"Room Entities, DAOs & Database",
+  prereqs:"S1.1 complete. All 16 domain model files exist.",
+  text:`Read CLAUDE.md. Sprint 1, Session 2: Room Entities, DAOs and Database.
+
+Entities map FROM domain models — they are separate @Entity classes.
+
+ENTITIES in core/data/local/entity/:
+1. ReportEntity.kt — @Entity(tableName="reports"), @PrimaryKey on id (String)
+2. EvidenceEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+3. DraftEntity.kt — @Entity(tableName="drafts"), nullable fields
+4. QualityScoreEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+5. AiOutputEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+6. DeviceProfileEntity.kt — @ForeignKey to reports, onDelete=CASCADE
+7. OutcomeFeedbackEntity.kt — @ForeignKey to reports, onDelete=CASCADE ★ FLYWHEEL
+   Fields: reportId, platformOutcome (String), rejectionReason (String?),
+   reportedByTesterAt (Long), preAiQualityScore (Int), postAiQualityScore (Int),
+   testerOverrodeSuggestion (Boolean), aiSuggestionsAccepted (String JSON),
+   aiSuggestionsRejected (String JSON)
+
+DAOs in core/data/local/dao/:
+8. ReportDao.kt — insert/update/delete (suspend), getById (suspend), getAllReports (Flow)
+9. EvidenceDao.kt — insert (suspend), getByReportId (suspend)
+10. DraftDao.kt — upsert (suspend), getById (suspend), deleteById (suspend), getAllDrafts (Flow)
+11. QualityScoreDao.kt — insert (suspend), getByReportId returning null if absent (suspend)
+12. AiOutputDao.kt — insert (suspend), getByReportId (suspend)
+13. DeviceProfileDao.kt — insert (suspend), getByReportId (suspend)
+14. OutcomeFeedbackDao.kt — insert (suspend), queryByReportId (suspend), getAll (Flow) ★
+
+CONVERTERS:
+15. core/data/local/Converters.kt — @TypeConverters:
+    Instant<->Long, List<String><->JSON, all 5 enums<->String
+
+DATABASE:
+16. core/data/local/BugReelDatabase.kt
+    @Database(version=1, exportSchema=true)
+    ALL 7 entities registered — OutcomeFeedbackEntity MUST be present
+    Abstract accessor for each of the 7 DAOs
+
+VERIFY schema export:
+  ./gradlew :app:kaptDebugKotlin
+  Confirm schemas/.../1.json exists and contains 7 tables including "outcome_feedback"
+
+Commit: feat(flywheel): add Room schema version 1 with OutcomeFeedbackEntity`,
+  outputs:"7 entities, 7 DAOs, Converters, BugReelDatabase, schema JSON at schemas/...1.json",
+  verify:"./gradlew :app:kaptDebugKotlin"
+},
+{
+  id:"S1.3",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"DI Modules, OemCompat & PermissionManager",
+  prereqs:"S1.2 complete. Room schema exported and confirmed.",
+  text:`Read CLAUDE.md. Sprint 1, Session 3: DI Infrastructure and Utilities.
+
+1. core/util/OemCompat.kt — object (not class)
+   ALL OEM checks live here exclusively.
+   requiresManualBatteryOptimizationWhitelist(): Boolean
+     true if Build.MANUFACTURER.lowercase() in ["xiaomi","oppo","vivo","huawei"]
+   overlayPermissionGrantIntent(context: Context): Intent
+     Settings.ACTION_MANAGE_OVERLAY_PERMISSION intent for this package
+   foregroundServiceSurvivesBatterySaver(): Boolean
+     false for xiaomi/oppo; true otherwise
+   mediaProjectionReprompts(): Boolean
+     true for samsung/xiaomi
+   needsPiPFallback(): Boolean
+     false — placeholder; add TODO: Update when Play Console review lands
+
+2. core/util/PermissionManager.kt — @Singleton class
+   ALL runtime permission requests go through here.
+   No Composable ever calls permission APIs directly.
+   requestMediaProjection(activity, launcher)
+   requestOverlayPermission(context)
+   requestNotificationPermission(launcher)
+   isOverlayPermissionGranted(context): Boolean
+   isMediaProjectionPermissionGranted(): Boolean
+
+3. core/util/Extensions.kt
+   fun String.toInstant(): Instant
+   fun Long.toInstant(): Instant
+   fun Context.showToast(message: String)
+
+4. core/di/DatabaseModule.kt — @Module @InstallIn(SingletonComponent)
+   Provides BugReelDatabase @Singleton using Room.databaseBuilder
+   .fallbackToDestructiveMigration() for DEBUG builds only
+   Separate @Provides for each of the 7 DAOs
+
+5. core/di/AppModule.kt — @Module @InstallIn(SingletonComponent)
+   Provides OemCompat
+   Provides PermissionManager @Singleton
+
+6. BugReelApplication.kt — @HiltAndroidApp
+   Notification channel in onCreate():
+   ID: "bugreel_capture", Importance: IMPORTANCE_LOW
+
+VERIFY — no OEM checks outside OemCompat:
+  grep -rn "Build.MANUFACTURER\\|Build.BRAND\\|MIUI" --include="*.kt" | grep -v OemCompat.kt
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug`,
+  outputs:"OemCompat, PermissionManager, Extensions, 2 DI modules, BugReelApplication",
+  verify:"grep -rn \"Build.MANUFACTURER\" --include=\"*.kt\" | grep -v OemCompat"
+},
+{
+  id:"S1.4",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"Capture Service Layer",
+  prereqs:"S1.3 complete. ./gradlew assembleDebug passes.",
+  text:`Read CLAUDE.md. Sprint 1, Session 4: Capture Engine Service Layer.
+
+CaptureService runs in :capture process. Nothing here runs on the main thread.
+
+1. feature/capture/service/BugReelEventLogger.kt
+   Captures BugReel's OWN interaction events — NOT the test app's logcat.
+   Sealed class BugReelEvent: AppLaunched, ScreenViewed(screenName), UserTapped(x,y,description),
+   UserSwiped(direction), RecordingStarted, RecordingStopped, ReportDraftOpened, ReportDraftSaved
+   Thread-safe storage: CopyOnWriteArrayList<BugReelEvent>
+   fun logEvent(event), fun getEvents(): List<BugReelEvent>, fun clearEvents()
+   No permissions required.
+
+2. feature/capture/service/MediaProjectionHandler.kt
+   constructor(mediaProjection: MediaProjection, scope: CoroutineScope)
+   fun startRecording(outputFile: File): Boolean
+   fun stopRecording(): File?
+   fun isRecording(): Boolean
+   Uses VirtualDisplay and MediaRecorder.
+   Add TODO: OemCompat.mediaProjectionReprompts() handling on service restart.
+
+3. feature/capture/service/BubbleOverlayManager.kt — ADR-005: BOTH modes from Day 1
+   enum class BubbleMode { PRIMARY, FALLBACK }
+   @Named("bubbleMode") mode: BubbleMode injected via constructor
+   
+   PRIMARY: WindowManager overlay (SYSTEM_ALERT_WINDOW)
+     72dp FAB, bottom-right, tap=capture, long-press=stop
+   FALLBACK: Persistent notification with "Start/Stop Capture" action
+   
+   fun show(): Boolean — false if PRIMARY and permission denied
+   fun hide()
+   fun updateCaptureState(isCapturing: Boolean)
+
+4. feature/capture/service/CaptureService.kt — @AndroidEntryPoint ForegroundService
+   android:process=":capture" already in AndroidManifest.xml
+   private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+   startForeground() immediately on startCommand
+   Inner LocalBinder: startCapture(mediaProjection), stopCapture(): CaptureResult?, isCapturing()
+   onDestroy: serviceScope.cancel(), stop recording, hide bubble
+   On create: check OemCompat.requiresManualBatteryOptimizationWhitelist()
+
+VERIFY:
+  grep -rn "getFirestore\\|Firebase" feature/capture/ --include="*.kt"
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug`,
+  outputs:"BugReelEventLogger, MediaProjectionHandler, BubbleOverlayManager (dual-mode), CaptureService",
+  verify:"grep -rn \"getFirestore\" feature/capture/ --include=\"*.kt\""
+},
+{
+  id:"S1.5",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"Capture Feature \u2014 Domain, Data & UI",
+  prereqs:"S1.4 complete. CaptureService compiles.",
+  text:`Read CLAUDE.md. Sprint 1, Session 5: Capture Feature Domain, Data and UI.
+
+1. feature/capture/data/DeviceProfiler.kt
+   fun getDeviceProfile(context: Context): DeviceProfile
+   Reads: Build.MANUFACTURER + " " + Build.MODEL, Build.VERSION.RELEASE,
+   Build.VERSION.SDK_INT, ActivityManager.MemoryInfo, WindowMetrics bounds,
+   ConnectivityManager networkType. No special permissions.
+
+2. feature/capture/domain/CaptureRepository.kt — interface
+   suspend fun startCapture(mediaProjection: MediaProjection): Result<Unit>
+   suspend fun stopCapture(): Result<CaptureResult>
+   fun isCaptureActive(): Flow<Boolean>
+   data class CaptureResult(recordingFile: File?, eventLog: List<BugReelEvent>)
+
+3. feature/capture/data/CaptureRepositoryImpl.kt
+   Communicates with CaptureService via ServiceConnection + LocalBinder.
+
+4. feature/capture/domain/StartCaptureUseCase.kt
+   Returns failure if already capturing or permission not granted.
+
+5. feature/capture/domain/StopCaptureUseCase.kt
+   Returns CaptureResult. Failure if no capture was active.
+
+6. feature/capture/ui/CaptureViewModel.kt
+   sealed class CaptureUiState: Idle, RequestingPermission, Capturing, CaptureComplete(result)
+   sealed class CaptureUiEvent: NavigateToReport(result), ShowPermissionDenied, ShowOemSetup
+
+7. feature/capture/ui/CaptureScreen.kt
+   Show value-first education before requesting MediaProjection permission.
+   Start Capture button → system consent dialog.
+   Recording indicator (pulsing dot) when active.
+   Stop button → navigate to ReportBuilder with CaptureResult.
+   OEM setup guide card when requiresManualBatteryOptimizationWhitelist() is true.
+
+UPDATE navigation/AppNavGraph.kt:
+   CaptureScreen as start destination.
+   Stub route for ReportBuilderScreen (Sprint 2).
+
+Run: ./gradlew assembleDebug && ./gradlew lint
+Commit: feat(capture): complete capture engine with dual-mode bubble overlay`,
+  outputs:"DeviceProfiler, CaptureRepository, 2 UseCases, ViewModel, CaptureScreen, Navigation",
+  verify:"./gradlew assembleDebug && ./gradlew lint"
+},
+{
+  id:"S1.6",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"Sprint 1 Tests",
+  prereqs:"S1.1\u2013S1.5 complete. All production code compiles.",
+  text:`Read CLAUDE.md Section 12 (Testing Architecture). Sprint 1, Session 6: Tests.
+
+Test naming: fun \`description in plain english\`() — backtick format always.
+Never mock Room — use Room.inMemoryDatabaseBuilder for persistence tests.
+
+UNIT TESTS (src/test/):
+
+1. BugReelEventLoggerTest.kt
+   \`all event subtypes can be logged without error\`
+   \`getEvents returns events in chronological order\`
+   \`clearEvents results in empty list\`
+   \`concurrent logging does not lose events\`
+
+2. OemCompatTest.kt
+   \`requiresManualBatteryOptimizationWhitelist returns true for xiaomi regardless of case\`
+   \`needsPiPFallback returns false by default\`
+   \`all methods callable without throwing\`
+
+3. DeviceProfilerTest.kt (Robolectric)
+   \`getDeviceProfile returns non-null DeviceProfile\`
+   \`brand and model are non-empty strings\`
+
+4. StartCaptureUseCaseTest.kt
+   \`returns failure when capture is already active\`
+
+5. StopCaptureUseCaseTest.kt
+   \`returns failure when no capture was active\`
+
+INTEGRATION TESTS (src/androidTest/) — in-memory Room always:
+
+6. DraftDaoIntegrationTest.kt
+   \`insert draft and retrieve by id returns same entity\`
+   \`update draft reflects updated fields on next read\`
+   \`delete draft returns null on subsequent getById\`
+   \`getAllDrafts flow emits when draft is inserted\`
+
+7. OutcomeFeedbackDaoIntegrationTest.kt ★ FLYWHEEL
+   \`insert and queryByReportId returns correct entity\`
+   \`preAiQualityScore and postAiQualityScore are persisted correctly\`
+   \`getAll flow emits when new record is inserted\`
+
+8. BugReelDatabaseTest.kt
+   \`database opens and all 7 DAOs are non-null\`
+   \`OutcomeFeedbackDao is accessible from database instance\`
+
+RUN:
+  ./gradlew test
+  ./gradlew connectedAndroidTest
+  ./gradlew lint
+  ./gradlew jacocoTestReport
+
+All pass with 0 failures. Report coverage.`,
+  outputs:"8 test files. 0 failures. 0 lint errors.",
+  verify:"./gradlew test && ./gradlew lint"
+},
+{
+  id:"S1.7",
+  phase:"s1",
+  color:"#1a7bd4",
+  title:"Sprint 1 Architecture Verification",
+  prereqs:"S1.1\u2013S1.6 complete. All tests pass.",
+  text:`Read CLAUDE.md Sections 4 and 19. Sprint 1 Architecture Verification.
+
+Run each check. Fix any violations. All 7 must PASS before Sprint 1 is declared done.
+
+CHECK 1 — No Firebase in capture feature:
+  grep -rn "getFirestore\\|Firebase" feature/capture/ --include="*.kt"
+  Expected: 0 results
+
+CHECK 2 — No OEM checks outside OemCompat:
+  grep -rn "Build.MANUFACTURER\\|MIUI\\|ColorOS" --include="*.kt" | grep -v OemCompat.kt
+  Expected: 0 results
+
+CHECK 3 — No Android imports in domain layer:
+  grep -rn "import android" core/domain/ --include="*.kt"
+  Expected: 0 results
+
+CHECK 4 — OutcomeFeedbackEntity in Room schema JSON:
+  Verify schemas/.../1.json entities array contains "outcome_feedback" table
+  Expected: present
+
+CHECK 5 — BubbleOverlayManager has both modes:
+  grep -n "PRIMARY\\|FALLBACK" feature/capture/service/BubbleOverlayManager.kt
+  Expected: both enum values AND both code paths present
+
+CHECK 6 — No cross-feature imports:
+  grep -rn "import com.bugreel.pro.feature" feature/ --include="*.kt"
+  Expected: 0 results
+
+CHECK 7 — Schema file committed:
+  git status schemas/
+  Expected: schema JSON is tracked
+
+Run: ./gradlew test && ./gradlew lint
+
+If all 7 PASS:
+  git add .
+  git commit -m "feat(sprint-1): complete capture engine and database schema"
+  Print: "Sprint 1 stop conditions MET. Ready for human device-test sign-off."
+
+Do NOT start Sprint 2. Wait for human checklist sign-off on PRD V4.0 Sprint 1 checklist.`,
+  outputs:"7 architecture checks PASS. Sprint 1 committed.",
+  verify:"All 7 grep checks return 0 results"
+},
+{
+  id:"S2.1",
+  phase:"s2",
+  color:"#2a8a4e",
+  title:"Firebase & Sync Infrastructure",
+  prereqs:"Sprint 1 checklist signed off by human. S1.7 all 7 checks PASS.",
+  text:`Read CLAUDE.md. Sprint 2, Session 1: Firebase and Sync Infrastructure.
+Sprint 1 human sign-off confirmed? If not confirmed, stop and request it first.
+
+1. core/data/remote/ai/AIService.kt — interface per CLAUDE.md Section 9
+   (Implementation Sprint 4. Create interface now for complete DI graph.)
+
+2. core/data/remote/ai/PromptRepository.kt — interface per CLAUDE.md Section 9
+   (Implementation Sprint 4.)
+
+3. core/data/remote/firebase/FirestoreSource.kt — @Singleton
+   The ONLY class that calls FirebaseFirestore.
+   suspend fun pushReport(reportId: String, reportJson: String): Result<Unit>
+   suspend fun pushOutcomeFeedback(feedbackJson: String): Result<Unit>  ★ FLYWHEEL
+   suspend fun pullAllReports(userId: String): Result<List<String>>
+   Wrap all Firebase calls in try/catch -> Result<T>.
+
+4. core/data/remote/firebase/StorageSource.kt — @Singleton
+   The ONLY class that calls FirebaseStorage.
+   suspend fun uploadRecording(uri: Uri, reportId: String): Result<String>
+   suspend fun uploadScreenshot(uri: Uri, reportId: String, index: Int): Result<String>
+   suspend fun deleteReportFiles(reportId: String): Result<Unit>
+
+5. core/data/sync/SyncMapper.kt — uses kotlinx.serialization
+   fun reportEntityToJson(entity: ReportEntity): String
+   fun jsonToReportEntity(json: String): ReportEntity?
+   fun outcomeFeedbackEntityToJson(entity: OutcomeFeedbackEntity): String  ★ FLYWHEEL
+
+6. core/data/sync/SyncWorker.kt — @HiltWorker
+   NetworkType.CONNECTED constraint. Exponential backoff: 30s, max 5 retries.
+   Pushes unsynced reports AND OutcomeFeedback records to Firebase.  ★ FLYWHEEL
+   Updates syncedAt in Room on success.
+
+7. core/di/FirebaseModule.kt
+   FirebaseFirestore, FirebaseStorage, FirebaseAuth, FirestoreSource, StorageSource — all @Singleton
+
+8. core/di/NetworkModule.kt
+   OkHttpClient (logging interceptor in debug only)
+   @Named("aiBaseUrl") = "https://api.openai.com/v1/"
+   @Named("aiModelStandard") from BuildConfig.AI_MODEL_STANDARD
+   @Named("aiModelSafety") from BuildConfig.AI_MODEL_SAFETY
+   Stub binding for AIService: throws NotImplementedError("AIService implemented Sprint 4")
+
+VERIFY:
+  grep -rn "getFirestore\\|collection(" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug`,
+  outputs:"AI interfaces, Firebase sources, SyncWorker, 2 DI modules",
+  verify:"grep -rn \"getFirestore\" --include=\"*.kt\" | grep -v SyncWorker | grep -v FirestoreSource"
+},
+{
+  id:"S2.2",
+  phase:"s2",
+  color:"#2a8a4e",
+  title:"Report Feature \u2014 Domain, Data & UI",
+  prereqs:"S2.1 complete. Firebase infrastructure compiles.",
+  text:`Read CLAUDE.md. Sprint 2, Session 2: Report Feature.
+
+1. feature/report/domain/PlatformTemplateRepository.kt — interface
+   fun getTemplate(platform: TestPlatform): ReportTemplate
+   data class ReportTemplate(requiredFields: List<String>, optionalFields: List<String>, formatInstructions: String)
+
+2. feature/report/data/PlatformTemplateRepositoryImpl.kt
+   Data-driven: store templates as companion object map — not if/when blocks.
+   UTEST: title, environment, severity, frequency, reproSteps, expectedResult, actualResult
+   TESTLIO: title, severity, steps, expectedVsActual, deviceInfo
+   TEST_IO: bugTitle, severity, stepsToReproduce, actualBehavior, expectedBehavior
+
+3. feature/report/data/EvidenceManager.kt
+   validateAndAttachRecording(uri): Result<Uri> — reject non-MP4
+   validateAndAttachScreenshot(uri): Result<Uri> — reject non-PNG/JPG; compress > 2MB
+   attachLogText(text): Result<Unit>
+   getEvidenceBundle(): EvidenceBundle
+   clearAll()
+
+4. feature/report/data/ZipGenerator.kt
+   fun generateZip(report: BugReport, evidence: EvidenceBundle): Result<File>
+   Fixed structure: /recording.mp4, /screenshots/screenshot_N.png, /log.txt, /report.json
+
+5. feature/report/data/ReportRepositoryImpl.kt
+   All writes: Room first, then trigger SyncWorker.
+
+6. feature/report/domain/BuildReportUseCase.kt
+   Returns List<ValidationError> per field — not a single Boolean.
+
+7. feature/report/domain/ExportReportUseCase.kt
+
+8. feature/report/ui/ReportBuilderViewModel.kt
+   UiState: Loading, BuildingReport(draft, errors), Submitting, Submitted, Error
+
+9. feature/report/ui/ReportBuilderScreen.kt — 5-step form:
+   Step 1: Title + Description
+   Step 2: Severity + Frequency
+   Step 3: Repro Steps (add/remove/reorder)
+   Step 4: Evidence (attached files)
+   Step 5: Review + Submit
+   Required fields block submit with inline errors.
+
+10. feature/report/ui/ReportListScreen.kt
+    LazyColumn. REQUIRED empty state:
+    "Your first report will appear here. Start by recording a test session."
+    + "Try Practice Mode first ->" (stub, Sprint 5)
+
+11. feature/report/ui/EvidencePickerScreen.kt
+
+UPDATE AppNavGraph.kt: add all report routes.
+Run: ./gradlew assembleDebug && ./gradlew lint`,
+  outputs:"Report feature: templates, evidence, ZIP, repository, 4 UI screens",
+  verify:"./gradlew assembleDebug && ./gradlew lint"
+},
+{
+  id:"S2.3",
+  phase:"s2",
+  color:"#2a8a4e",
+  title:"Sprint 2 Tests & Verification",
+  prereqs:"S2.1 and S2.2 complete. ./gradlew assembleDebug passes.",
+  text:`Read CLAUDE.md. Sprint 2, Session 3: Tests and Verification.
+
+UNIT TESTS:
+
+1. ZipGeneratorTest.kt
+   \`generated ZIP contains recording.mp4 at root\`
+   \`generated ZIP contains screenshots directory with numbered files\`
+   \`generated ZIP contains log.txt and report.json\`
+   \`report.json deserializes back to BugReport with all fields intact\`
+
+2. EvidenceManagerTest.kt
+   \`validateAndAttachRecording rejects non-MP4 URI\`
+   \`validateAndAttachScreenshot rejects non-PNG non-JPG URI\`
+   \`getEvidenceBundle returns correct URIs after attachment\`
+
+3. BuildReportUseCaseTest.kt
+   \`returns validation error for missing title\`
+   \`returns validation error when reproSteps is empty\`
+   \`returns empty errors when all required fields present\`
+
+4. ReportRepositoryImplTest.kt (mock Firebase, real in-memory Room)
+   \`createReport stores to Room\`
+   \`getAllReports flow emits when report inserted\`
+
+INTEGRATION TESTS:
+
+5. ReportDaoIntegrationTest.kt
+   \`full CRUD round-trip for ReportEntity\`
+   \`getAllReports flow emits on insert and delete\`
+
+6. SyncWorkerIntegrationTest.kt
+   \`worker executes when network available\`
+   \`OutcomeFeedback records synced alongside reports\`  ★ FLYWHEEL
+
+ARCHITECTURE CHECKS:
+  grep -rn "getFirestore\\|collection(" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource
+  Expected: 0 results
+  
+  grep -rn "import com.bugreel.pro.feature" feature/report/ --include="*.kt"
+  Expected: 0 results
+
+RUN: ./gradlew test && ./gradlew connectedAndroidTest && ./gradlew lint
+
+Commit: feat(sprint-2): complete report builder and firebase sync
+Do NOT start Sprint 3. Wait for human sign-off.`,
+  outputs:"6 test files. All Sprint 2 stop conditions met.",
+  verify:"./gradlew test && ./gradlew lint"
+},
+{
+  id:"S3.1",
+  phase:"s3",
+  color:"#7b3fd4",
+  title:"Quality Engine Core",
+  prereqs:"Sprint 2 checklist signed off by human.",
+  text:`Read CLAUDE.md Section 10 (Quality Scorer Contract) in full before writing any code.
+Sprint 3, Session 1: Quality Engine Core.
+
+CRITICAL: After writing QualityScorer, run this BEFORE anything else:
+  grep -rn "import android\\|suspend\\|Flow\\|AIService\\|coroutine" feature/quality/domain/QualityScorer.kt
+  Expected: 0 results. Refactor until 0.
+
+1. feature/quality/domain/CoachingHintStrings.kt — object
+   ALL coaching text as constants. No hint strings elsewhere.
+   2-3 hints per scoring dimension. All <= 120 characters.
+   fun verify() { all strings.forEach { check(it.length <= 120) } }
+
+2. feature/quality/domain/QualityScorer.kt — pure function, per CLAUDE.md Section 10
+   fun score(report: BugReport): QualityScore
+   
+   Reproduction (max 25):
+   +10 reproSteps.isNotEmpty()
+   +5 reproSteps.size >= 2
+   +5 reproSteps.all { it.length > 10 }
+   +5 summary contains "expected" or "actual" (case-insensitive)
+   
+   Evidence (max 25):
+   +15 recordingUri != null
+   +7 screenshots.size >= 2
+   +3 logText != null or eventLog != null
+   
+   Description (max 20):
+   +10 summary.length >= 50
+   +5 summary.length <= 500
+   +5 no placeholder text (\\[.*?\\]|TODO|placeholder)
+   
+   Severity (max 15):
+   +10 severity not null/default
+   +5 severity consistent with evidence
+   
+   Metadata (max 15):
+   +10 deviceProfile.brand and model non-empty
+   +5 platform fields populated
+   
+   Coaching: generate for dimensions < 80% of max.
+   Max 3 returned, sorted by scoreImpact descending.
+   All hint text from CoachingHintStrings only.
+
+3. feature/quality/domain/SeverityAdvisor.kt — pure function
+   fun advise(evidence: EvidenceBundle, current: Severity?): SeverityAdvice
+   data class SeverityAdvice(recommended: Severity, reasoning: String, confidence: Float)
+
+4. feature/quality/domain/CompletenessChecker.kt — pure function
+   fun check(report: BugReport): CompletenessResult
+   data class CompletenessResult(missingFields: List<String>, isComplete: Boolean)
+
+5. feature/quality/domain/DuplicateDetector.kt
+   > 60% word overlap in normalized titles = potential duplicate.
+
+6. feature/quality/domain/ScoreReportUseCase.kt
+   Calls QualityScorer.score(). Saves to QualityScoreDao.
+   Records preAiQualityScore in OutcomeFeedbackDao.  ★ FLYWHEEL DATA STARTS HERE
+
+7. feature/quality/data/QualityRepositoryImpl.kt
+
+Run: ./gradlew assembleDebug`,
+  outputs:"QualityScorer (pure function verified), SeverityAdvisor, CompletenessChecker, DuplicateDetector",
+  verify:"grep -rn \"import android\\|suspend\\|Flow\\|AIService\" feature/quality/domain/QualityScorer.kt"
+},
+{
+  id:"S3.2",
+  phase:"s3",
+  color:"#7b3fd4",
+  title:"Quality UI, Tests & Verification",
+  prereqs:"S3.1 complete. QualityScorer grep check returns 0.",
+  text:`Read CLAUDE.md. Sprint 3, Session 2: Quality UI, Tests and Verification.
+
+UI:
+1. feature/quality/ui/QualityScoreViewModel.kt
+   UiState: Loading, Scoring, ScoreReady(score, coaching, showUpgradePrompt), Error
+
+2. feature/quality/ui/QualityScoreScreen.kt
+   Animated score count-up 0 -> final value (300ms). Radial progress indicator.
+   Breakdown by dimension. Up to 3 coaching hints sorted by scoreImpact.
+   Upgrade prompt when score < BuildConfig.QUALITY_SCORE_UPGRADE.
+   Dismiss button — persisted in DataStore.
+
+UNIT TESTS:
+3. QualityScorerTest.kt
+   \`empty report scores zero\`
+   \`full report scores 100\`
+   \`same input 1000 times always produces same output\`
+   \`coaching hints generated when reproduction sub-score below 20\`
+   \`coaching hints generated when evidence sub-score below 20\`
+   \`no more than 3 coaching hints returned\`
+   \`coaching hints sorted by scoreImpact descending\`
+   \`partial evidence gives partial credit not zero\`
+
+4. SeverityAdvisorTest.kt — 25 test cases (5 levels x 5 evidence scenarios)
+
+5. CompletenessCheckerTest.kt — each missing field caught independently
+
+6. DuplicateDetectorTest.kt
+   \`10 non-duplicate pairs produce no false positives\`
+   \`identical title flagged as duplicate\`
+
+ARCHITECTURE CHECKS:
+  grep -rn "import android\\|suspend\\|Flow\\|AIService" feature/quality/domain/QualityScorer.kt
+  Expected: 0 results
+
+RUN:
+  ./gradlew test
+  ./gradlew jacocoTestReport
+  Target: >= 90% coverage on feature/quality/domain/
+  ./gradlew lint
+
+Commit: feat(sprint-3): complete quality engine with deterministic scorer
+Do NOT start Sprint 4. Wait for human sign-off.`,
+  outputs:"Quality UI, 4 test files. >=90% coverage on quality/domain.",
+  verify:"./gradlew test && ./gradlew jacocoTestReport"
+},
+{
+  id:"S4.1",
+  phase:"s4",
+  color:"#b07800",
+  title:"AI Infrastructure \u2014 DTOs, Service & Prompts",
+  prereqs:"Sprint 3 signed off. Confirm per-report AI cost at P90 < $0.20 from Sprint 0 Track 4 memo.",
+  text:`Read CLAUDE.md Sections 9 and 17. Sprint 4, Session 1: AI Infrastructure.
+
+BEFORE STARTING: Confirm P90 AI cost from Sprint 0 Track 4 memo is < $0.20/report.
+If not, stop and flag to human before writing any AI code.
+
+1. core/data/remote/ai/dto/ChatRequest.kt — @Serializable
+   model: String, messages: List<Message>, max_tokens: Int = 1000, temperature: Float = 0.3f
+   @Serializable data class Message(role: String, content: String)
+
+2. core/data/remote/ai/dto/ChatResponse.kt — @Serializable
+   id: String, choices: List<Choice>, usage: Usage?
+   @Serializable data class Choice(message: Message, finish_reason: String)
+   @Serializable data class Usage(prompt_tokens: Int, completion_tokens: Int, total_tokens: Int)
+
+3. core/data/remote/ai/dto/VisionRequest.kt — @Serializable
+   Same as ChatRequest with ContentPart support for image_url
+
+4. core/data/remote/ai/DefaultPromptRepository.kt — implements PromptRepository
+   ALL prompt strings defined as private constants here. None exist elsewhere.
+   titlePrompt: return ONLY the title, no quotes, max 80 chars
+   summaryPrompt: return ONLY improved summary, 50-200 chars
+   reproStepsPrompt: return ONLY a JSON array of numbered steps
+   safetyValidationPrompt: return ONLY {"passed":bool,"reason":"string"}
+   Private: fun String.fillPlaceholders(vararg pairs: Pair<String,String>): String
+
+5. core/data/remote/ai/OpenAIService.kt — implements AIService
+   The ONLY file making HTTP calls.
+   AI_MODEL_STANDARD for title, summary, reproSteps.
+   AI_MODEL_SAFETY for validateSafety.
+   Log token counts per call for cost monitoring.
+   sealed class AIResult<T>: Success(data), Failure(error), RateLimited(retryAfterSeconds)
+
+6. feature/ai/domain/AiRateLimiter.kt — @Singleton, token bucket
+   fun acquire(): AcquireResult (Acquired | Denied(retryAfterMs))
+   Refills at BuildConfig.AI_RATE_LIMIT_RPM per minute. AtomicLong for thread safety.
+
+UPDATE NetworkModule.kt:
+   Remove NotImplementedError stub.
+   Bind OpenAIService to AIService.
+   Bind DefaultPromptRepository to PromptRepository.
+
+VERIFY:
+  grep -rn '"gpt-4\\|"gpt-5' --include="*.kt" | grep -v BuildConfig
+  Expected: 0 results
+
+Run: ./gradlew assembleDebug`,
+  outputs:"3 DTOs, DefaultPromptRepository, OpenAIService, AiRateLimiter. Zero hardcoded model strings.",
+  verify:"grep -rn '\"gpt-4' --include=\"*.kt\" | grep -v BuildConfig"
+},
+{
+  id:"S4.2",
+  phase:"s4",
+  color:"#b07800",
+  title:"Safety Validator, AI Feature & OutcomeFeedback Wiring",
+  prereqs:"S4.1 complete. Zero hardcoded model strings confirmed.",
+  text:`Read CLAUDE.md Section 9 (SafetyValidator criteria). Sprint 4, Session 2.
+
+1. feature/ai/domain/SafetyValidator.kt
+   fun validate(context: ReportContext, output: AiOutput): SafetyResult
+   sealed class SafetyResult: Pass(output), Blocked(reason: String)
+   
+   CRITERION A: output mentions UI element not in context.evidence.eventLog
+     -> Blocked("Ungrounded UI element reference")
+   CRITERION B: output claims crash/critical with no crash log and no recording
+     -> Blocked("Severity not supported by evidence")
+   CRITERION C: generated repro step action not in event log
+     -> Blocked("Repro step not in evidence")
+   CRITERION D: output device name mismatches context.deviceProfile
+     -> Blocked("Device metadata inconsistency")
+   THEN: call AIService.validateSafety() for LLM-based check.
+   BOTH must pass. Log all blocks to analytics.
+   NO bypass path exists anywhere.
+
+2. feature/ai/domain/GenerateTitleUseCase.kt
+   acquire(AiRateLimiter) -> if Denied: RateLimitError
+   call AIService.generateTitle() -> if failure: Error
+   run SafetyValidator.validate() -> if Blocked: return original tester title + emit SafetyBlockEvent
+   if Pass: return generated title
+
+3. feature/ai/domain/GenerateSummaryUseCase.kt — same pattern
+4. feature/ai/domain/FormatReproStepsUseCase.kt — same pattern
+5. feature/ai/data/AiRepositoryImpl.kt
+
+6. feature/ai/ui/AiAssistViewModel.kt
+   Track accepted vs rejected fields for OutcomeFeedback.
+   On edit: set testerOverrodeSuggestion = true.
+
+7. feature/ai/ui/AiAssistScreen.kt
+   3 cards: Title, Summary, Repro Steps. Each with Generate button.
+   Skeleton loading -> side-by-side: "Your text" vs "AI suggestion" (distinct backgrounds)
+   Accept / Edit per card.
+   Rate limit: countdown timer. Network error: fallback to original, never blank.
+
+WIRE OutcomeFeedback:
+   After AI suggestions: re-run QualityScorer, store postAiQualityScore  ★ FLYWHEEL
+   Track aiSuggestionsAccepted and aiSuggestionsRejected per field  ★ FLYWHEEL
+
+Run: ./gradlew assembleDebug && ./gradlew lint`,
+  outputs:"SafetyValidator (4 criteria), 3 UseCases, AI UI, OutcomeFeedback fully wired",
+  verify:"./gradlew assembleDebug && ./gradlew lint"
+},
+{
+  id:"S4.3",
+  phase:"s4",
+  color:"#b07800",
+  title:"Sprint 4 Tests & Verification",
+  prereqs:"S4.1 and S4.2 complete. All AI feature code compiles.",
+  text:`Read CLAUDE.md. Sprint 4, Session 3: Tests and Verification.
+
+UNIT TESTS:
+
+1. SafetyValidatorTest.kt — one test per criterion plus pass case:
+   \`criterion A blocks when title references element absent from event log\`
+   \`criterion A passes when element present in event log\`
+   \`criterion B blocks when Critical severity with no crash log and no recording\`
+   \`criterion C blocks when repro step action not in event log\`
+   \`criterion D blocks when device name mismatches DeviceProfile\`
+   \`correct grounded output returns SafetyResult.Pass\`
+   Mock AIService.validateSafety() to return pass for all above tests.
+
+2. DefaultPromptRepositoryTest.kt:
+   \`all 4 prompt methods return non-empty strings for valid ReportContext\`
+   \`no unfilled placeholder tokens after fillPlaceholders called\`
+   \`all prompts under 2000 characters\`
+
+3. AiRateLimiterTest.kt:
+   \`20 consecutive acquire calls return Acquired\`
+   \`21st call in same minute returns Denied with positive retryAfterMs\`
+
+4. GenerateTitleUseCaseTest.kt:
+   \`returns AI title when safety passes\`
+   \`returns original tester title when safety blocks\`
+
+5. OpenAIServiceTest.kt — MockWebServer (no real network):
+   \`sends correct model string from BuildConfig not hardcoded\`
+   \`parses 200 response to AIResult.Success\`
+   \`returns AIResult.RateLimited on 429 response\`
+
+ARCHITECTURE CHECKS:
+  grep -rn '"gpt-4\\|"gpt-5' --include="*.kt" | grep -v BuildConfig
+  Expected: 0
+  
+  grep -rn "OkHttp\\|HttpClient" --include="*.kt" | grep -v OpenAIService | grep -v NetworkModule
+  Expected: 0
+  
+  grep -rn "skipSafety\\|bypassSafety" --include="*.kt"
+  Expected: 0
+
+RUN: ./gradlew test && ./gradlew lint
+
+Commit: feat(sprint-4): complete AI assistant with safety validator
+Do NOT start Sprint 5. Wait for human sign-off.`,
+  outputs:"5 SafetyValidator tests. All Sprint 4 stop conditions met.",
+  verify:"./gradlew test && ./gradlew lint"
+},
+{
+  id:"S5.1",
+  phase:"s5",
+  color:"#0d7a6b",
+  title:"Flywheel \u2014 Outcome Recording & Analytics Domain",
+  prereqs:"Sprint 4 checklist signed off by human.",
+  text:`Read CLAUDE.md Section 23 (Flywheel Instrumentation). Sprint 5, Session 1.
+
+1. feature/analytics/domain/RecordOutcomeUseCase.kt  ★ THE FLYWHEEL COMPLETES HERE
+   fun recordOutcome(reportId: String, outcome: PlatformOutcome, reason: String?): Result<Unit>
+   Validate reportId exists in Room. Write to OutcomeFeedbackDao.
+   Trigger SyncWorker for Firebase sync. Log warning if REJECTED with no reason.
+
+2. feature/analytics/domain/AcceptanceRateUseCase.kt
+   fun getAcceptanceRate(period: AcceptancePeriod): Flow<AcceptanceStats>
+   enum: LAST_7_DAYS, LAST_30_DAYS, ALL_TIME
+   data class AcceptanceStats(totalSubmitted, totalAccepted, acceptanceRate, trend, qualityScoreTrend)
+   Reads OutcomeFeedbackDao only. Zero Firestore reads.
+
+3. feature/analytics/domain/PracticeModeUseCase.kt
+   5 preset scenarios. fun startPracticeSession(scenario). fun scoreSession(session): QualityScore.
+
+4. feature/analytics/data/AnalyticsRepositoryImpl.kt
+
+5. feature/analytics/ui/OutcomeFeedbackScreen.kt  ★ FLYWHEEL UI
+   Reachable from report list in <= 2 taps for PENDING reports.
+   ACCEPTED / REJECTED radio. Rejection reason field when REJECTED.
+   Submit -> RecordOutcomeUseCase -> "Thanks — this helps improve BugReel."
+   UPDATE ReportListScreen: "Got a result? Update ->" prompt on PENDING reports.
+
+6. feature/analytics/ui/AnalyticsDashboardViewModel.kt
+
+7. feature/analytics/ui/AnalyticsDashboardScreen.kt
+   Acceptance Rate, Quality Score trend, Time Saved, Rejection analysis.
+   REQUIRED EMPTY STATES (both must be present):
+   0 reports: "Your acceptance rate appears here. Top testers average 87%."
+   0 outcomes: "Update your report outcomes to unlock your acceptance rate."
+
+8. feature/analytics/ui/PracticeModeScreen.kt
+   Choose scenario -> fill report -> score reveal -> Try Again / Next Scenario.
+   Must feel like a game. Immediate feedback. Retry loop. NOT a tutorial.
+
+Run: ./gradlew assembleDebug && ./gradlew lint`,
+  outputs:"RecordOutcomeUseCase, AcceptanceRate, PracticeMode, OutcomeFeedbackScreen, Dashboard with empty states",
+  verify:"./gradlew assembleDebug && ./gradlew lint"
+},
+{
+  id:"S5.2",
+  phase:"s5",
+  color:"#0d7a6b",
+  title:"Legal Screens, Empty States & Hardening",
+  prereqs:"S5.1 complete. Consent copy counsel-approved (Sprint 0 Track 3).",
+  text:`Read CLAUDE.md. Sprint 5, Session 2: Legal Screens and Launch Hardening.
+
+1. feature/onboarding/ui/ConsentScreen.kt — shown ONCE on first install
+   Checkbox 1 (required): "I accept the Terms of Service and Privacy Policy" + links
+   Checkbox 2 (required): "I may process pre-release app footage and confirm right to do so"
+   Checkbox 3 (optional): "Allow BugReel to use my anonymised data to improve AI"  ★ SEPARATE
+   Continue: enabled only when 1 + 2 checked.
+   Save consent state + AI opt-in state to DataStore separately.
+
+2. feature/onboarding/ui/AiTrainingOptInScreen.kt
+   Non-blocking, shown 7 days post-install if Checkbox 3 was skipped.
+
+3. Settings screen additions:
+   AI training opt-in toggle. "Delete all my data" with confirmation dialog.
+
+EMPTY STATE AUDIT:
+4. Verify ReportListScreen empty state present (Sprint 2)
+5. Verify both AnalyticsDashboard empty states present (S5.1)
+6. Add first-report callout to QualityScoreScreen:
+   "Your quality score. Higher scores get accepted faster."
+
+STARTUP VERIFICATION — add to BugReelApplication.onCreate():
+   if (BuildConfig.DEBUG) {
+     CoachingHintStrings.verify()
+     check(BuildConfig.FLYWHEEL_ENABLED) { "FLYWHEEL_ENABLED must be true" }
+     check(BuildConfig.AI_MODEL_STANDARD != BuildConfig.AI_MODEL_SAFETY) { "Use different models" }
+   }
+
+HARDENING:
+7. grep -rn "TODO\\|FIXME\\|NotImplementedError" --include="*.kt"
+   Implement or document each. Zero NotImplementedError in release code paths.
+
+8. ./gradlew assembleRelease
+   Add ProGuard/R8 rules for: Hilt, Room, OkHttp, kotlinx.serialization.
+   Fix all R8 stripping issues.
+
+9. Move all user-facing strings to res/values/strings.xml.
+
+Run: ./gradlew assembleDebug && ./gradlew assembleRelease && ./gradlew lint`,
+  outputs:"Consent screens, AI opt-in, hardened release build, all TODOs resolved.",
+  verify:"./gradlew assembleRelease && ./gradlew lint"
+},
+{
+  id:"S5.3",
+  phase:"s5",
+  color:"#0d7a6b",
+  title:"Sprint 5 Tests & Launch Readiness Gate",
+  prereqs:"S5.1 and S5.2 complete. ./gradlew assembleRelease passes.",
+  text:`Read CLAUDE.md Section 18 (Launch Readiness Gate). Sprint 5 final session.
+
+UNIT TESTS:
+1. RecordOutcomeUseCaseTest.kt
+   \`recording outcome links correctly to existing reportId\`
+   \`recording outcome for non-existent reportId returns error\`
+   \`REJECTED without reason is allowed with warning\`
+
+2. AcceptanceRateUseCaseTest.kt
+   \`correct rate from seeded OutcomeFeedback data\`
+   \`last 7 days filter excludes older records\`
+
+3. OutcomeFeedbackEndToEndTest.kt
+   \`submit report -> update outcome -> OutcomeFeedbackDao has correct row with all fields\`
+   \`preAiQualityScore differs from postAiQualityScore after AI suggestions applied\`
+
+LAUNCH READINESS GATE — run all 12 checks, report PASS / FAIL:
+
+1. ./gradlew test -> 0 failures
+2. ./gradlew lint -> 0 errors
+3. ./gradlew assembleRelease -> BUILD SUCCESSFUL
+4. FLYWHEEL: grep -rn "FLYWHEEL_ENABLED" app/build.gradle.kts -> "true" all variants
+5. No hardcoded models: grep -rn '"gpt-4' --include="*.kt" | grep -v BuildConfig -> 0
+6. No Firebase outside SyncWorker: grep -rn "getFirestore" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource -> 0
+7. No cross-feature imports: grep -rn "import com.bugreel.pro.feature" feature/ --include="*.kt" -> 0
+8. QualityScorer pure: grep -rn "import android\\|suspend\\|AIService" feature/quality/domain/QualityScorer.kt -> 0
+9. Room 7 entities: verify schemas/.../1.json has 7 tables including "outcome_feedback"
+10. Consent screen exists: ls feature/onboarding/ui/ConsentScreen.kt -> present
+11. Models differ: verify AI_MODEL_STANDARD != AI_MODEL_SAFETY in build.gradle.kts
+12. OutcomeFeedback wired: grep -rn "preAiQualityScore\\|postAiQualityScore" --include="*.kt" | wc -l -> > 3
+
+If all 12 PASS:
+  git add .
+  git commit -m "feat(sprint-5): complete analytics flywheel and launch readiness"
+  Print: "All automated Launch Readiness Gate checks PASS. Ready for human device sign-off."
+
+List any FAIL. Do not send alpha invites until human confirms 6 device checks.`,
+  outputs:"3 test files. All 12 Launch Readiness checks PASS.",
+  verify:"All 12 grep/gradle checks"
+},
+{
+  id:"M1",
+  phase:"meta",
+  color:"#888",
+  title:"Debug a Failing Test",
+  prereqs:"A specific test is failing. Have the test name and error output ready to paste.",
+  text:`Read CLAUDE.md.
+
+A test is failing. Diagnose and fix the production code.
+Do not change the test unless it is provably wrong.
+
+FAILING TEST:
+[PASTE TEST NAME AND FULL ERROR OUTPUT HERE]
+
+DEBUGGING PROTOCOL:
+1. Read the failing test to understand what it asserts
+2. Read the production code it exercises
+3. Identify root cause — not surface symptom
+4. Classify:
+   (a) Production code bug -> fix production code
+   (b) Test setup issue -> fix mocks or in-memory DB state
+   (c) Architecture violation -> fix violation first
+   (d) Test expectation wrong (rare) -> document why before changing
+
+CONSTRAINTS:
+- Do not suppress assertions or add try/catch to hide failures
+- Do not mock Room to avoid a real Room failure — the failure is the signal
+- If fix requires > 3 files, stop and report — likely an architectural issue
+
+VERIFICATION:
+  ./gradlew test --tests "[TestClassName.testMethodName]"
+  Expected: PASSED
+  
+  ./gradlew test
+  Expected: 0 failures
+
+Report: root cause, fix applied, architectural concern if any.`,
+  outputs:"Root cause identified. Failing test passes. Full suite green.",
+  verify:"./gradlew test"
+},
+{
+  id:"M2",
+  phase:"meta",
+  color:"#888",
+  title:"Fix an Architecture Violation",
+  prereqs:"An architecture check grep returned results it should not. Have the violation details ready.",
+  text:`Read CLAUDE.md Sections 4 and 19.
+
+An architecture violation has been found:
+[DESCRIBE THE VIOLATION — file, line, nature of problem]
+
+FIX PROTOCOL:
+1. Identify exact violation (file, line, which anti-pattern from CLAUDE.md Section 19)
+2. Identify what SHOULD be happening per CLAUDE.md
+3. Implement the correct pattern
+4. Remove the violation
+5. Run the relevant architecture check:
+   [PASTE THE GREP COMMAND FROM CLAUDE.md SECTION 19]
+   Expected: 0 results
+
+6. Verify nothing broke:
+   ./gradlew test
+   ./gradlew lint
+
+7. Write a test that would catch this class of violation in future.
+   If a test already exists: verify it would have caught this.
+
+Report: the violation, the fix, grep now returns 0, regression test added.`,
+  outputs:"Violation fixed. Architecture check returns 0. Regression test present.",
+  verify:"[relevant grep from CLAUDE.md Section 19]"
+},
+{
+  id:"M3",
+  phase:"meta",
+  color:"#888",
+  title:"Dependency Version Update",
+  prereqs:"A specific library needs updating. One dependency at a time only.",
+  text:`Read CLAUDE.md Section 2 (Tech Stack) and Section 24 (Living Document Protocol).
+
+Update this dependency:
+[NAME THE DEPENDENCY AND ITS NEW VERSION]
+
+UPDATE PROTOCOL:
+1. Update the version constant in buildSrc/Dependencies.kt
+2. Run: ./gradlew assembleDebug
+   Fix any breaking API changes — do not suppress them
+3. Run: ./gradlew test
+   Fix behavioral regressions
+4. Run: ./gradlew lint
+5. Update CLAUDE.md Section 2 with the new verified version
+6. Commit: chore(deps): bump [library] from [old] to [new]
+
+CONSTRAINTS:
+- One dependency per session
+- Major version bumps (X.0.0) require human approval before proceeding
+- If update breaks > 5 files: stop and report
+
+Report: old version, new version, files changed, API differences.`,
+  outputs:"Dependency updated. Tests pass. CLAUDE.md Section 2 updated. Committed.",
+  verify:"./gradlew assembleDebug && ./gradlew test && ./gradlew lint"
+},
+{
+  id:"M4",
+  phase:"meta",
+  color:"#888",
+  title:"Architectural Audit",
+  prereqs:"Run periodically or before any major PR. Does not modify code \u2014 audit only.",
+  text:`Read CLAUDE.md Sections 4 and 19. Perform architectural audit. Report only — do not fix.
+
+Run all 10 checks and report PASS (0 results) or FAIL (list violations):
+
+CHECK 1: grep -rn "getFirestore\\|collection(" --include="*.kt" | grep -v SyncWorker | grep -v FirestoreSource
+CHECK 2: grep -rn "Build.MANUFACTURER\\|MIUI\\|ColorOS" --include="*.kt" | grep -v OemCompat.kt
+CHECK 3: grep -rn "import android" core/domain/ --include="*.kt"
+CHECK 4: grep -rn "import com.bugreel.pro.feature" feature/ --include="*.kt"
+CHECK 5: grep -rn '"gpt-4\\|"gpt-5' --include="*.kt" | grep -v BuildConfig
+CHECK 6: grep -rn "import android\\|suspend\\|Flow\\|AIService" feature/quality/domain/QualityScorer.kt
+CHECK 7: grep -rn "OkHttp\\|HttpClient" --include="*.kt" | grep -v OpenAIService | grep -v NetworkModule
+CHECK 8: grep -rn "skipSafety\\|bypassSafety" --include="*.kt"
+CHECK 9: grep -rn "FLYWHEEL_ENABLED.*false" --include="*.kt" --include="*.kts"
+CHECK 10: verify every schema version > 1 has a corresponding Migration class
+
+FINAL REPORT:
+"X of 10 architectural checks PASS. Violations in: [list]."
+Each violation: file name and line number.
+
+This session does not fix violations. Human prioritises follow-up.`,
+  outputs:"Audit report: 10 checks with PASS/FAIL and all violation details.",
+  verify:"N/A \u2014 this session is the audit"
+},
+{
+  id:"M5",
+  phase:"meta",
+  color:"#888",
+  title:"Performance Investigation",
+  prereqs:"A specific performance issue observed on device. Have symptom and screen name ready.",
+  text:`Read CLAUDE.md.
+
+Investigate this performance issue:
+[DESCRIBE: screen name, symptom, when it occurs, which device]
+
+INVESTIGATION PROTOCOL:
+
+1. DATABASE — missing indexes on queried fields:
+   grep -rn "@Index" core/data/local/entity/ --include="*.kt"
+   For frequently queried fields (createdAt, reportId, syncedAt): add @Index if missing.
+   Each new @Index = new Room schema migration required.
+
+2. UI RENDERING — unnecessary recompositions:
+   Unstable lambdas -> wrap in remember {}
+   Missing key= in LazyColumn -> add key = { item.id }
+   Heavy computation in composition -> move to ViewModel
+   Objects recreated each composition -> remember {} or derivedStateOf {}
+
+3. FLOW — over-emission:
+   Missing distinctUntilChanged() on frequently updating flows
+   collectAsState() instead of collectAsStateWithLifecycle() -> change it
+   Large lists emitted on small changes -> consider diffing
+
+4. COIL — image loading:
+   Verify disk cache enabled (Coil 3.x default)
+   Screenshots > 2MB not compressed -> EvidenceManager.validateAndAttachScreenshot()
+
+5. NETWORK — AI calls on wrong thread:
+   grep -rn "Dispatchers.Main" feature/ai/ --include="*.kt"
+   AI calls must use Dispatchers.IO.
+
+After fix: ./gradlew test -> verify 0 regressions.
+Report: root cause, fix applied, expected improvement, test verifying fix.`,
+  outputs:"Performance root cause identified. Fix applied. Tests pass.",
+  verify:"./gradlew test"
+}
+];
+
+const PHASES={
+  pre:{label:"Phase 0",name:"Pre-Sprint Setup"},
+  s1:{label:"Sprint 1",name:"Capture Engine"},
+  s2:{label:"Sprint 2",name:"Report Builder"},
+  s3:{label:"Sprint 3",name:"Quality Engine"},
+  s4:{label:"Sprint 4",name:"AI Assistant"},
+  s5:{label:"Sprint 5",name:"Analytics"},
+  meta:{label:"Meta",name:"Meta Prompts"},
+};
+
+let done={};
+let activeFilter='all';
+try{done=JSON.parse(localStorage.getItem('br-prompts-done')||'{}');}catch(e){}
+
+function save(){try{localStorage.setItem('br-prompts-done',JSON.stringify(done));}catch(e){}}
+
+function markDone(id,val){
+  done[id]=val;save();renderNav();renderProgress();
+  const hdr=document.getElementById('chk-'+id);
+  if(hdr){
+    hdr.style.background=val?p(id).color:'transparent';
+    hdr.style.borderColor=val?p(id).color:'#ccc';
+    hdr.innerHTML=val?'<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':'';
+  }
+}
+
+function p(id){return PROMPTS.find(x=>x.id===id);}
+
+function scrollTo(id){
+  const el=document.getElementById('card-'+id);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active-nav'));
+  const ni=document.getElementById('nav-'+id);
+  if(ni)ni.classList.add('active-nav');
+}
+
+function copyPrompt(id){
+  const pr=p(id);if(!pr)return;
+  navigator.clipboard.writeText(pr.text).then(()=>{
+    const btn=document.getElementById('copy-'+id);
+    if(btn){btn.textContent='✓ Copied';btn.classList.add('ok');
+      setTimeout(()=>{btn.innerHTML='⎘ Copy prompt';btn.classList.remove('ok');},2000);}
+  });
+}
+
+function setFilter(f){
+  activeFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  const fb=document.getElementById('fb-'+f);if(fb){fb.classList.add('active');fb.style.color=f==='all'?'#333':PROMPTS.find(x=>x.phase===f)?.color||'#333';fb.style.borderColor=f==='all'?'#888':PROMPTS.find(x=>x.phase===f)?.color||'#888';}
+  document.querySelectorAll('.prompt-card').forEach(c=>{
+    const ph=c.dataset.phase;
+    c.style.display=(f==='all'||ph===f)?'':'none';
+  });
+}
+
+function renderProgress(){
+  const total=PROMPTS.length;
+  const n=PROMPTS.filter(p=>done[p.id]).length;
+  const pct=Math.round(n/total*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-count').textContent=n+' / '+total;
+}
+
+function renderNav(){
+  const phases=Object.keys(PHASES);
+  let h='';
+  phases.forEach(ph=>{
+    const items=PROMPTS.filter(p=>p.phase===ph);
+    if(!items.length)return;
+    h+=`<div class="nav-section"><div class="nav-section-label">${PHASES[ph].label} — ${PHASES[ph].name}</div>`;
+    items.forEach(p=>{
+      const isDone=!!done[p.id];
+      const check=isDone?`<div class="nav-check" style="background:${p.color};border:none"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><polyline points="1.5,4.5 3.5,6.5 7.5,2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`:`<div class="nav-check" style="border:1.5px solid #ccc"></div>`;
+      h+=`<div class="nav-item${isDone?' done-nav':''}" id="nav-${p.id}" onclick="scrollTo('${p.id}')">${check}<span class="nav-id">${p.id}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.title}</span></div>`;
+    });
+    h+='</div>';
+  });
+  document.getElementById('nav').innerHTML=h;
+}
+
+function renderFilters(){
+  const phases=Object.keys(PHASES);
+  let h=`<button class="filter-btn active" id="fb-all" onclick="setFilter('all')" style="color:#333;border-color:#888">All</button>`;
+  phases.forEach(ph=>{
+    const color=PROMPTS.find(x=>x.phase===ph)?.color||'#888';
+    h+=`<button class="filter-btn" id="fb-${ph}" onclick="setFilter('${ph}')" style="color:${color}">${PHASES[ph].label}</button>`;
+  });
+  document.getElementById('filters').innerHTML=h;
+}
+
+function renderCards(){
+  let h='';
+  const phases=Object.keys(PHASES);
+  phases.forEach(ph=>{
+    const items=PROMPTS.filter(p=>p.phase===ph);
+    items.forEach(pr=>{
+      const isDone=!!done[pr.id];
+      const isFlywh=pr.text.includes('★ FLYWHEEL')||pr.text.includes('★ THE FLYWHEEL');
+      h+=`<div class="prompt-card" id="card-${pr.id}" data-phase="${pr.phase}">
+        <div class="card-header" onclick="scrollTo('${pr.id}')">
+          <div class="card-done-check${isDone?' checked':''}" id="chk-${pr.id}" style="${isDone?'background:'+pr.color+';border:none':''}" onclick="event.stopPropagation();markDone('${pr.id}',!done['${pr.id}'])">${isDone?'<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+          <div class="card-meta">
+            <div class="card-badges">
+              <span class="phase-badge" style="background:${pr.color}">${PHASES[pr.phase].label}</span>
+              <span class="id-badge">${pr.id}</span>
+              ${isFlywh?'<span class="star">★ flywheel</span>':''}
+            </div>
+            <div class="card-title">${pr.title}</div>
+          </div>
+        </div>
+        ${pr.prereqs?`<div class="prereq-box"><span class="prereq-label">Prerequisites:</span>${esc2(pr.prereqs)}</div>`:''}
+        <div class="prompt-section">
+          <div class="section-label">
+            <span>Prompt — paste into Claude Code</span>
+            <button class="copy-btn" id="copy-${pr.id}" onclick="copyPrompt('${pr.id}')">⎘ Copy prompt</button>
+          </div>
+          <div class="prompt-text">${esc2(pr.text)}</div>
+          <div class="section-label" style="margin-top:12px">Expected outputs & verification</div>
+          <div class="outputs-row">
+            <div class="mini-box"><div class="mini-label">Outputs</div>${esc2(pr.outputs)}</div>
+            <div class="mini-box"><div class="mini-label">Verify with</div><div class="verify-box">${esc2(pr.verify)}</div></div>
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('cards').innerHTML=h;
+}
+
+function esc2(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+renderFilters();renderNav();renderCards();renderProgress();
+</script>
+
+</body></html>
