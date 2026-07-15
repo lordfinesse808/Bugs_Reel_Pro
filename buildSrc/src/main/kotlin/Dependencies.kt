@@ -10,7 +10,11 @@ object Versions {
     const val ksp = "2.1.20-1.0.31"
 
     // DI
-    const val hilt = "2.52"
+    // 2.52 cannot read Kotlin 2.1.x class metadata (hiltJavaCompileDebug throws
+    // "Unable to read Kotlin metadata due to unsupported metadata version" on any
+    // @Inject-annotated Kotlin class — see github.com/google/dagger/issues/4451).
+    // 2.53.1 is the minimal fix: bumps kotlin-metadata-jvm to 2.0.21.
+    const val hilt = "2.53.1"
 
     // UI
     const val composeBom = "2026.06.00"
