@@ -10,11 +10,14 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("plugin.serialization")
+    kotlin("plugin.compose")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    // Applied only once google-services.json is present (CLAUDE.md Section 22).
-    // id("com.google.gms.google-services")
-    // id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("de.mannodermaus.android-junit5")
+    id("androidx.room")
+    jacoco
 }
 
 android {
@@ -26,10 +29,11 @@ android {
         minSdk = 28
         targetSdk = 35
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "0.1.0-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // CLAUDE.md Section 2 / Section 22 — BuildConfig constants
         buildConfigField("String", "AI_MODEL_STANDARD", "\"gpt-4.1-mini\"")
         buildConfigField("String", "AI_MODEL_SAFETY", "\"gpt-4.1\"")
         buildConfigField("int", "QUALITY_SCORE_UPGRADE", "70")
@@ -68,36 +72,86 @@ android {
             isMinifyEnabled = false
         }
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+    }
+
+    packaging {
+        resources.excludes.add("META-INF/LICENSE*")
+    }
+}
+
+// Room schema export (CLAUDE.md Section 7 — exportSchema always true, JSON committed to repo)
+room {
+    schemaDirectory("$projectDir/../schemas")
+}
+
+// Jacoco coverage (CLAUDE.md Section 12 — coverage targets, Section 20 — jacocoTestReport)
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf(
+        "**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*",
+        "**/*Test*.*", "android/**/*.*", "**/*_Hilt*.*", "**/Hilt_*.*",
+        "**/*_Factory.*", "**/*_MembersInjector.*", "**/di/**"
+    )
+    val debugTree = fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
+    }
+    val mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory.get()) { include("jacoco/testDebugUnitTest.exec") }
+    )
 }
 
 dependencies {
-    implementation(Deps.androidxCoreKtx)
+    implementation(Libs.androidxCoreKtx)
+
     implementation(platform("androidx.compose:compose-bom:${Versions.composeBom}"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation(Deps.composeNavigation)
+    implementation(Libs.composeUi)
+    implementation(Libs.composeMaterial3)
+    implementation(Libs.composeNavigation)
 
-    implementation(Deps.hiltAndroid)
-    ksp(Deps.hiltCompiler)
+    implementation(Libs.hiltAndroid)
+    ksp(Libs.hiltCompiler)
 
-    implementation(Deps.roomRuntime)
-    implementation(Deps.roomKtx)
-    ksp(Deps.roomCompiler)
+    implementation(Libs.roomRuntime)
+    implementation(Libs.roomKtx)
+    ksp(Libs.roomCompiler)
 
-    implementation(Deps.workManagerKtx)
-    implementation(Deps.datastoreCore)
-    implementation(Deps.okhttp)
-    implementation(Deps.kotlinxSerializationJson)
-    implementation(Deps.coilCompose)
+    implementation(Libs.workManagerKtx)
+    implementation(Libs.datastoreCore)
+    implementation(Libs.okhttp)
+    implementation(Libs.kotlinxSerializationJson)
+    implementation(Libs.coilCompose)
 
     implementation(platform("com.google.firebase:firebase-bom:${Versions.firebaseBom}"))
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-storage-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation(Libs.firebaseFirestore)
+    implementation(Libs.firebaseAuth)
+    implementation(Libs.firebaseStorage)
+    implementation(Libs.firebaseCrashlytics)
 
-    testImplementation(Deps.mockk)
-    testImplementation(Deps.turbine)
-    androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.espresso}")
-    androidTestImplementation("androidx.test.uiautomator:uiautomator:${Versions.uiautomator}")
+    testImplementation(Libs.junit5Api)
+    testRuntimeOnly(Libs.junit5Engine)
+    testImplementation(Libs.mockk)
+    testImplementation(Libs.turbine)
+
+    androidTestImplementation(Libs.espresso)
+    androidTestImplementation(Libs.uiautomator)
 }

@@ -4,21 +4,39 @@
 // Re-verify before Sprint 1 work begins, then update this file and CLAUDE.md together.
 
 object Versions {
+    // Language / build tooling
     const val kotlin = "2.1.20"
     const val agp = "8.7.2"
     const val ksp = "2.1.20-1.0.31"
+
+    // DI
     const val hilt = "2.52"
-    const val composeBom = "2025.01.00"
+
+    // UI
+    const val composeBom = "2026.06.00"
     const val composeNavigation = "2.8.5"
+
+    // Persistence
     const val room = "2.7.0"
     const val datastore = "1.1.1"
+
+    // Background
     const val workManager = "2.10.0"
+
+    // Firebase — firebaseBom pins the individual Firestore/Auth/Storage/Crashlytics
+    // artifact versions referenced in CLAUDE.md Section 2; do not version them separately.
     const val firebaseBom = "33.7.0"
     const val googleServices = "4.4.2"
     const val crashlyticsPlugin = "3.0.2"
-    const val coil = "3.0.4"
-    const val kotlinxSerialization = "1.7.3"
+
+    // Networking / serialization
     const val okhttp = "4.12.0"
+    const val kotlinxSerialization = "1.7.3"
+
+    // Images
+    const val coil = "3.0.4"
+
+    // Testing
     const val junit5 = "5.11.4"
     const val junit5Plugin = "1.11.2.0"
     const val mockk = "1.13.14"
@@ -27,19 +45,46 @@ object Versions {
     const val uiautomator = "2.3.0"
 }
 
-object Deps {
+object Libs {
+    // AndroidX core
     const val androidxCoreKtx = "androidx.core:core-ktx:1.15.0"
+
+    // Compose — ui/material3 versions resolved via the compose-bom platform
+    const val composeUi = "androidx.compose.ui:ui"
+    const val composeMaterial3 = "androidx.compose.material3:material3"
+    const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"
+
+    // DI
     const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
     const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+
+    // Persistence
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
-    const val workManagerKtx = "androidx.work:work-runtime-ktx:${Versions.workManager}"
     const val datastoreCore = "androidx.datastore:datastore:${Versions.datastore}"
-    const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"
+
+    // Background
+    const val workManagerKtx = "androidx.work:work-runtime-ktx:${Versions.workManager}"
+
+    // Firebase — versions resolved via the firebase-bom platform
+    const val firebaseFirestore = "com.google.firebase:firebase-firestore-ktx"
+    const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
+    const val firebaseStorage = "com.google.firebase:firebase-storage-ktx"
+    const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+
+    // Networking / serialization
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
     const val kotlinxSerializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
+
+    // Images
     const val coilCompose = "io.coil-kt.coil3:coil-compose:${Versions.coil}"
+
+    // Testing
+    const val junit5Api = "org.junit.jupiter:junit-jupiter-api:${Versions.junit5}"
+    const val junit5Engine = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit5}"
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
     const val turbine = "app.cash.turbine:turbine:${Versions.turbine}"
+    const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+    const val uiautomator = "androidx.test.uiautomator:uiautomator:${Versions.uiautomator}"
 }
