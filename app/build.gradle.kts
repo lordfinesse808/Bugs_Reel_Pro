@@ -83,6 +83,14 @@ android {
     packaging {
         resources.excludes.add("META-INF/LICENSE*")
     }
+
+    lint {
+        // AGP 8.7.2's bundled lint engine crashes (IncompatibleClassChangeError) running the
+        // transitively-included androidx.lifecycle NonNullableMutableLiveDataDetector against
+        // Kotlin 2.1.20's analysis API. We don't use MutableLiveData anywhere (Section 11 —
+        // StateFlow/SharedFlow only), so disabling this check is safe.
+        disable += "NullSafeMutableLiveData"
+    }
 }
 
 // Room schema export (CLAUDE.md Section 7 — exportSchema always true, JSON committed to repo)
