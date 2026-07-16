@@ -15,7 +15,14 @@
         android:label="BugReel Pro"
         android:supportsRtl="true">
 
-        <!-- MainActivity and remaining Sprint 1 components are added per CLAUDE.md Section 14. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".feature.capture.service.CaptureService"
