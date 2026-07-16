@@ -1,11 +1,16 @@
 // CLAUDE.md Section 2 / Section 24 — Living Document Protocol.
-// These versions are UNVERIFIED PLACEHOLDERS pending human sign-off against the
-// official release pages listed in CLAUDE.md Section 2. Do not treat them as current.
-// Re-verify before Sprint 1 work begins, then update this file and CLAUDE.md together.
-
+// Verified 2026-07-16 against the official release pages in CLAUDE.md Section 2:
+//   - composeBom 2026.06.00 IS current (developer.android.com/jetpack/compose/bom).
+//   - kotlin 2.1.20 is STALE — latest stable is 2.4.10 (kotlinlang.org/docs/releases.html).
+//     Not bumped yet: Kotlin 2.1.x -> 2.4.x also requires re-verifying the KSP build
+//     (`ksp`) and the Compose compiler bundled with kotlin("plugin.compose"), and Hilt
+//     was already bumped to 2.53.1 once for a Kotlin-2.1.x metadata incompatibility
+//     (see the `hilt` comment below) — the same class of break is plausible on this
+//     jump. Treat as a tracked upgrade task with a full test/lint re-run, not a
+//     same-day doc edit.
 object Versions {
     // Language / build tooling
-    const val kotlin = "2.1.20"
+    const val kotlin = "2.1.20" // stale pin — see verification note above
     const val agp = "8.7.2"
     const val ksp = "2.1.20-1.0.31"
 

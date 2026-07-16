@@ -79,7 +79,7 @@ since the last session. Never assume versions from a previous session are still 
 | Unit Testing | JUnit5 + MockK + Turbine | latest | mannodermaus.github.io/android-junit5 |
 | Device Testing | Espresso + UIAutomator | latest | developer.android.com |
 | Build | Gradle KTS | 8.5+ | gradle.org/releases |
-| IDE | Android Studio Quail 1 | 2026.1.1 | developer.android.com/studio |
+| IDE | Android Studio Quail 2 | 2026.1.2 | developer.android.com/studio |
 | JDK | Temurin JDK 17 | 17.0.19+ | adoptium.net/temurin/releases/?version=17 |
 | minSdk | 28 (Android 9) | — | — |
 | targetSdk / compileSdk | 35 | — | — |
@@ -613,7 +613,7 @@ Do not revisit Sprint 0 decisions mid-build unless a gate explicitly turns RED.
 
 ---
 
-## 14. Sprint 1 — Capture Engine & Database Schema
+## 14. Sprint 1 — Capture Engine & Database Schema (COMPLETE — signed off 2026-07-16)
 
 **Scope:** Foundation. Everything that never changes after this sprint.
 All 5 subsequent sprints depend on the Room schema created here.
@@ -1174,4 +1174,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: July 2026 · BugReel Pro V4.0 build-ready · Sprint 0 complete*
+*Last updated: 2026-07-16 · BugReel Pro V4.0 build-ready · Sprint 1 complete, Sprint 2 signed off to begin*
