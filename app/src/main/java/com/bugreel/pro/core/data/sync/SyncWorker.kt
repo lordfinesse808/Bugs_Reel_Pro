@@ -7,7 +7,6 @@ import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import com.bugreel.pro.core.data.local.dao.OutcomeFeedbackDao
 import com.bugreel.pro.core.data.local.dao.ReportDao
@@ -68,7 +67,7 @@ class SyncWorker @AssistedInject constructor(
         private const val MAX_RETRIES = 5
         private const val BACKOFF_DELAY_SECONDS = 30L
 
-        fun buildWorkRequest(): WorkRequest =
+        fun buildWorkRequest(): OneTimeWorkRequest =
             OneTimeWorkRequest.Builder(SyncWorker::class.java)
                 .setConstraints(
                     Constraints.Builder()

@@ -27,6 +27,9 @@ interface ReportDao {
     @Query("SELECT * FROM reports")
     fun getAllReports(): Flow<List<ReportEntity>>
 
+    @Query("SELECT * FROM reports WHERE id = :id")
+    fun observeById(id: String): Flow<ReportEntity?>
+
     // CLAUDE.md Section 7 — SyncWorker's push set; syncedAt IS NULL means Room hasn't
     // confirmed a successful Firestore write for that report yet.
     @Query("SELECT * FROM reports WHERE syncedAt IS NULL")
