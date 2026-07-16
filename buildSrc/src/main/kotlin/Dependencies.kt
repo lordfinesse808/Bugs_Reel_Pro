@@ -39,6 +39,7 @@ object Versions {
     // Networking / serialization
     const val okhttp = "4.12.0"
     const val kotlinxSerialization = "1.7.3"
+    const val kotlinxCoroutines = "1.9.0"
 
     // Images
     const val coil = "3.0.4"
@@ -50,6 +51,15 @@ object Versions {
     const val turbine = "1.2.0"
     const val espresso = "3.6.1"
     const val uiautomator = "2.3.0"
+    // Robolectric has no native JUnit5 extension; the mannodermaus plugin runs JUnit4-style
+    // Robolectric tests through the JUnit Vintage engine alongside Jupiter (JUnit5) tests in
+    // the same source set — see de.mannodermaus.android-junit5 docs. androidTest integration
+    // tests also stay on JUnit4 (androidx.test.ext:junit) — the AndroidX instrumented test
+    // stack (Espresso/UiAutomator/AndroidJUnitRunner) is built around it.
+    const val junit4 = "4.13.2"
+    const val robolectric = "4.15.1"
+    const val androidxTestCore = "1.7.0"
+    const val androidxTestExtJunit = "1.3.0"
 }
 
 object Libs {
@@ -87,6 +97,7 @@ object Libs {
     // Networking / serialization
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
     const val kotlinxSerializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
+    const val kotlinxCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinxCoroutines}"
 
     // Images
     const val coilCompose = "io.coil-kt.coil3:coil-compose:${Versions.coil}"
@@ -98,4 +109,9 @@ object Libs {
     const val turbine = "app.cash.turbine:turbine:${Versions.turbine}"
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
     const val uiautomator = "androidx.test.uiautomator:uiautomator:${Versions.uiautomator}"
+    const val junit4 = "junit:junit:${Versions.junit4}"
+    const val junit5VintageEngine = "org.junit.vintage:junit-vintage-engine:${Versions.junit5}"
+    const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
+    const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
+    const val androidxTestExtJunit = "androidx.test.ext:junit:${Versions.androidxTestExtJunit}"
 }

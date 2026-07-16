@@ -163,7 +163,18 @@ dependencies {
     testRuntimeOnly(Libs.junit5Engine)
     testImplementation(Libs.mockk)
     testImplementation(Libs.turbine)
+    testImplementation(Libs.kotlinxCoroutinesTest)
+
+    // Robolectric has no JUnit5 extension; DeviceProfilerTest runs as a JUnit4 test through
+    // the Vintage engine registered above, alongside the Jupiter (JUnit5) tests in this module.
+    testImplementation(Libs.junit4)
+    testRuntimeOnly(Libs.junit5VintageEngine)
+    testImplementation(Libs.robolectric)
+    testImplementation(Libs.androidxTestCore)
 
     androidTestImplementation(Libs.espresso)
     androidTestImplementation(Libs.uiautomator)
+    androidTestImplementation(Libs.androidxTestExtJunit)
+    androidTestImplementation(Libs.turbine)
+    androidTestImplementation(Libs.kotlinxCoroutinesTest)
 }
