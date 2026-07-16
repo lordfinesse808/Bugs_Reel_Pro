@@ -19,6 +19,9 @@ object Versions {
     // UI
     const val composeBom = "2026.06.00"
     const val composeNavigation = "2.8.5"
+    const val activityCompose = "1.9.3"
+    const val lifecycle = "2.8.7"
+    const val hiltNavigationCompose = "1.2.0"
 
     // Persistence
     const val room = "2.7.0"
@@ -57,10 +60,14 @@ object Libs {
     const val composeUi = "androidx.compose.ui:ui"
     const val composeMaterial3 = "androidx.compose.material3:material3"
     const val composeNavigation = "androidx.navigation:navigation-compose:${Versions.composeNavigation}"
+    const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
+    const val lifecycleRuntimeCompose = "androidx.lifecycle:lifecycle-runtime-compose:${Versions.lifecycle}"
+    const val lifecycleViewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}"
 
     // DI
     const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
     const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+    const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}"
 
     // Persistence
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"

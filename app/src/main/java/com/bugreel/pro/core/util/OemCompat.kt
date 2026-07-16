@@ -29,6 +29,11 @@ object OemCompat {
     fun mediaProjectionReprompts(): Boolean =
         Build.MANUFACTURER.lowercase() in MEDIA_PROJECTION_REPROMPT_MANUFACTURERS
 
+    // Architecture Rule 3 requires every Build.MANUFACTURER read to live here — even a plain,
+    // non-branching read for device-profile reporting (DeviceProfiler) — so route it through
+    // this passthrough rather than reading Build.MANUFACTURER at the call site.
+    fun deviceManufacturer(): String = Build.MANUFACTURER
+
     // TODO: Update when Play Console review lands (CLAUDE.md Section 13, Track 2).
     fun needsPiPFallback(): Boolean = false
 }

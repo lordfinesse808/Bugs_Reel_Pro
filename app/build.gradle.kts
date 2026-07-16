@@ -135,9 +135,13 @@ dependencies {
     implementation(Libs.composeUi)
     implementation(Libs.composeMaterial3)
     implementation(Libs.composeNavigation)
+    implementation(Libs.activityCompose)
+    implementation(Libs.lifecycleRuntimeCompose)
+    implementation(Libs.lifecycleViewModelCompose)
 
     implementation(Libs.hiltAndroid)
     ksp(Libs.hiltCompiler)
+    implementation(Libs.hiltNavigationCompose)
 
     implementation(Libs.roomRuntime)
     implementation(Libs.roomKtx)
