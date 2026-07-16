@@ -142,6 +142,8 @@ dependencies {
     implementation(Libs.hiltAndroid)
     ksp(Libs.hiltCompiler)
     implementation(Libs.hiltNavigationCompose)
+    implementation(Libs.hiltWork)
+    ksp(Libs.hiltWorkCompiler)
 
     implementation(Libs.roomRuntime)
     implementation(Libs.roomKtx)
@@ -150,7 +152,9 @@ dependencies {
     implementation(Libs.workManagerKtx)
     implementation(Libs.datastoreCore)
     implementation(Libs.okhttp)
+    implementation(Libs.okhttpLoggingInterceptor)
     implementation(Libs.kotlinxSerializationJson)
+    implementation(Libs.kotlinxCoroutinesPlayServices)
     implementation(Libs.coilCompose)
 
     implementation(platform("com.google.firebase:firebase-bom:${Versions.firebaseBom}"))

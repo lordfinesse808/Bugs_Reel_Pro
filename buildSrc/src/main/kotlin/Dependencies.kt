@@ -83,6 +83,10 @@ object Libs {
     const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
     const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
     const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}"
+    // hilt-work/hilt-compiler share the androidx.hilt group version with hilt-navigation-compose.
+    // Required for @HiltWorker (core/data/sync/SyncWorker) to generate its assisted factory.
+    const val hiltWork = "androidx.hilt:hilt-work:${Versions.hiltNavigationCompose}"
+    const val hiltWorkCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltNavigationCompose}"
 
     // Persistence
     const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
@@ -101,8 +105,12 @@ object Libs {
 
     // Networking / serialization
     const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
+    const val okhttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
     const val kotlinxSerializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
     const val kotlinxCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinxCoroutines}"
+    // FirebaseFirestore/Storage/Auth's Task-based APIs need this for the .await() extension
+    // used throughout FirestoreSource/StorageSource.
+    const val kotlinxCoroutinesPlayServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}"
 
     // Images
     const val coilCompose = "io.coil-kt.coil3:coil-compose:${Versions.coil}"
