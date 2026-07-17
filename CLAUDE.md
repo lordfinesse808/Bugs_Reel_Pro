@@ -81,7 +81,7 @@ since the last session. Never assume versions from a previous session are still 
 | Build | Gradle KTS | 8.5+ | gradle.org/releases |
 | IDE | Android Studio Quail 2 | 2026.1.2 | developer.android.com/studio |
 | JDK | Temurin JDK 17 | 17.0.19+ | adoptium.net/temurin/releases/?version=17 |
-| minSdk | 28 (Android 9) | — | — |
+| minSdk | 29 (Android 10) | — | bumped from 28 2026-07-17, kept as a modernization; did NOT fix the DEX 040/backtick-test-name issue it was meant to (see app/build.gradle.kts comment) — that remains open |
 | targetSdk / compileSdk | 35 | — | — |
 
 **BuildConfig constants — set in `app/build.gradle.kts` `defaultConfig` block:**
