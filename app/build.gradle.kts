@@ -181,4 +181,6 @@ dependencies {
     androidTestImplementation(Libs.androidxTestExtJunit)
     androidTestImplementation(Libs.turbine)
     androidTestImplementation(Libs.kotlinxCoroutinesTest)
+    androidTestImplementation(Libs.workTesting)
+    androidTestImplementation(Libs.mockkAndroid)
 }

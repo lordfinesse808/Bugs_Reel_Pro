@@ -65,6 +65,10 @@ object Versions {
     const val robolectric = "4.15.1"
     const val androidxTestCore = "1.7.0"
     const val androidxTestExtJunit = "1.3.0"
+    // work-testing is version-aligned with work-runtime; mockk-android is MockK's
+    // instrumented-test artifact (plain io.mockk:mockk doesn't work on-device).
+    const val workTesting = workManager
+    const val mockkAndroid = mockk
 }
 
 object Libs {
@@ -127,4 +131,6 @@ object Libs {
     const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
     const val androidxTestCore = "androidx.test:core:${Versions.androidxTestCore}"
     const val androidxTestExtJunit = "androidx.test.ext:junit:${Versions.androidxTestExtJunit}"
+    const val workTesting = "androidx.work:work-testing:${Versions.workTesting}"
+    const val mockkAndroid = "io.mockk:mockk-android:${Versions.mockkAndroid}"
 }
