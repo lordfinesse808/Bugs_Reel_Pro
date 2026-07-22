@@ -81,7 +81,7 @@ since the last session. Never assume versions from a previous session are still 
 | Build | Gradle KTS | 8.5+ | gradle.org/releases |
 | IDE | Android Studio Quail 2 | 2026.1.2 | developer.android.com/studio |
 | JDK | Temurin JDK 17 | 17.0.19+ | adoptium.net/temurin/releases/?version=17 |
-| minSdk | 29 (Android 10) | — | bumped from 28 2026-07-17, kept as a modernization; did NOT fix the DEX 040/backtick-test-name issue it was meant to (see app/build.gradle.kts comment) — that remains open |
+| minSdk | 29 (Android 10) | — | bumped from 28 2026-07-17 as a modernization; the DEX 040/backtick-test-name issue it was meant to fix was NOT a minSdk problem — resolved 2026-07-22 via androidTest naming convention instead (Section 5) |
 | targetSdk / compileSdk | 35 | — | — |
 
 **BuildConfig constants — set in `app/build.gradle.kts` `defaultConfig` block:**
@@ -259,6 +259,15 @@ fun `submit report stores to room and schedules firebase sync`()
 fun testSubmitReport()
 fun test_quality_score()
 ```
+
+**androidTest exception (added 2026-07-22):** in `src/androidTest/` only, use underscores instead
+of spaces inside the backticks (e.g. `` `insert_draft_and_retrieve_by_id_returns_same_entity` ``).
+Root cause: `kotlinx-coroutines-test`'s `runTest {}` and Turbine's `.test {}` are non-inline, so a
+backtick name containing a literal space gets baked into a real synthetic/continuation class name,
+which D8 rejects ("Space characters in SimpleName ... not allowed prior to DEX version 040") —
+confirmed by direct reproduction, and no minSdk this project would ship at avoids it. Hyphens are
+fine; only spaces trip D8. `src/test/` (JVM-only, never dexed) keeps full spaces-allowed backticks.
+See `app/build.gradle.kts` `minSdk` comment for the full investigation.
 
 ---
 
@@ -722,7 +731,7 @@ Stop when all stop conditions in Section 14 are met. Do not start Sprint 2.
 
 ---
 
-## 15. Sprint 2 — Report Builder & Firebase Sync
+## 15. Sprint 2 — Report Builder & Firebase Sync (automated checks passed 2026-07-22 — pending human device-test sign-off)
 
 **Scope:** Report construction, evidence management, platform export, and Firebase sync.
 
@@ -1174,4 +1183,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-16 · BugReel Pro V4.0 build-ready · Sprint 1 complete, Sprint 2 signed off to begin*
+*Last updated: 2026-07-22 · BugReel Pro V4.0 build-ready · Sprint 1 complete; Sprint 2 built, automated gates green, DEX 040 androidTest blocker resolved — awaiting human device-test sign-off before Sprint 3*
