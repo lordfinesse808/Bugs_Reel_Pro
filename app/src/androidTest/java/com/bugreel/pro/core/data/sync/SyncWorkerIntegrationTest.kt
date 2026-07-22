@@ -61,7 +61,7 @@ class SyncWorkerIntegrationTest {
     }
 
     @Test
-    fun `sync work request declares a CONNECTED network constraint`() {
+    fun `sync_work_request_declares_a_CONNECTED_network_constraint`() {
         val request = SyncWorker.buildWorkRequest()
 
         assertEquals(NetworkType.CONNECTED, request.workSpec.constraints.requiredNetworkType)
@@ -73,7 +73,7 @@ class SyncWorkerIntegrationTest {
     // Flow-based WorkManager API rather than the ListenableFuture one to stay off the
     // Guava classpath entirely.
     @Test
-    fun `sync work runs and succeeds once its network constraint is met`() = runTest {
+    fun `sync_work_runs_and_succeeds_once_its_network_constraint_is_met`() = runTest {
         val workManager = WorkManager.getInstance(context)
         val testDriver = WorkManagerTestInitHelper.getTestDriver(context)!!
         val request = SyncWorker.buildWorkRequest()

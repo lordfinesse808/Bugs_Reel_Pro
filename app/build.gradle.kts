@@ -26,16 +26,23 @@ android {
 
     defaultConfig {
         applicationId = "com.bugreel.pro"
-        // CLAUDE.md Section 2 — bumped from 28 to 29 (Android 10) 2026-07-17. Attempted fix
-        // for D8's "Space characters in SimpleName ... not allowed prior to DEX version 040"
-        // error (hit by backtick test names with spaces inside a non-inline lambda, e.g.
-        // Turbine's .test{} — see DraftDaoIntegrationTest, ReportDaoIntegrationTest,
-        // SyncWorkerIntegrationTest). Per AOSP's dex-format docs, minSdk 29 should be enough,
-        // but empirically it was NOT: assembleDebugAndroidTest still fails identically at
-        // minSdk 29 with our AGP 8.7.2 / D8 toolchain. Kept at 29 anyway as a reasonable
-        // modernization on its own merits; the underlying DEX issue is unresolved and
-        // instrumented tests using this pattern can't run on-device until further
-        // investigation (possibly an AGP/D8 version gap, not a minSdk gap).
+        // CLAUDE.md Section 2 — bumped from 28 to 29 (Android 10) 2026-07-17 as a reasonable
+        // modernization on its own merits. NOTE: this bump does NOT fix (and was never able to
+        // fix) the D8 "Space characters in SimpleName ... not allowed prior to DEX version 040"
+        // error hit by backtick androidTest names containing spaces. Root cause (confirmed
+        // 2026-07-22 by direct dexBuilderDebugAndroidTest reproduction): kotlinx-coroutines-test's
+        // runTest {} (and Turbine's .test {}) are non-inline, so every `= runTest { ... }` body
+        // compiles to a real synthetic/continuation class whose name embeds the literal enclosing
+        // backtick test method name — spaces and all (visible directly in the .class file name on
+        // disk). D8 rejects any DEX SimpleName containing a space below DEX version 040, and no
+        // minSdk this project would realistically ship at gets D8 to select version 040 with our
+        // AGP 8.7.2 / R8 8.7.18 toolchain. minSdk is NOT the right lever for this — raising it
+        // further only trades away device compatibility for crowdtesters without fixing anything.
+        // Actual fix (see CLAUDE.md Section 5): androidTest backtick names use underscores instead
+        // of spaces (e.g. `insert_draft_and_retrieve_by_id_returns_same_entity`) — hyphens are
+        // fine, only literal spaces trip D8. androidTest deliberately stays on JUnit4 (see
+        // buildSrc/Dependencies.kt comment); JUnit5 + @DisplayName was considered but rejected to
+        // avoid reversing that decision.
         minSdk = 29
         targetSdk = 35
         versionCode = 1

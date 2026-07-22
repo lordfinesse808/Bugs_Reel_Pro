@@ -37,7 +37,7 @@ class DraftDaoIntegrationTest {
     }
 
     @Test
-    fun `insert draft and retrieve by id returns same entity`() = runTest {
+    fun `insert_draft_and_retrieve_by_id_returns_same_entity`() = runTest {
         val draft = testDraft(id = "draft-1")
 
         draftDao.upsert(draft)
@@ -46,7 +46,7 @@ class DraftDaoIntegrationTest {
     }
 
     @Test
-    fun `update draft reflects updated fields on next read`() = runTest {
+    fun `update_draft_reflects_updated_fields_on_next_read`() = runTest {
         val draft = testDraft(id = "draft-2")
         draftDao.upsert(draft)
 
@@ -56,7 +56,7 @@ class DraftDaoIntegrationTest {
     }
 
     @Test
-    fun `delete draft returns null on subsequent getById`() = runTest {
+    fun `delete_draft_returns_null_on_subsequent_getById`() = runTest {
         val draft = testDraft(id = "draft-3")
         draftDao.upsert(draft)
 
@@ -66,7 +66,7 @@ class DraftDaoIntegrationTest {
     }
 
     @Test
-    fun `getAllDrafts flow emits when draft is inserted`() = runTest {
+    fun `getAllDrafts_flow_emits_when_draft_is_inserted`() = runTest {
         draftDao.getAllDrafts().test {
             assertEquals(emptyList<DraftEntity>(), awaitItem())
 

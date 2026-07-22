@@ -75,7 +75,7 @@ class OutcomeFeedbackDaoIntegrationTest {
     )
 
     @Test
-    fun `insert and queryByReportId returns correct entity`() = runTest {
+    fun `insert_and_queryByReportId_returns_correct_entity`() = runTest {
         insertReport("report-1")
         val feedback = testFeedback("report-1")
 
@@ -85,7 +85,7 @@ class OutcomeFeedbackDaoIntegrationTest {
     }
 
     @Test
-    fun `preAiQualityScore and postAiQualityScore are persisted correctly`() = runTest {
+    fun `preAiQualityScore_and_postAiQualityScore_are_persisted_correctly`() = runTest {
         insertReport("report-2")
         outcomeFeedbackDao.insert(testFeedback("report-2"))
 
@@ -97,7 +97,7 @@ class OutcomeFeedbackDaoIntegrationTest {
     }
 
     @Test
-    fun `getAll flow emits when new record is inserted`() = runTest {
+    fun `getAll_flow_emits_when_new_record_is_inserted`() = runTest {
         insertReport("report-3")
 
         outcomeFeedbackDao.getAll().test {

@@ -41,7 +41,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `insert report and get by id returns same entity`() = runTest {
+    fun `insert_report_and_get_by_id_returns_same_entity`() = runTest {
         val report = testReport(id = "report-1")
 
         reportDao.insert(report)
@@ -50,7 +50,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `update report reflects updated fields on next read`() = runTest {
+    fun `update_report_reflects_updated_fields_on_next_read`() = runTest {
         val report = testReport(id = "report-2")
         reportDao.insert(report)
 
@@ -60,7 +60,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `delete report returns null on subsequent getById`() = runTest {
+    fun `delete_report_returns_null_on_subsequent_getById`() = runTest {
         val report = testReport(id = "report-3")
         reportDao.insert(report)
 
@@ -70,7 +70,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `getUnsyncedReports returns only reports with null syncedAt`() = runTest {
+    fun `getUnsyncedReports_returns_only_reports_with_null_syncedAt`() = runTest {
         reportDao.insert(testReport(id = "unsynced"))
         reportDao.insert(testReport(id = "synced").copy(syncedAt = Instant.parse("2026-01-02T00:00:00Z")))
 
@@ -80,7 +80,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `markSynced sets syncedAt so report no longer appears as unsynced`() = runTest {
+    fun `markSynced_sets_syncedAt_so_report_no_longer_appears_as_unsynced`() = runTest {
         reportDao.insert(testReport(id = "report-4"))
 
         reportDao.markSynced("report-4", Instant.parse("2026-01-03T00:00:00Z"))
@@ -89,7 +89,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `getAllReports flow emits when report is inserted`() = runTest {
+    fun `getAllReports_flow_emits_when_report_is_inserted`() = runTest {
         reportDao.getAllReports().test {
             assertEquals(emptyList<ReportEntity>(), awaitItem())
 
@@ -101,7 +101,7 @@ class ReportDaoIntegrationTest {
     }
 
     @Test
-    fun `observeById emits the updated entity after update`() = runTest {
+    fun `observeById_emits_the_updated_entity_after_update`() = runTest {
         val report = testReport(id = "report-6")
         reportDao.insert(report)
 

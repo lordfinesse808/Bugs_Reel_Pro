@@ -29,7 +29,7 @@ class BugReelDatabaseTest {
     }
 
     @Test
-    fun `database opens and all 7 DAOs are non-null`() {
+    fun `database_opens_and_all_7_DAOs_are_non-null`() {
         assertNotNull(database.reportDao())
         assertNotNull(database.evidenceDao())
         assertNotNull(database.draftDao())
@@ -40,7 +40,7 @@ class BugReelDatabaseTest {
     }
 
     @Test
-    fun `OutcomeFeedbackDao is accessible from database instance`() {
+    fun `OutcomeFeedbackDao_is_accessible_from_database_instance`() {
         assertNotNull(database.outcomeFeedbackDao())
     }
 }
