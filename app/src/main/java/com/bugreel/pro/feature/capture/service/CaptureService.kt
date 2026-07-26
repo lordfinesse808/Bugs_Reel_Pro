@@ -70,16 +70,14 @@ class CaptureService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = bubbleOverlayManager.buildForegroundNotification()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(
-                BubbleOverlayManager.NOTIFICATION_ID,
-                notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
-            )
-        } else {
-            startForeground(BubbleOverlayManager.NOTIFICATION_ID, notification)
-        }
+        // Do NOT call startForeground(..., FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION) here.
+        // onStartCommand fires for every startService() call, including CaptureRepositoryImpl's
+        // eager status-check ping at app launch — long before any MediaProjection consent
+        // exists. Android 14+ (targetSdk 35) requires an already-granted projection token at
+        // the moment that FGS type is requested and throws SecurityException otherwise, which
+        // previously crash-looped the :capture process on every app start (START_STICKY kept
+        // restarting it into the same unconditional call). The type is now only requested from
+        // performStartCapture(), once a real MediaProjection has actually been obtained.
         bubbleOverlayManager.show()
 
         when (intent?.action) {
@@ -112,6 +110,20 @@ class CaptureService : Service() {
             return
         }
 
+        // Promote to a mediaProjection-typed foreground service only now, at the point we
+        // actually hold a user-granted (resultCode, projectionData) pair — the earliest legal
+        // moment per Android 14+ FGS type rules.
+        val notification = bubbleOverlayManager.buildForegroundNotification()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                BubbleOverlayManager.NOTIFICATION_ID,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION
+            )
+        } else {
+            startForeground(BubbleOverlayManager.NOTIFICATION_ID, notification)
+        }
+
         val projectionManager = getSystemService(MediaProjectionManager::class.java)
         val projection = projectionManager.getMediaProjection(resultCode, projectionData)
         val handler = MediaProjectionHandler(projection, serviceScope)
@@ -125,6 +137,7 @@ class CaptureService : Service() {
             replyTo?.send(Message.obtain(null, MSG_CAPTURE_STARTED))
         } else {
             replyTo?.send(Message.obtain(null, MSG_CAPTURE_START_FAILED))
+            stopForeground(STOP_FOREGROUND_REMOVE)
         }
     }
 
@@ -140,6 +153,7 @@ class CaptureService : Service() {
 
         eventLogger.logEvent(BugReelEvent.RecordingStopped())
         bubbleOverlayManager.updateCaptureState(isCapturing = false)
+        stopForeground(STOP_FOREGROUND_REMOVE)
 
         val eventsJson = Json.encodeToString(eventLogger.getEvents())
         eventLogger.clearEvents()
