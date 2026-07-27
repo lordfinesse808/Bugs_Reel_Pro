@@ -731,7 +731,7 @@ Stop when all stop conditions in Section 14 are met. Do not start Sprint 2.
 
 ---
 
-## 15. Sprint 2 — Report Builder & Firebase Sync (automated checks passed 2026-07-22 — pending human device-test sign-off)
+## 15. Sprint 2 — Report Builder & Firebase Sync (COMPLETE — signed off 2026-07-26)
 
 **Scope:** Report construction, evidence management, platform export, and Firebase sync.
 
@@ -800,9 +800,24 @@ Stop when all stop conditions are met. Do not start Sprint 3.
 
 ---
 
-## 16. Sprint 3 — Quality Engine
+## 16. Sprint 3 — Quality Engine (automated checks passed 2026-07-27 — pending human device-test sign-off)
 
 **Scope:** Deterministic quality scoring, coaching hints, severity advice, completeness checking, duplicate detection.
+
+**Architecture amendment (2026-07-27):** item 10 below originally said to update
+`feature/report/domain/BuildReportUseCase.kt` to record `preAiQualityScore`. That would make
+`BuildReportUseCase` (feature/report) import `QualityScorer` (feature/quality), which breaks
+Rule 4 (no feature cross-imports — Section 4). Built instead as
+`feature/quality/domain/RecordInitialQualityScoreUseCase.kt`: it scores a freshly submitted
+`BugReport`, persists the score via `ReportRepository.updateReport`, and records the initial
+`OutcomeFeedback` row (`PENDING`, `preAiQualityScore = score.total`). It's triggered from
+`QualityScoreViewModel.init` when `QualityScoreScreen` first loads a report — reachable now via
+`ReportBuilderScreen`'s submit flow and a `ReportListScreen` row tap, both of which previously had
+no destination wired up (Section 15 note: "no report detail screen yet"). `BuildReportUseCase.kt`
+itself is unchanged from Sprint 2. This also required creating the first implementations of the
+Sprint-1-only `OutcomeFeedbackRepository` interface (`feature/quality/data/OutcomeFeedbackRepositoryImpl.kt`)
+and a new `feature/quality/domain/QualityRepository.kt` interface + `QualityRepositoryImpl.kt`
+(existing-reports lookup for `DuplicateDetector`), bound via `feature/quality/di/QualityModule.kt`.
 
 ### Session start prompt
 ```
@@ -847,13 +862,16 @@ Stop when all stop conditions are met. Do not start Sprint 4.
 - `CoachingHintStrings.kt` entries must be ≤120 characters — enforce with a string length assertion test
 
 ### Stop conditions — Sprint 3
-- `./gradlew test` passes — 0 failures
-- `./gradlew lint` — 0 errors
-- Coverage ≥90% on `feature/quality/domain/` (Jacoco report)
-- `QualityScorer` determinism test passes across 1,000 iterations
-- `grep -rn "AIService\|suspend\|Flow\|import android" feature/quality/domain/QualityScorer.kt` returns 0
-- Coaching hint string length assertion passes (all ≤120 chars)
-- `OutcomeFeedbackEntity.preAiQualityScore` is being populated after scoring
+- `./gradlew test` passes — 0 failures ✅ (98 tests)
+- `./gradlew lint` — 0 errors ✅
+- Coverage ≥90% on `feature/quality/domain/` (Jacoco report) ✅ 100% line coverage
+- `QualityScorer` determinism test passes across 1,000 iterations ✅
+- `grep -rn "AIService\|suspend\|Flow\|import android" feature/quality/domain/QualityScorer.kt` returns 0 ✅
+- Coaching hint string length assertion passes (all ≤120 chars) ✅
+- `OutcomeFeedbackEntity.preAiQualityScore` is being populated after scoring ✅ (via
+  `RecordInitialQualityScoreUseCase`, see amendment above)
+- Still pending: human device-test sign-off (score reveal animation, upgrade prompt, and the new
+  ReportBuilder → QualityScore → ReportList navigation flow on a physical device)
 
 ---
 
@@ -1183,4 +1201,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-22 · BugReel Pro V4.0 build-ready · Sprint 1 complete; Sprint 2 built, automated gates green, DEX 040 androidTest blocker resolved — awaiting human device-test sign-off before Sprint 3*
+*Last updated: 2026-07-27 · BugReel Pro V4.0 build-ready · Sprint 1 and 2 complete; Sprint 3 built, automated gates green (100% coverage on feature/quality/domain), Rule 4 architecture amendment documented above — awaiting human device-test sign-off before Sprint 4*

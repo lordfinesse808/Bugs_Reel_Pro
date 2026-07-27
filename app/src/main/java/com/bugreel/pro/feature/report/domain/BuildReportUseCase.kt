@@ -10,6 +10,12 @@ import javax.inject.Inject
 // CLAUDE.md Sprint 2 Session 2 — pure validation logic (no IO, no suspend), mirroring the
 // "return every error, not just the first" spirit of Section 10's QualityScorer contract so
 // ReportBuilderScreen can show every invalid field at once instead of one-at-a-time.
+//
+// Sprint 3 note: this stays untouched by design. QualityScorer lives in feature/quality/domain
+// (CLAUDE.md Section 16), and Architecture Rule 4 forbids feature/report from importing another
+// feature package -- so scoring cannot happen here. RecordInitialQualityScoreUseCase (in
+// feature/quality/domain) scores and records preAiQualityScore instead, triggered when
+// QualityScoreScreen loads for a freshly submitted report. See CLAUDE.md Section 16 amendment.
 class BuildReportUseCase @Inject constructor() {
 
     operator fun invoke(draft: BugReportDraft): List<ValidationError> {

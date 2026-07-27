@@ -46,7 +46,7 @@ private const val TOTAL_STEPS = 5
 
 @Composable
 fun ReportBuilderScreen(
-    onSubmitted: () -> Unit,
+    onSubmitted: (String) -> Unit,
     onNavigateToEvidencePicker: () -> Unit,
     onBack: () -> Unit,
     viewModel: ReportBuilderViewModel = hiltViewModel()
@@ -57,7 +57,7 @@ fun ReportBuilderScreen(
     LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
-                is ReportBuilderUiEvent.NavigateToReportList -> onSubmitted()
+                is ReportBuilderUiEvent.NavigateToReportList -> onSubmitted(event.reportId)
                 is ReportBuilderUiEvent.ShowValidationErrors ->
                     snackbarHostState.showSnackbar("Fix ${event.errors.size} field(s) before submitting")
             }
