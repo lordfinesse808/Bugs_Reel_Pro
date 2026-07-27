@@ -808,7 +808,7 @@ is clean of real cross-feature imports as of this correction.
 
 ---
 
-## 16. Sprint 3 — Quality Engine (automated checks passed 2026-07-27 — pending human device-test sign-off)
+## 16. Sprint 3 — Quality Engine (COMPLETE — signed off 2026-07-27)
 
 **Scope:** Deterministic quality scoring, coaching hints, severity advice, completeness checking, duplicate detection.
 
@@ -878,8 +878,7 @@ Stop when all stop conditions are met. Do not start Sprint 4.
 - Coaching hint string length assertion passes (all ≤120 chars) ✅
 - `OutcomeFeedbackEntity.preAiQualityScore` is being populated after scoring ✅ (via
   `RecordInitialQualityScoreUseCase`, see amendment above)
-- Still pending: human device-test sign-off (score reveal animation, upgrade prompt, and the new
-  ReportBuilder → QualityScore → ReportList navigation flow on a physical device)
+- Human device-test sign-off — confirmed 2026-07-27
 
 ---
 
@@ -1209,4 +1208,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-27 · BugReel Pro V4.0 build-ready · Sprint 1 and 2 complete; Sprint 3 built, automated gates green (100% coverage on feature/quality/domain), Rule 4 architecture amendment documented above — awaiting human device-test sign-off before Sprint 4*
+*Last updated: 2026-07-27 · BugReel Pro V4.0 build-ready · Sprints 1-3 complete and signed off. Do not start Sprint 4 in the same session as this sign-off without an explicit human instruction to do so.*
