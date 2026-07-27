@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.capture.data
+package com.bugreel.pro.core.util
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider

@@ -9,7 +9,7 @@ import com.bugreel.pro.core.domain.model.enums.Frequency
 import com.bugreel.pro.core.domain.model.enums.Severity
 import com.bugreel.pro.core.domain.model.enums.TestPlatform
 import com.bugreel.pro.core.domain.repository.ReportRepository
-import com.bugreel.pro.feature.capture.data.DeviceProfiler
+import com.bugreel.pro.core.util.DeviceProfiler
 import com.bugreel.pro.feature.report.data.EvidenceManager
 import com.bugreel.pro.feature.report.domain.BuildReportUseCase
 import com.bugreel.pro.feature.report.domain.ValidationError

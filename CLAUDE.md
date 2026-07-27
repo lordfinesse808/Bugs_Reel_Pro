@@ -798,6 +798,14 @@ Stop when all stop conditions are met. Do not start Sprint 3.
 - `SyncWorker` is the only file containing Firebase write calls
 - Empty state renders correctly on `ReportListScreen`
 
+**Post-sign-off correction (2026-07-27):** `feature/report/ui/ReportBuilderViewModel.kt` had been
+importing `feature/capture/data/DeviceProfiler.kt` directly — a Rule 4 violation (no feature
+cross-imports) that slipped through the Sprint 2 Architecture Gate. `DeviceProfiler` had zero
+consumers inside `feature/capture` itself (only `ReportBuilderViewModel` used it), so it was
+moved to `core/util/DeviceProfiler.kt` alongside `OemCompat`/`PermissionManager` — the same kind
+of no-permission, cross-cutting device utility. `grep -rn "import com.bugreel.pro.feature\." feature/`
+is clean of real cross-feature imports as of this correction.
+
 ---
 
 ## 16. Sprint 3 — Quality Engine (automated checks passed 2026-07-27 — pending human device-test sign-off)

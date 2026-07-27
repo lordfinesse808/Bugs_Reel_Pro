@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.capture.data
+package com.bugreel.pro.core.util
 
 import android.app.ActivityManager
 import android.content.Context
@@ -8,11 +8,14 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import com.bugreel.pro.core.domain.model.DeviceProfile
-import com.bugreel.pro.core.util.OemCompat
 import javax.inject.Inject
 import javax.inject.Singleton
 
 // CLAUDE.md Section 14 — read-only device metadata, no special permissions required.
+// Moved here from feature/capture/data in Sprint 3 (CLAUDE.md Section 14 amendment): it had zero
+// consumers inside feature/capture and was only ever used by feature/report/ui, which violated
+// Architecture Rule 4 (no feature cross-imports). core/util already houses OemCompat and
+// PermissionManager -- the same kind of cross-cutting, no-permission device utility.
 @Singleton
 class DeviceProfiler @Inject constructor() {
 
