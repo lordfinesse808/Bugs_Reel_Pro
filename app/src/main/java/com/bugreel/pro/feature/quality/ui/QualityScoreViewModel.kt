@@ -4,18 +4,18 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bugreel.pro.BuildConfig
+import com.bugreel.pro.core.domain.model.BugReport
 import com.bugreel.pro.core.domain.model.QualityScore
 import com.bugreel.pro.core.domain.repository.ReportRepository
-import com.bugreel.pro.feature.quality.domain.RecordInitialQualityScoreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 sealed class QualityScoreUiState {
@@ -32,36 +32,24 @@ sealed class QualityScoreIntent {
     data object DoneClicked : QualityScoreIntent()
 }
 
+// Sprint 4: no longer scores anything itself. BuildReportUseCase.buildOrNull() (feature/report)
+// attaches qualityScore before the report is ever persisted (Section 16 amendment, revised
+// Sprint 4 now that QualityScorer lives in core/domain/quality), so this screen just displays
+// whatever score the report already carries.
 @HiltViewModel
 class QualityScoreViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val reportRepository: ReportRepository,
-    private val recordInitialQualityScoreUseCase: RecordInitialQualityScoreUseCase
+    reportRepository: ReportRepository
 ) : ViewModel() {
 
     private val reportId: String = checkNotNull(savedStateHandle[REPORT_ID_ARG])
 
-    private val _uiState = MutableStateFlow<QualityScoreUiState>(QualityScoreUiState.Loading)
-    val uiState: StateFlow<QualityScoreUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<QualityScoreUiState> = reportRepository.getReportById(reportId)
+        .map { report -> toUiState(report) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), QualityScoreUiState.Loading)
 
     private val _events = MutableSharedFlow<QualityScoreUiEvent>()
     val events: SharedFlow<QualityScoreUiEvent> = _events.asSharedFlow()
-
-    init {
-        viewModelScope.launch {
-            val report = reportRepository.getReportById(reportId).first()
-            if (report == null) {
-                _uiState.value = QualityScoreUiState.NotFound
-                return@launch
-            }
-            val scored = recordInitialQualityScoreUseCase(report)
-            val score = scored.qualityScore ?: return@launch
-            _uiState.value = QualityScoreUiState.Loaded(
-                score = score,
-                showUpgradePrompt = score.total < BuildConfig.QUALITY_SCORE_UPGRADE
-            )
-        }
-    }
 
     fun onIntent(intent: QualityScoreIntent) {
         when (intent) {
@@ -70,7 +58,17 @@ class QualityScoreViewModel @Inject constructor(
         }
     }
 
+    private fun toUiState(report: BugReport?): QualityScoreUiState {
+        if (report == null) return QualityScoreUiState.NotFound
+        val score = report.qualityScore ?: return QualityScoreUiState.Loading
+        return QualityScoreUiState.Loaded(
+            score = score,
+            showUpgradePrompt = score.total < BuildConfig.QUALITY_SCORE_UPGRADE
+        )
+    }
+
     companion object {
         const val REPORT_ID_ARG = "reportId"
+        private const val STOP_TIMEOUT_MS = 5000L
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bugreel.pro.core.domain.model.AiOutput
 import com.bugreel.pro.core.domain.model.BugReportDraft
 import com.bugreel.pro.core.domain.model.enums.Frequency
 import com.bugreel.pro.core.domain.model.enums.Severity
@@ -56,6 +57,15 @@ sealed class ReportBuilderIntent {
     data class ScreenshotAttached(val uri: Uri) : ReportBuilderIntent()
     data class LogTextAttached(val text: String) : ReportBuilderIntent()
     data class StepChanged(val step: Int) : ReportBuilderIntent()
+    // Filled in by AppNavGraph after AiAssistScreen (feature/ai) returns its result -- kept to
+    // primitives + the core AiOutput model (never feature/ai's own result type) so this file
+    // never needs to import another feature package (Architecture Rule 4).
+    data class AiSuggestionsApplied(
+        val title: String?,
+        val summary: String?,
+        val reproSteps: List<String>,
+        val aiOutput: AiOutput?
+    ) : ReportBuilderIntent()
     data object Submit : ReportBuilderIntent()
 }
 
@@ -98,6 +108,15 @@ class ReportBuilderViewModel @Inject constructor(
             is ReportBuilderIntent.ScreenshotAttached -> attachScreenshot(current, intent.uri)
             is ReportBuilderIntent.LogTextAttached -> attachLogText(current, intent.text)
             is ReportBuilderIntent.StepChanged -> _uiState.value = current.copy(currentStep = intent.step)
+            is ReportBuilderIntent.AiSuggestionsApplied ->
+                update(current) {
+                    it.copy(
+                        title = intent.title,
+                        summary = intent.summary,
+                        reproSteps = intent.reproSteps,
+                        aiOutput = intent.aiOutput
+                    )
+                }
             ReportBuilderIntent.Submit -> submit(current)
         }
     }
@@ -143,6 +162,7 @@ class ReportBuilderViewModel @Inject constructor(
         _uiState.value = ReportBuilderUiState.Submitting
         viewModelScope.launch {
             reportRepository.insertReport(report)
+            buildReportUseCase.recordOutcomeFeedback(report)
             _uiState.value = ReportBuilderUiState.Submitted(report.id)
             _events.emit(ReportBuilderUiEvent.NavigateToReportList(report.id))
         }

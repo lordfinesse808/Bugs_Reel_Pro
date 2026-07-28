@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.quality.domain
+package com.bugreel.pro.core.domain.quality
 
 import com.bugreel.pro.core.domain.model.BugReportDraft
 import com.bugreel.pro.core.domain.model.CoachingHint
@@ -12,6 +12,11 @@ import javax.inject.Inject
 // CLAUDE.md Section 10 — pure function. Zero IO, zero coroutines, zero Android imports, zero
 // AI calls. Same input always produces the same output; scored against a BugReportDraft (not
 // the non-nullable BugReport) so this can run live while the tester is still filling the form.
+//
+// Lives in core/domain (not feature/quality/domain as originally sketched in CLAUDE.md Section
+// 16) because Sprint 4 needs it callable from feature/ai too (to score a pre-AI-suggestion
+// baseline), and Architecture Rule 4 forbids one feature package importing another. See
+// CLAUDE.md Section 16 amendment (2026-07-28).
 class QualityScorer @Inject constructor() {
 
     fun score(draft: BugReportDraft): QualityScore {

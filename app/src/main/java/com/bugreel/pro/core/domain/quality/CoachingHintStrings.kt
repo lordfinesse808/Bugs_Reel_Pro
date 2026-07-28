@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.quality.domain
+package com.bugreel.pro.core.domain.quality
 
 // CLAUDE.md Section 10 / Section 16 — every coaching hint message QualityScorer can emit lives
 // here, and nowhere else. All entries must stay <=120 chars (enforced by

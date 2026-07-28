@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.quality.domain
+package com.bugreel.pro.core.domain.quality
 
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

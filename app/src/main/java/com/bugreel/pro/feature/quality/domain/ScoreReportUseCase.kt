@@ -4,6 +4,7 @@ import com.bugreel.pro.core.domain.model.BugReport
 import com.bugreel.pro.core.domain.model.BugReportDraft
 import com.bugreel.pro.core.domain.model.QualityScore
 import com.bugreel.pro.core.domain.model.enums.Severity
+import com.bugreel.pro.core.domain.quality.QualityScorer
 import javax.inject.Inject
 
 // The full picture ScoreReportUseCase assembles for the report-builder UI: the deterministic

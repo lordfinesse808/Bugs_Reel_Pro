@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.quality.domain
+package com.bugreel.pro.core.domain.quality
 
 import com.bugreel.pro.core.domain.model.BugReportDraft
 import com.bugreel.pro.core.domain.model.DeviceProfile

@@ -8,6 +8,7 @@ import com.bugreel.pro.core.domain.model.enums.Frequency
 import com.bugreel.pro.core.domain.model.enums.ReportStatus
 import com.bugreel.pro.core.domain.model.enums.Severity
 import com.bugreel.pro.core.domain.model.enums.TestPlatform
+import com.bugreel.pro.core.domain.quality.QualityScorer
 import io.mockk.coEvery
 import io.mockk.mockk
 import java.time.Instant

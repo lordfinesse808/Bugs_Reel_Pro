@@ -1,4 +1,4 @@
-package com.bugreel.pro.feature.quality.data
+package com.bugreel.pro.core.data
 
 import com.bugreel.pro.core.data.local.dao.OutcomeFeedbackDao
 import com.bugreel.pro.core.data.local.entity.OutcomeFeedbackEntity
@@ -14,9 +14,10 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 // CLAUDE.md Section 1 / Section 23 — THE FLYWHEEL. The interface has existed since Sprint 1;
-// this is its first implementation, added now because Section 16 item 10 requires
-// preAiQualityScore to start accumulating in Sprint 3 (Architecture Rule 1: BuildReportUseCase
-// may only reach Room through this repository interface, never OutcomeFeedbackDao directly).
+// this is its first implementation, added in Sprint 3. Lives in core/data (not feature/quality
+// or feature/report) because it's a genuinely cross-feature concern: feature/report writes to
+// it at submission time, feature/analytics reads it in Sprint 5 -- no single feature owns it,
+// and Rule 4 means whichever feature's DI module binds it can't be imported by the others.
 class OutcomeFeedbackRepositoryImpl @Inject constructor(
     private val outcomeFeedbackDao: OutcomeFeedbackDao
 ) : OutcomeFeedbackRepository {
