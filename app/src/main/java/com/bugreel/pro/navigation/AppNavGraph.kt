@@ -1,6 +1,7 @@
 package com.bugreel.pro.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -9,13 +10,27 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.bugreel.pro.core.domain.model.ReportContext
+import com.bugreel.pro.feature.ai.ui.AiAssistResult
+import com.bugreel.pro.feature.ai.ui.AiAssistScreen
+import com.bugreel.pro.feature.ai.ui.AiAssistViewModel
 import com.bugreel.pro.feature.capture.ui.CaptureScreen
 import com.bugreel.pro.feature.quality.ui.QualityScoreScreen
 import com.bugreel.pro.feature.quality.ui.QualityScoreViewModel
 import com.bugreel.pro.feature.report.ui.EvidencePickerScreen
+import com.bugreel.pro.feature.report.ui.ReportBuilderIntent
 import com.bugreel.pro.feature.report.ui.ReportBuilderScreen
 import com.bugreel.pro.feature.report.ui.ReportBuilderViewModel
 import com.bugreel.pro.feature.report.ui.ReportListScreen
+
+// Keys for handing data between ReportBuilder and AiAssist through Compose Navigation's
+// SavedStateHandle "returning a result" pattern (developer.android.com/guide/navigation/
+// navigation-programmatic#returning_a_result). Neither ReportContext nor AiAssistResult is
+// Parcelable; this works because the hand-off is same-process and short-lived (one screen
+// transition), which is the documented trade-off of that pattern -- it isn't restoration-safe
+// across process death, acceptable for this bounded interaction.
+private const val AI_ASSIST_CONTEXT_KEY = "aiAssistContext"
+private const val AI_ASSIST_RESULT_KEY = "aiAssistResult"
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
@@ -40,9 +55,29 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 
         composable(Screen.ReportBuilder.route) { entry ->
             val viewModel: ReportBuilderViewModel = hiltViewModel(entry)
+
+            val aiResult = entry.savedStateHandle.get<AiAssistResult>(AI_ASSIST_RESULT_KEY)
+            LaunchedEffect(aiResult) {
+                aiResult?.let { result ->
+                    viewModel.onIntent(
+                        ReportBuilderIntent.AiSuggestionsApplied(
+                            title = result.title,
+                            summary = result.summary,
+                            reproSteps = result.reproSteps,
+                            aiOutput = result.aiOutput
+                        )
+                    )
+                    entry.savedStateHandle.remove<AiAssistResult>(AI_ASSIST_RESULT_KEY)
+                }
+            }
+
             ReportBuilderScreen(
                 viewModel = viewModel,
                 onNavigateToEvidencePicker = { navController.navigate(Screen.EvidencePicker.route) },
+                onNavigateToAiAssist = { context ->
+                    navController.currentBackStackEntry?.savedStateHandle?.set(AI_ASSIST_CONTEXT_KEY, context)
+                    navController.navigate(Screen.AiAssist.route)
+                },
                 onSubmitted = { reportId ->
                     navController.navigate(Screen.QualityScore.createRoute(reportId)) {
                         popUpTo(Screen.ReportList.route) { inclusive = false }
@@ -60,6 +95,22 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
             EvidencePickerScreen(
                 viewModel = viewModel,
                 onDone = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.AiAssist.route) { entry ->
+            val reportContext = navController.previousBackStackEntry
+                ?.savedStateHandle?.get<ReportContext>(AI_ASSIST_CONTEXT_KEY)
+            val viewModel: AiAssistViewModel = hiltViewModel(entry)
+            LaunchedEffect(reportContext) { reportContext?.let(viewModel::initialize) }
+
+            AiAssistScreen(
+                viewModel = viewModel,
+                onApply = { result ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set(AI_ASSIST_RESULT_KEY, result)
+                    navController.popBackStack()
+                },
+                onCancel = { navController.popBackStack() }
             )
         }
 

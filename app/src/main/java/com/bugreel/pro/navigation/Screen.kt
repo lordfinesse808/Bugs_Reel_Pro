@@ -5,6 +5,7 @@ sealed class Screen(val route: String) {
     data object ReportBuilder : Screen("report_builder")
     data object ReportList : Screen("report_list")
     data object EvidencePicker : Screen("evidence_picker")
+    data object AiAssist : Screen("ai_assist")
     data object QualityScore : Screen("quality_score/{reportId}") {
         fun createRoute(reportId: String) = "quality_score/$reportId"
     }

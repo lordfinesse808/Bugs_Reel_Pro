@@ -69,6 +69,9 @@ object Versions {
     // instrumented-test artifact (plain io.mockk:mockk doesn't work on-device).
     const val workTesting = workManager
     const val mockkAndroid = mockk
+    // OpenAIServiceTest (Sprint 4) needs a fake HTTP server so it never hits the real
+    // OpenAI API; version-aligned with the okhttp client it stands in for.
+    const val mockWebServer = okhttp
 }
 
 object Libs {
@@ -133,4 +136,5 @@ object Libs {
     const val androidxTestExtJunit = "androidx.test.ext:junit:${Versions.androidxTestExtJunit}"
     const val workTesting = "androidx.work:work-testing:${Versions.workTesting}"
     const val mockkAndroid = "io.mockk:mockk-android:${Versions.mockkAndroid}"
+    const val mockWebServer = "com.squareup.okhttp3:mockwebserver:${Versions.mockWebServer}"
 }

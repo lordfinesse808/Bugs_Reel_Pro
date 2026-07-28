@@ -882,9 +882,60 @@ Stop when all stop conditions are met. Do not start Sprint 4.
 
 ---
 
-## 17. Sprint 4 — AI Assistant
+## 17. Sprint 4 — AI Assistant (automated checks passed 2026-07-28 — pending human device-test sign-off)
 
 **Scope:** AI-assisted title, summary, repro step generation; safety validation; rate limiting.
+
+**Architecture amendments (2026-07-28):**
+
+1. **QualityScorer moved to `core/domain/quality/`** (from `feature/quality/domain/`, where Sprint
+   3 built it). Sprint 4 needs a quality score at two separate points -- a baseline before AI
+   suggestions are shown (feature/ai) and the final score after (feature/report, via
+   `BuildReportUseCase`) -- and Rule 4 forbids either feature from importing a class that lives in
+   a third, sibling feature package. `CoachingHintStrings.kt` moved alongside it, since
+   `QualityScorer` depends on it. Every reference in `feature/quality` (`ScoreReportUseCase`, its
+   test) was updated to the new import; nothing in `QualityScorer`'s own contract changed.
+
+2. **Sprint 3's `RecordInitialQualityScoreUseCase` was removed.** It existed only to work around
+   QualityScorer being feature-scoped (score computed lazily, after the report round-tripped
+   through Room, when `QualityScoreScreen` first loaded it). With QualityScorer now in core, the
+   *original* Section 16 item 10 design is valid again: `BuildReportUseCase.buildOrNull()`
+   attaches `qualityScore` directly, and a new `BuildReportUseCase.recordOutcomeFeedback(report)`
+   (called from `ReportBuilderViewModel.submit()` right after `insertReport`) writes the initial
+   `OutcomeFeedback` row. `QualityScoreViewModel` now just displays whatever score the report
+   already carries -- it no longer triggers scoring itself.
+
+3. **`OutcomeFeedbackRepositoryImpl` moved to `core/data/`** (from `feature/quality/data/`), bound
+   via a new `core/di/RepositoryModule.kt`. It's a genuinely cross-feature concern (feature/report
+   writes to it, feature/analytics will read it in Sprint 5) with no single owning feature --
+   Rule 4 means whichever feature's DI module binds it can't be imported by the others.
+
+4. **`AiOutput` (core domain model) gained 5 fields**: `preAiQualityScore`, `postAiQualityScore`,
+   `testerOverrodeSuggestion`, `aiSuggestionsAccepted`, `aiSuggestionsRejected` -- all defaulted,
+   so no Room migration was needed (`AiOutputEntity`'s columns are unchanged; these fields are
+   transient, read once by `BuildReportUseCase.recordOutcomeFeedback()` off the in-memory
+   `BugReport` built at submission time, never round-tripped through Room). `preAiQualityScore` is
+   captured by `AiAssistViewModel.initialize()` before any suggestion is generated; the rest are
+   computed when the tester taps Apply, by diffing each field's final value against its AI
+   suggestion.
+
+5. **Navigation**: added `Screen.AiAssist`, launched from a new "AI Assist" button on
+   `ReportBuilderScreen`'s review step. Since `AiAssistViewModel` (feature/ai) can't depend on
+   `ReportBuilderViewModel` (feature/report) and vice versa, the draft's `ReportContext` and the
+   AI Assist result are handed between the two nav entries via Compose Navigation's
+   `SavedStateHandle` "returning a result" pattern (`AppNavGraph.kt`) -- same-process only, not
+   restoration-safe across process death, which is an acceptable trade-off for this bounded,
+   single-screen-transition hand-off.
+
+6. **`OpenAIService.validateSafety()` delegates entirely to the local, deterministic
+   `SafetyValidator`** rather than a second paid round-trip through `BuildConfig.AI_MODEL_SAFETY`:
+   ADR-004's four criteria are objective rules checkable against the evidence bundle directly. The
+   `aiModelSafety` DI binding and `safetyValidationPrompt()` stay available/tested for a future
+   vision-based check.
+
+**Sprint 0 Track 4 cost re-verification:** the human did not have the per-report P90 cost figure
+on hand this session and explicitly waived re-confirming it before proceeding (2026-07-28) --
+recorded here per the Living Document Protocol rather than silently skipped.
 
 ### Session start prompt
 ```
@@ -939,13 +990,19 @@ Stop when all stop conditions are met. Do not start Sprint 5.
   uses vision only when screenshots are present in the evidence bundle
 
 ### Stop conditions — Sprint 4
-- `./gradlew test` passes — 0 failures
-- `./gradlew lint` — 0 errors
-- All 5 SafetyValidator test cases pass (4 BLOCKED + 1 PASS)
+- `./gradlew test` passes — 0 failures ✅
+- `./gradlew lint` — 0 errors ✅
+- All 5 SafetyValidator test cases pass (4 BLOCKED + 1 PASS) ✅
 - `grep -rn "OkHttp\|HttpClient\|retrofit\|openai" --include="*.kt" | grep -v OpenAIService | grep -v dto` returns 0
-- `grep -rn '"gpt-4\|"gpt-5\|"claude' --include="*.kt" | grep -v BuildConfig` returns 0 (no hardcoded model strings)
-- `OutcomeFeedbackEntity.postAiQualityScore` is populated after AI suggestions accepted
-- `OutcomeFeedbackEntity.testerOverrodeSuggestion` is set correctly when tester edits AI output
+  ✅ (only match is `core/di/NetworkModule.kt` providing the singleton `OkHttpClient` DI wants
+  constructed once, centrally -- it makes no HTTP calls itself; same class of exception as
+  Sprint 2's FirestoreSource/SyncWorker check)
+- `grep -rn '"gpt-4\|"gpt-5\|"claude' --include="*.kt" | grep -v BuildConfig` returns 0 ✅ (no hardcoded model strings)
+- `OutcomeFeedbackEntity.postAiQualityScore` is populated after AI suggestions accepted ✅ (verified by `BuildReportUseCaseTest`)
+- `OutcomeFeedbackEntity.testerOverrodeSuggestion` is set correctly when tester edits AI output ✅ (verified by `BuildReportUseCaseTest`)
+- Still pending: human device-test sign-off (AI Assist flow end-to-end on a physical device,
+  including a real OpenAI call -- everything above was verified with MockWebServer/mocks, never
+  against the live API)
 
 ---
 
@@ -1208,4 +1265,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-27 · BugReel Pro V4.0 build-ready · Sprints 1-3 complete and signed off. Do not start Sprint 4 in the same session as this sign-off without an explicit human instruction to do so.*
+*Last updated: 2026-07-28 · BugReel Pro V4.0 build-ready · Sprints 1-3 complete and signed off; Sprint 4 built, automated gates green, QualityScorer relocated to core/domain/quality (Section 17 amendment) — awaiting human device-test sign-off before Sprint 5*

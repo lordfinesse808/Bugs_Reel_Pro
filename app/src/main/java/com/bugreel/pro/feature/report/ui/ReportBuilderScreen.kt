@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bugreel.pro.core.domain.model.ReportContext
 import com.bugreel.pro.core.domain.model.enums.Frequency
 import com.bugreel.pro.core.domain.model.enums.Severity
 import com.bugreel.pro.core.domain.model.enums.TestPlatform
@@ -48,6 +49,7 @@ private const val TOTAL_STEPS = 5
 fun ReportBuilderScreen(
     onSubmitted: (String) -> Unit,
     onNavigateToEvidencePicker: () -> Unit,
+    onNavigateToAiAssist: (ReportContext) -> Unit,
     onBack: () -> Unit,
     viewModel: ReportBuilderViewModel = hiltViewModel()
 ) {
@@ -73,6 +75,7 @@ fun ReportBuilderScreen(
                     state = state,
                     onIntent = viewModel::onIntent,
                     onNavigateToEvidencePicker = onNavigateToEvidencePicker,
+                    onNavigateToAiAssist = onNavigateToAiAssist,
                     onBack = onBack
                 )
                 is ReportBuilderUiState.Submitted -> Unit // handled by the LaunchedEffect above
@@ -90,6 +93,7 @@ private fun BuildingReportContent(
     state: ReportBuilderUiState.BuildingReport,
     onIntent: (ReportBuilderIntent) -> Unit,
     onNavigateToEvidencePicker: () -> Unit,
+    onNavigateToAiAssist: (ReportContext) -> Unit,
     onBack: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
@@ -101,7 +105,7 @@ private fun BuildingReportContent(
                 2 -> StepSeverityAndFrequency(state, onIntent)
                 3 -> StepReproSteps(state, onIntent)
                 4 -> StepEvidence(state, onNavigateToEvidencePicker)
-                5 -> StepReview(state)
+                5 -> StepReview(state, onNavigateToAiAssist)
             }
         }
 
@@ -318,7 +322,10 @@ private fun StepEvidence(state: ReportBuilderUiState.BuildingReport, onNavigateT
 }
 
 @Composable
-private fun StepReview(state: ReportBuilderUiState.BuildingReport) {
+private fun StepReview(
+    state: ReportBuilderUiState.BuildingReport,
+    onNavigateToAiAssist: (ReportContext) -> Unit
+) {
     val draft = state.draft
     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         item { ReviewRow("Title", draft.title.orEmpty()) }
@@ -328,6 +335,19 @@ private fun StepReview(state: ReportBuilderUiState.BuildingReport) {
         item { ReviewRow("Frequency", draft.frequency?.name.orEmpty()) }
         item { ReviewRow("Repro steps", "${draft.reproSteps.orEmpty().size} step(s)") }
         item { ReviewRow("Evidence", "${draft.evidenceBundle?.screenshots?.size ?: 0} screenshot(s)") }
+        val deviceProfile = draft.deviceProfile
+        val evidenceBundle = draft.evidenceBundle
+        if (deviceProfile != null && evidenceBundle != null) {
+            item {
+                OutlinedButton(
+                    onClick = {
+                        onNavigateToAiAssist(
+                            ReportContext(draft = draft, deviceProfile = deviceProfile, evidenceBundle = evidenceBundle)
+                        )
+                    }
+                ) { Text("AI Assist") }
+            }
+        }
         if (state.errors.isNotEmpty()) {
             item {
                 Text(

@@ -185,6 +185,7 @@ dependencies {
     testImplementation(Libs.mockk)
     testImplementation(Libs.turbine)
     testImplementation(Libs.kotlinxCoroutinesTest)
+    testImplementation(Libs.mockWebServer)
 
     // Robolectric has no JUnit5 extension; DeviceProfilerTest runs as a JUnit4 test through
     // the Vintage engine registered above, alongside the Jupiter (JUnit5) tests in this module.
