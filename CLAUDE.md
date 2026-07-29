@@ -1020,6 +1020,21 @@ session then wrote the three missing Sprint 5 test files (items 13–15) against
 and re-ran the full automated gate. Recording this here per the Living Document Protocol rather
 than silently treating the sprint boundary as if it hadn't been crossed.
 
+**Emulator verification (2026-07-29):** ran `OutcomeFeedbackDaoIntegrationTest` and
+`OutcomeFeedbackEndToEndTest` via `connectedDebugAndroidTest` against a `Pixel_8` AVD (real Room on
+a real Android runtime, not the in-memory-on-JVM `test/` suite) — 5/5 passed, 0 failures:
+`insert_and_queryByReportId_returns_correct_entity`,
+`getAll_flow_emits_when_new_record_is_inserted`,
+`preAiQualityScore_and_postAiQualityScore_are_persisted_correctly`,
+`submitting_a_report_writes_a_PENDING_row_then_resolving_to_ACCEPTED_updates_the_same_row`,
+`resolving_to_REJECTED_persists_the_rejection_reason_on_the_row`. This mechanically confirms the
+DAO write/read/update path — submit writes a `PENDING` row, outcome resolution updates that same
+row rather than duplicating it, and the pre/post AI quality scores persist correctly. It does
+**not** satisfy the two physical-device stop conditions below: it's a scripted test run, not
+"internal testing" usage generating organic rows, and an emulator doesn't exercise the OEM-specific
+consent/overlay/MediaProjection behavior `OemCompat.kt` exists for. Those two items are unchanged
+and still require real hardware.
+
 ### Session start prompt
 ```
 Read CLAUDE.md. We are in Sprint 5: Analytics, Flywheel & Launch Readiness.
@@ -1064,10 +1079,16 @@ This is the final sprint before Private Alpha.
 ### Stop conditions — Sprint 5
 - `./gradlew test` passes — 0 failures ✅ (full suite green, including the 9 new Sprint 5 unit tests)
 - `./gradlew lint` — 0 errors ✅
-- `OutcomeFeedbackDao` has non-zero rows from internal testing (flywheel is recording) — pending; requires actual device usage, not verifiable statically
+- `OutcomeFeedbackDao` has non-zero rows from internal testing (flywheel is recording) — DAO
+  write/read/update path verified 2026-07-29 via `connectedDebugAndroidTest` on a `Pixel_8`
+  emulator (5/5 tests passed, see session note above); still pending organic non-zero rows from
+  actual internal testing, not a scripted test run
 - `grep -rn "getFirestore\|collection(" feature/analytics --include="*.kt"` returns 0 (analytics reads Room only) ✅
 - Empty states present on all analytics screens ✅ (`AnalyticsDashboardScreen` shows a dimmed potential-of-the-chart state per the key implementation note, not "No data yet"; `ReportListScreen`'s existing Sprint 2 empty state is unchanged aside from a new Analytics nav link)
-- Consent flow live and tested on at least one physical device — pending; `OutcomeFeedbackEndToEndTest.kt` (androidTest) compiles clean but, like the rest of the `androidTest` suite, needs a connected device to actually execute
+- Consent flow live and tested on at least one physical device — pending; `OutcomeFeedbackEndToEndTest.kt`
+  now confirmed executing and passing on an emulator (2026-07-29), but the consent flow's actual UX
+  and OEM-specific behavior (overlay prompts, MediaProjection re-prompts) still require physical
+  hardware, which the emulator does not exercise
 - Human device-test sign-off — pending
 
 ### Launch Readiness Gate — before first Private Alpha invite is sent
@@ -1275,4 +1296,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-29 · BugReel Pro V4.0 build-ready · Sprints 1-4 complete and signed off; Sprint 5 built (analytics dashboard, flywheel outcome recording, consent/AI-training-opt-in onboarding), automated gates green — awaiting human device-test sign-off (physical-device consent flow test, OutcomeFeedbackDao non-zero rows from real usage) before Launch Readiness Gate*
+*Last updated: 2026-07-29 · BugReel Pro V4.0 build-ready · Sprints 1-4 complete and signed off; Sprint 5 built (analytics dashboard, flywheel outcome recording, consent/AI-training-opt-in onboarding), automated gates green, OutcomeFeedbackDao read/write/update path verified on a Pixel_8 emulator — awaiting human device-test sign-off (physical-device consent flow test, OutcomeFeedbackDao non-zero rows from real internal-testing usage) before Launch Readiness Gate*
