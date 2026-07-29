@@ -1005,10 +1005,20 @@ Stop when all stop conditions are met. Do not start Sprint 5.
 
 ---
 
-## 18. Sprint 5 — Analytics, Flywheel & Launch Readiness
+## 18. Sprint 5 — Analytics, Flywheel & Launch Readiness (automated checks passed 2026-07-29 — pending human device-test sign-off)
 
 **Scope:** Acceptance rate dashboard, practice mode, outcome feedback entry, and all launch gates.
 This is the sprint where the flywheel starts generating real training signal.
+
+**Session note (2026-07-29):** Sprint 5's feature code (items 1–12 below) was already written,
+uncommitted, in the working tree when this session started — built in the same session Sprint 4
+was signed off in, which is a literal violation of Section 0's "never start Sprint N+1 in the same
+session as Sprint N without explicit human approval." Flagged to the human at session start;
+approval to continue was given explicitly, with instruction to commit the WIP first (done —
+`c6752ee`, `.kotlin/` build-cache dir also added to `.gitignore` since it wasn't ignored yet). This
+session then wrote the three missing Sprint 5 test files (items 13–15) against the existing code
+and re-ran the full automated gate. Recording this here per the Living Document Protocol rather
+than silently treating the sprint boundary as if it hadn't been crossed.
 
 ### Session start prompt
 ```
@@ -1052,12 +1062,13 @@ This is the final sprint before Private Alpha.
 - Verify `FLYWHEEL_ENABLED = true` in all build variants before the Launch Readiness Gate
 
 ### Stop conditions — Sprint 5
-- `./gradlew test` passes — 0 failures
-- `./gradlew lint` — 0 errors
-- `OutcomeFeedbackDao` has non-zero rows from internal testing (flywheel is recording)
-- `grep -rn "getFirestore\|collection(" feature/analytics --include="*.kt"` returns 0 (analytics reads Room only)
-- Empty states present on all analytics screens
-- Consent flow live and tested on at least one physical device
+- `./gradlew test` passes — 0 failures ✅ (full suite green, including the 9 new Sprint 5 unit tests)
+- `./gradlew lint` — 0 errors ✅
+- `OutcomeFeedbackDao` has non-zero rows from internal testing (flywheel is recording) — pending; requires actual device usage, not verifiable statically
+- `grep -rn "getFirestore\|collection(" feature/analytics --include="*.kt"` returns 0 (analytics reads Room only) ✅
+- Empty states present on all analytics screens ✅ (`AnalyticsDashboardScreen` shows a dimmed potential-of-the-chart state per the key implementation note, not "No data yet"; `ReportListScreen`'s existing Sprint 2 empty state is unchanged aside from a new Analytics nav link)
+- Consent flow live and tested on at least one physical device — pending; `OutcomeFeedbackEndToEndTest.kt` (androidTest) compiles clean but, like the rest of the `androidTest` suite, needs a connected device to actually execute
+- Human device-test sign-off — pending
 
 ### Launch Readiness Gate — before first Private Alpha invite is sent
 - All five sprint checklists signed off by human (PRD V4.0)
@@ -1264,4 +1275,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-28 · BugReel Pro V4.0 build-ready · Sprints 1-3 complete and signed off; Sprint 4 built, automated gates green, QualityScorer relocated to core/domain/quality (Section 17 amendment) — awaiting human device-test sign-off before Sprint 5*
+*Last updated: 2026-07-29 · BugReel Pro V4.0 build-ready · Sprints 1-4 complete and signed off; Sprint 5 built (analytics dashboard, flywheel outcome recording, consent/AI-training-opt-in onboarding), automated gates green — awaiting human device-test sign-off (physical-device consent flow test, OutcomeFeedbackDao non-zero rows from real usage) before Launch Readiness Gate*
