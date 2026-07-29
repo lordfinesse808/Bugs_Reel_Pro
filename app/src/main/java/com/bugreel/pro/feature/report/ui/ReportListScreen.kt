@@ -12,10 +12,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -48,16 +50,25 @@ class ReportListViewModel @Inject constructor(
 
 // CLAUDE.md Section 15 — LazyColumn for 25+ report performance; empty state is required,
 // never a blank screen or spinner.
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportListScreen(
     onReportClick: (String) -> Unit,
     onStartCapture: () -> Unit,
     onPracticeMode: () -> Unit,
+    onNavigateToAnalytics: () -> Unit,
     viewModel: ReportListViewModel = hiltViewModel()
 ) {
     val reports by viewModel.reports.collectAsStateWithLifecycle()
 
-    Scaffold { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Reports") },
+                actions = { TextButton(onClick = onNavigateToAnalytics) { Text("Analytics") } }
+            )
+        }
+    ) { padding ->
         Box(modifier = Modifier.fillMaxSize().padding(padding)) {
             if (reports.isEmpty()) {
                 EmptyReportListState(onStartCapture = onStartCapture, onPracticeMode = onPracticeMode)

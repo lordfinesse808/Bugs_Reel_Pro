@@ -29,6 +29,9 @@ class OutcomeFeedbackRepositoryImpl @Inject constructor(
     override fun queryByReportId(reportId: String): Flow<OutcomeFeedback?> =
         outcomeFeedbackDao.getAll().map { rows -> rows.firstOrNull { it.reportId == reportId }?.let(::toDomain) }
 
+    override fun getAll(): Flow<List<OutcomeFeedback>> =
+        outcomeFeedbackDao.getAll().map { rows -> rows.map(::toDomain) }
+
     private fun toEntity(feedback: OutcomeFeedback) = OutcomeFeedbackEntity(
         reportId = feedback.reportId,
         platformOutcome = feedback.platformOutcome.name,

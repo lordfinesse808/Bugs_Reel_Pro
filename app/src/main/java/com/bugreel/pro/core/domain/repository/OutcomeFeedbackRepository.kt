@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface OutcomeFeedbackRepository {
     suspend fun insert(feedback: OutcomeFeedback)
     fun queryByReportId(reportId: String): Flow<OutcomeFeedback?>
+    // Sprint 5 — AcceptanceRateUseCase needs the full set to compute a rate across all reports.
+    fun getAll(): Flow<List<OutcomeFeedback>>
 }

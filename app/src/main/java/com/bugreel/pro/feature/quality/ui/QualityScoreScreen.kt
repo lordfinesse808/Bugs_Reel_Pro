@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import com.bugreel.pro.core.domain.model.QualityScore
 @Composable
 fun QualityScoreScreen(
     onDone: () -> Unit,
+    onReportOutcome: () -> Unit,
     viewModel: QualityScoreViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -61,7 +63,8 @@ fun QualityScoreScreen(
                 is QualityScoreUiState.Loaded -> QualityScoreContent(
                     score = state.score,
                     showUpgradePrompt = state.showUpgradePrompt,
-                    onDone = { viewModel.onIntent(QualityScoreIntent.DoneClicked) }
+                    onDone = { viewModel.onIntent(QualityScoreIntent.DoneClicked) },
+                    onReportOutcome = onReportOutcome
                 )
             }
         }
@@ -69,7 +72,12 @@ fun QualityScoreScreen(
 }
 
 @Composable
-private fun QualityScoreContent(score: QualityScore, showUpgradePrompt: Boolean, onDone: () -> Unit) {
+private fun QualityScoreContent(
+    score: QualityScore,
+    showUpgradePrompt: Boolean,
+    onDone: () -> Unit,
+    onReportOutcome: () -> Unit
+) {
     val animatedTotal by animateIntAsState(
         targetValue = score.total,
         animationSpec = tween(durationMillis = SCORE_REVEAL_DURATION_MS),
@@ -119,6 +127,9 @@ private fun QualityScoreContent(score: QualityScore, showUpgradePrompt: Boolean,
             Box(modifier = Modifier.weight(1f))
         }
 
+        OutlinedButton(onClick = onReportOutcome, modifier = Modifier.fillMaxWidth()) {
+            Text("Report Outcome")
+        }
         Button(onClick = onDone, modifier = Modifier.fillMaxWidth()) { Text("Done") }
     }
 }

@@ -14,6 +14,10 @@ import com.bugreel.pro.core.domain.model.ReportContext
 import com.bugreel.pro.feature.ai.ui.AiAssistResult
 import com.bugreel.pro.feature.ai.ui.AiAssistScreen
 import com.bugreel.pro.feature.ai.ui.AiAssistViewModel
+import com.bugreel.pro.feature.analytics.ui.AnalyticsDashboardScreen
+import com.bugreel.pro.feature.analytics.ui.OutcomeFeedbackScreen
+import com.bugreel.pro.feature.analytics.ui.OutcomeFeedbackViewModel
+import com.bugreel.pro.feature.analytics.ui.PracticeModeScreen
 import com.bugreel.pro.feature.capture.ui.CaptureScreen
 import com.bugreel.pro.feature.quality.ui.QualityScoreScreen
 import com.bugreel.pro.feature.quality.ui.QualityScoreViewModel
@@ -41,10 +45,17 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
                     navController.navigate(Screen.QualityScore.createRoute(reportId))
                 },
                 onStartCapture = { navController.navigate(Screen.Capture.route) },
-                // Practice Mode is Sprint 5 scope (CLAUDE.md Section 18) — no screen to
-                // navigate to yet.
-                onPracticeMode = {}
+                onPracticeMode = { navController.navigate(Screen.PracticeMode.route) },
+                onNavigateToAnalytics = { navController.navigate(Screen.AnalyticsDashboard.route) }
             )
+        }
+
+        composable(Screen.AnalyticsDashboard.route) {
+            AnalyticsDashboardScreen()
+        }
+
+        composable(Screen.PracticeMode.route) {
+            PracticeModeScreen(onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Capture.route) {
@@ -117,10 +128,19 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
         composable(
             route = Screen.QualityScore.route,
             arguments = listOf(navArgument(QualityScoreViewModel.REPORT_ID_ARG) { type = NavType.StringType })
-        ) {
+        ) { entry ->
+            val reportId = checkNotNull(entry.arguments?.getString(QualityScoreViewModel.REPORT_ID_ARG))
             QualityScoreScreen(
-                onDone = { navController.popBackStack(Screen.ReportList.route, false) }
+                onDone = { navController.popBackStack(Screen.ReportList.route, false) },
+                onReportOutcome = { navController.navigate(Screen.OutcomeFeedback.createRoute(reportId)) }
             )
+        }
+
+        composable(
+            route = Screen.OutcomeFeedback.route,
+            arguments = listOf(navArgument(OutcomeFeedbackViewModel.REPORT_ID_ARG) { type = NavType.StringType })
+        ) {
+            OutcomeFeedbackScreen(onDone = { navController.popBackStack() })
         }
     }
 }

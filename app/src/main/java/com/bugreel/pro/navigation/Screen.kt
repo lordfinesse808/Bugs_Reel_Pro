@@ -9,4 +9,9 @@ sealed class Screen(val route: String) {
     data object QualityScore : Screen("quality_score/{reportId}") {
         fun createRoute(reportId: String) = "quality_score/$reportId"
     }
+    data object AnalyticsDashboard : Screen("analytics_dashboard")
+    data object PracticeMode : Screen("practice_mode")
+    data object OutcomeFeedback : Screen("outcome_feedback/{reportId}") {
+        fun createRoute(reportId: String) = "outcome_feedback/$reportId"
+    }
 }

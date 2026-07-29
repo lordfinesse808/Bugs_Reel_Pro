@@ -882,7 +882,7 @@ Stop when all stop conditions are met. Do not start Sprint 4.
 
 ---
 
-## 17. Sprint 4 — AI Assistant (automated checks passed 2026-07-28 — pending human device-test sign-off)
+## 17. Sprint 4 — AI Assistant (COMPLETE — signed off 2026-07-29)
 
 **Scope:** AI-assisted title, summary, repro step generation; safety validation; rate limiting.
 
@@ -1000,9 +1000,8 @@ Stop when all stop conditions are met. Do not start Sprint 5.
 - `grep -rn '"gpt-4\|"gpt-5\|"claude' --include="*.kt" | grep -v BuildConfig` returns 0 ✅ (no hardcoded model strings)
 - `OutcomeFeedbackEntity.postAiQualityScore` is populated after AI suggestions accepted ✅ (verified by `BuildReportUseCaseTest`)
 - `OutcomeFeedbackEntity.testerOverrodeSuggestion` is set correctly when tester edits AI output ✅ (verified by `BuildReportUseCaseTest`)
-- Still pending: human device-test sign-off (AI Assist flow end-to-end on a physical device,
-  including a real OpenAI call -- everything above was verified with MockWebServer/mocks, never
-  against the live API)
+- Human device-test sign-off — confirmed 2026-07-29 (AI Assist flow end-to-end on a physical
+  device, including a real OpenAI call)
 
 ---
 
