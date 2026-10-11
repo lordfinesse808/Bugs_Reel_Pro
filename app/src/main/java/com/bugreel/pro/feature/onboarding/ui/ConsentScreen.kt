@@ -37,8 +37,10 @@ fun ConsentScreen(
             Text(
                 "BugReel Pro captures screen recordings, screenshots, and in-app interaction " +
                     "events while you're testing, and uses this evidence to build and score bug " +
-                    "reports on your behalf. By continuing, you agree to this data being collected " +
-                    "and stored to build your reports.",
+                    "reports on your behalf. Your reports are backed up to your private cloud " +
+                    "storage, and crash diagnostics are sent to help us fix problems. By " +
+                    "continuing, you agree to this data being collected and stored to build " +
+                    "your reports.",
                 style = MaterialTheme.typography.bodyMedium
             )
             Button(onClick = { viewModel.onIntent(ConsentIntent.Accept) }, modifier = Modifier.fillMaxWidth()) {

@@ -16,6 +16,12 @@
         android:label="BugReel Pro"
         android:supportsRtl="true">
 
+        <!-- Crash reports stay off until the tester accepts the consent screen
+             (CLAUDE.md Section 13 Track 3); BugReelApplication turns collection on afterwards. -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

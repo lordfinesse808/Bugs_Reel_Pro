@@ -1,6 +1,7 @@
 package com.bugreel.pro.feature.capture.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.ViewModel
@@ -73,6 +74,21 @@ class CaptureViewModel @Inject constructor(
     // constraint, not a permission-request call.
     fun requestMediaProjection(activity: Activity, launcher: ActivityResultLauncher<Intent>) {
         permissionManager.requestMediaProjection(activity, launcher)
+    }
+
+    // Android 13+ hides the recording notification (and the FALLBACK capture trigger, which IS
+    // that notification) unless POST_NOTIFICATIONS is granted at runtime.
+    fun requestNotificationPermission(launcher: ActivityResultLauncher<String>) {
+        permissionManager.requestNotificationPermission(launcher)
+    }
+
+    // The PRIMARY floating bubble (ADR-005) needs SYSTEM_ALERT_WINDOW, which is granted from a
+    // system settings page rather than a runtime dialog.
+    fun isOverlayPermissionGranted(context: Context): Boolean =
+        permissionManager.isOverlayPermissionGranted(context)
+
+    fun requestOverlayPermission(context: Context) {
+        permissionManager.requestOverlayPermission(context)
     }
 
     private fun handleMediaProjectionResult(resultCode: Int, data: Intent?) {

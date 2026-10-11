@@ -193,6 +193,11 @@ bugreel-pro/
 ├── buildSrc/
 │   └── Dependencies.kt
 ├── schemas/
+├── firestore.rules         ← Security Rules (owner-scoped, default deny) — added 2026-10-11
+├── storage.rules           ← Security Rules (users/{uid}/reports/... only) — added 2026-10-11
+├── firebase.json           ← rules + emulator config
+├── firebase-rules-tests/   ← `npm install && npm test` runs the rules against the emulator
+├── docs/                   ← human-facing manuals (physical-device test walkthrough PDF)
 ├── CLAUDE.md               ← THIS FILE
 ├── ARCHITECTURE.md
 ├── build.gradle.kts
@@ -1035,6 +1040,47 @@ row rather than duplicating it, and the pre/post AI quality scores persist corre
 consent/overlay/MediaProjection behavior `OemCompat.kt` exists for. Those two items are unchanged
 and still require real hardware.
 
+**Launch-gap closure (2026-10-11):** a status review found these launch blockers, now closed:
+1. **Firebase Security Rules** — `firestore.rules` + `storage.rules` (default deny; every document
+   and file is owner-scoped to the caller's auth uid; payload shape and size validated). Verified
+   18/18 by `firebase-rules-tests/` against the Firestore + Storage emulators. Deploy with
+   `firebase deploy --only firestore:rules,storage` once the production project is selected.
+2. **No Firebase sign-in existed** — every write was tagged `userId = "anonymous"`, which locked
+   rules would reject. New `core/data/remote/firebase/FirebaseUserSession.kt` signs in anonymously
+   on first use. **Requires the Anonymous provider enabled** in Firebase console → Authentication.
+3. **Flywheel rows duplicated in Firestore** — `pushOutcomeFeedback` used `add()` and SyncWorker
+   re-pushes the full set each run. Now `set()` on a document keyed by `reportId` (idempotent).
+4. **AI training opt-in was recorded but never read** (Track 3 "separate data path" not enforced).
+   `SyncWorker` now uploads outcome feedback only when `aiTrainingOptIn` is true; local Room
+   recording is unchanged (`FLYWHEEL_ENABLED` stays true). Covered by `SyncWorkerTest`.
+5. **StorageSource paths** moved to `users/{uid}/reports/{reportId}/…` with explicit
+   `video/mp4` / `image/png` content types so storage.rules can enforce ownership from the path.
+6. **Release build** — signing config read from `local.properties` (Section 22 keys; unsigned if
+   absent), `isMinifyEnabled`/`isShrinkResources = true`, `app/proguard-rules.pro` added.
+   A minified release build must be smoke-tested on device before Closed Testing.
+7. **Bubble fallback** — `OemCompat.needsPiPFallback()` now reads the
+   `BUBBLE_FORCE_FALLBACK` BuildConfig flag (default `false`); flip it if the Play review is RED.
+8. **Crashlytics** — collection disabled in the manifest until consent is accepted, then enabled
+   by `BugReelApplication`. Consent copy now mentions cloud backup and crash diagnostics —
+   **needs legal review** as part of the Launch Readiness Gate.
+9. **Overlay + notification permissions were never requested** — `PermissionManager` had
+   `requestOverlayPermission()`/`requestNotificationPermission()` but nothing called them, so on
+   Android 13+ (e.g. the Galaxy A05s test device) the PRIMARY bubble could never appear and the
+   recording notification was hidden. `CaptureScreen` now requests POST_NOTIFICATIONS on entry and
+   shows an "Allow floating button" card (via `CaptureViewModel` → `PermissionManager`, per
+   Anti-Pattern 3) until "Display over other apps" is granted.
+10. **Kotlin 2.1.20 → 2.4.x upgrade — deliberately deferred** until after Private Alpha: it needs
+   KSP/Hilt/Compose-compiler re-verification and a full test/lint/device re-run, and changing the
+   toolchain right before launch adds risk without a launch-blocking benefit.
+
+**Not verified in that session:** `dl.google.com` (Android SDK) was blocked by the cloud
+environment's network policy, so items 2–9 were **not compiled**, and `./gradlew test`/`lint`
+were not run. Run both locally before relying on them. Device steps live in
+`docs/BugReel_Pro_Physical_Test_Manual.pdf`.
+**Known launch risk (not yet addressed):** `OPENAI_API_KEY` is compiled into `BuildConfig`, so it
+can be extracted from any distributed APK. Before a public release, route AI calls through a
+backend proxy. For a small trusted Private Alpha, use a dedicated, spend-capped key.
+
 ### Session start prompt
 ```
 Read CLAUDE.md. We are in Sprint 5: Analytics, Flywheel & Launch Readiness.
@@ -1296,4 +1342,4 @@ session should be: "Is CLAUDE.md still accurate? Update if not, then commit."
 
 ---
 
-*Last updated: 2026-07-29 · BugReel Pro V4.0 build-ready · Sprints 1-4 complete and signed off; Sprint 5 built (analytics dashboard, flywheel outcome recording, consent/AI-training-opt-in onboarding), automated gates green, OutcomeFeedbackDao read/write/update path verified on a Pixel_8 emulator — awaiting human device-test sign-off (physical-device consent flow test, OutcomeFeedbackDao non-zero rows from real internal-testing usage) before Launch Readiness Gate*
+*Last updated: 2026-10-11 (launch-gap closure, uncompiled — see Section 18) · BugReel Pro V4.0 build-ready · Sprints 1-4 complete and signed off; Sprint 5 built (analytics dashboard, flywheel outcome recording, consent/AI-training-opt-in onboarding), automated gates green, OutcomeFeedbackDao read/write/update path verified on a Pixel_8 emulator — awaiting human device-test sign-off (physical-device consent flow test, OutcomeFeedbackDao non-zero rows from real internal-testing usage) before Launch Readiness Gate*

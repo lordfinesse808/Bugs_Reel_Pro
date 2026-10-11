@@ -16,7 +16,10 @@ import app.cash.turbine.test
 import com.bugreel.pro.core.data.local.dao.OutcomeFeedbackDao
 import com.bugreel.pro.core.data.local.dao.ReportDao
 import com.bugreel.pro.core.data.remote.firebase.FirestoreSource
+import com.bugreel.pro.core.domain.model.ConsentState
+import com.bugreel.pro.core.domain.repository.ConsentRepository
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -44,6 +47,9 @@ class SyncWorkerIntegrationTest {
             coEvery { getAll() } returns flowOf(emptyList())
         }
         val firestoreSource = mockk<FirestoreSource>(relaxed = true)
+        val consentRepository = mockk<ConsentRepository> {
+            every { consentState } returns flowOf(ConsentState(consentGiven = true, aiTrainingOptIn = true))
+        }
 
         val workerFactory = object : WorkerFactory() {
             override fun createWorker(
@@ -51,7 +57,9 @@ class SyncWorkerIntegrationTest {
                 workerClassName: String,
                 workerParameters: WorkerParameters
             ): ListenableWorker =
-                SyncWorker(appContext, workerParameters, reportDao, outcomeFeedbackDao, firestoreSource)
+                SyncWorker(
+                    appContext, workerParameters, reportDao, outcomeFeedbackDao, firestoreSource, consentRepository
+                )
         }
         val config = Configuration.Builder()
             .setExecutor(SynchronousExecutor())

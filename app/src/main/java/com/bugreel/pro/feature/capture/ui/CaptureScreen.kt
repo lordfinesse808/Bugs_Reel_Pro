@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +38,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bugreel.pro.feature.capture.domain.CaptureRepository
 
@@ -52,6 +56,18 @@ fun CaptureScreen(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         viewModel.onIntent(CaptureIntent.MediaProjectionResult(result.resultCode, result.data))
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* Capture still works without it; only the status notification is hidden. */ }
+    LaunchedEffect(Unit) { viewModel.requestNotificationPermission(notificationPermissionLauncher) }
+
+    // Re-checked on every resume so the card disappears after the tester returns from the
+    // system "Display over other apps" page.
+    var overlayGranted by remember { mutableStateOf(viewModel.isOverlayPermissionGranted(context)) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        overlayGranted = viewModel.isOverlayPermissionGranted(context)
     }
 
     LaunchedEffect(viewModel) {
@@ -79,6 +95,8 @@ fun CaptureScreen(
             when (val state = uiState) {
                 is CaptureUiState.Idle -> IdleContent(
                     showOemSetupCard = state.showOemSetupCard,
+                    showOverlayCard = !overlayGranted,
+                    onAllowOverlay = { viewModel.requestOverlayPermission(context) },
                     onStartCapture = {
                         viewModel.onIntent(CaptureIntent.RequestPermission)
                         viewModel.requestMediaProjection(context as Activity, launcher)
@@ -95,7 +113,12 @@ fun CaptureScreen(
 }
 
 @Composable
-private fun IdleContent(showOemSetupCard: Boolean, onStartCapture: () -> Unit) {
+private fun IdleContent(
+    showOemSetupCard: Boolean,
+    showOverlayCard: Boolean,
+    onAllowOverlay: () -> Unit,
+    onStartCapture: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -110,8 +133,28 @@ private fun IdleContent(showOemSetupCard: Boolean, onStartCapture: () -> Unit) {
         if (showOemSetupCard) {
             OemSetupCard()
         }
+        if (showOverlayCard) {
+            OverlayPermissionCard(onAllowOverlay)
+        }
         Button(onClick = onStartCapture) {
             Text("Start Capture")
+        }
+    }
+}
+
+@Composable
+private fun OverlayPermissionCard(onAllowOverlay: () -> Unit) {
+    Card {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Floating capture button", style = MaterialTheme.typography.titleSmall)
+            Text(
+                text = "Allow BugReel to display over other apps so you can stop a recording " +
+                    "from inside the app you're testing.",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Button(onClick = onAllowOverlay) {
+                Text("Allow floating button")
+            }
         }
     }
 }

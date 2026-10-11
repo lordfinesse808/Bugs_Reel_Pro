@@ -11,6 +11,7 @@ import androidx.work.WorkerParameters
 import com.bugreel.pro.core.data.local.dao.OutcomeFeedbackDao
 import com.bugreel.pro.core.data.local.dao.ReportDao
 import com.bugreel.pro.core.data.remote.firebase.FirestoreSource
+import com.bugreel.pro.core.domain.repository.ConsentRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
@@ -27,7 +28,8 @@ class SyncWorker @AssistedInject constructor(
     @Assisted params: WorkerParameters,
     private val reportDao: ReportDao,
     private val outcomeFeedbackDao: OutcomeFeedbackDao,
-    private val firestoreSource: FirestoreSource
+    private val firestoreSource: FirestoreSource,
+    private val consentRepository: ConsentRepository
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -50,14 +52,19 @@ class SyncWorker @AssistedInject constructor(
         return allSucceeded
     }
 
+    // CLAUDE.md Section 13, Track 3 — AI training opt-in is a separate data path. Outcome
+    // feedback is always recorded locally in Room (FLYWHEEL_ENABLED; it powers the tester's own
+    // analytics), but it only leaves the device for testers who explicitly opted in.
+    //
     // OutcomeFeedbackEntity has no syncedAt column of its own (Section 23 requires it in
     // the schema starting Sprint 1, not a sync-tracking column) — re-pushing the full set
-    // each run is safe because pushOutcomeFeedback's Firestore write is a plain add(), and
-    // the flywheel data volume here is one row per reviewed report, not per-event.
+    // each run is safe because pushOutcomeFeedback writes to a document keyed by reportId
+    // (an idempotent overwrite), and the volume is one row per reviewed report.
     private suspend fun syncOutcomeFeedback(): Boolean {
+        if (!consentRepository.consentState.first().aiTrainingOptIn) return true
         var allSucceeded = true
         outcomeFeedbackDao.getAll().first().forEach { entity ->
-            firestoreSource.pushOutcomeFeedback(SyncMapper.outcomeFeedbackEntityToJson(entity))
+            firestoreSource.pushOutcomeFeedback(entity.reportId, SyncMapper.outcomeFeedbackEntityToJson(entity))
                 .onFailure { allSucceeded = false }
         }
         return allSucceeded

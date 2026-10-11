@@ -1,0 +1,48 @@
+rules_version = '2';
+
+// CLAUDE.md Section 18 Launch Readiness Gate — "Firebase Security Rules locked — no open
+// read/write in production project". Default deny; every allowed path is owner-scoped to the
+// signed-in user (FirebaseUserSession signs in anonymously before the first SyncWorker write).
+//
+// Document shape is fixed by FirestoreSource: exactly { userId: <auth uid>, data: <JSON string> }.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function ownsExisting() {
+      return signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // ~900 KB, safely under Firestore's 1 MiB document limit.
+    function validPayload() {
+      return request.resource.data.keys().hasOnly(['userId', 'data'])
+        && request.resource.data.keys().hasAll(['userId', 'data'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.data is string
+        && request.resource.data.data.size() <= 900000;
+    }
+
+    match /reports/{reportId} {
+      allow read: if ownsExisting();
+      allow create: if signedIn() && validPayload();
+      // Ownership can never be transferred: the existing doc must already be the caller's.
+      allow update: if ownsExisting() && validPayload();
+      allow delete: if ownsExisting();
+    }
+
+    // THE FLYWHEEL (CLAUDE.md Section 23). Document ID is the reportId, so re-syncs overwrite
+    // the same row instead of duplicating it. Only written for testers who opted in to AI
+    // training (CLAUDE.md Section 13, Track 3) — enforced client-side in SyncWorker.
+    match /outcome_feedback/{reportId} {
+      allow read: if ownsExisting();
+      allow create: if signedIn() && validPayload();
+      allow update: if ownsExisting() && validPayload();
+      allow delete: if ownsExisting();
+    }
+
+    // Anything not matched above is denied.
+  }
+}

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import com.bugreel.pro.BuildConfig
 
 // CLAUDE.md Section 8 / Architecture Rule 3 — every Build.MANUFACTURER / Build.BRAND / MIUI
 // check lives exclusively here. Nothing outside this file may branch on OEM identity.
@@ -36,6 +37,9 @@ object OemCompat {
     // this passthrough rather than reading Build.MANUFACTURER at the call site.
     fun deviceManufacturer(): String = Build.MANUFACTURER
 
-    // TODO: Update when Play Console review lands (CLAUDE.md Section 13, Track 2).
-    fun needsPiPFallback(): Boolean = false
+    // CLAUDE.md Section 13, Track 2 / ADR-005 — the Play Console's SYSTEM_ALERT_WINDOW policy
+    // outcome is a release decision, not an OEM fact, so it's a build flag
+    // (BUBBLE_FORCE_FALLBACK in app/build.gradle.kts) rather than a code edit: flip it to true
+    // if the review returns RED and every device gets the PiP/notification-tile trigger.
+    fun needsPiPFallback(forceFallback: Boolean = BuildConfig.BUBBLE_FORCE_FALLBACK): Boolean = forceFallback
 }

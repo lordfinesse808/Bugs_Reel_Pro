@@ -1,0 +1,31 @@
+rules_version = '2';
+
+// CLAUDE.md Section 18 Launch Readiness Gate — Storage locked down. Evidence files live under
+// the owner's uid (StorageSource builds users/{uid}/reports/{reportId}/...), so ownership is
+// checked from the path alone with no cross-service Firestore lookup. Default deny elsewhere.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{userId}/reports/{reportId} {
+
+      function isOwner() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      // ZIP layout (CLAUDE.md Section 15): recording.mp4, screenshots/screenshot_N.png
+      match /recording.mp4 {
+        allow read, delete: if isOwner();
+        allow create, update: if isOwner()
+          && request.resource.size < 500 * 1024 * 1024
+          && request.resource.contentType.matches('video/mp4');
+      }
+
+      match /screenshots/{fileName} {
+        allow read, delete: if isOwner();
+        allow create, update: if isOwner()
+          && fileName.matches('screenshot_[0-9]+\\.png')
+          && request.resource.size < 20 * 1024 * 1024
+          && request.resource.contentType.matches('image/png');
+      }
+    }
+  }
+}

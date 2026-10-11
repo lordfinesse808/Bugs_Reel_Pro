@@ -22,6 +22,11 @@ class OemCompatTest {
     }
 
     @Test
+    fun `needsPiPFallback returns true when the build forces the fallback bubble`() {
+        assertTrue(OemCompat.needsPiPFallback(forceFallback = true))
+    }
+
+    @Test
     fun `all methods callable without throwing`() {
         val context = mockk<Context>()
         every { context.packageName } returns "com.bugreel.pro"

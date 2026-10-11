@@ -1,0 +1,12 @@
+{
+  "name": "bugreel-firebase-rules-tests",
+  "private": true,
+  "description": "Security Rules tests for firestore.rules and storage.rules (CLAUDE.md Section 18 Launch Readiness Gate).",
+  "scripts": {
+    "test": "firebase emulators:exec --project demo-bugreel --only firestore,storage --config ../firebase.json \"node --test\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.1",
+    "firebase": "^11.0.0"
+  }
+}

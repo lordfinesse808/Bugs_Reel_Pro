@@ -1,37 +1,34 @@
 package com.bugreel.pro.core.data.remote.firebase
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
 // CLAUDE.md Architecture Rule 2 — the ONLY class permitted to call FirebaseFirestore.
-// FirebaseAuth is injected (rather than added to every method signature) so writes are
-// scoped to the signed-in user without every caller having to thread a userId through.
+// Writes are scoped to the signed-in user (FirebaseUserSession) — firestore.rules rejects any
+// document whose userId isn't the caller's own auth uid.
 @Singleton
 class FirestoreSource @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val auth: FirebaseAuth
+    private val userSession: FirebaseUserSession
 ) {
-
-    private val currentUserId: String
-        get() = auth.currentUser?.uid ?: ANONYMOUS_USER_ID
 
     suspend fun pushReport(reportId: String, reportJson: String): Result<Unit> = runCatching {
         firestore.collection(REPORTS_COLLECTION)
             .document(reportId)
-            .set(mapOf(USER_ID_FIELD to currentUserId, DATA_FIELD to reportJson))
+            .set(mapOf(USER_ID_FIELD to userSession.requireUserId(), DATA_FIELD to reportJson))
             .await()
         Unit
     }
 
-    // CLAUDE.md Section 23 — THE FLYWHEEL. Uses an auto-generated document ID: the entity's
-    // reportId is already embedded in feedbackJson via SyncMapper, and one report can only
-    // ever produce one feedback row (OutcomeFeedbackEntity's primary key is reportId).
-    suspend fun pushOutcomeFeedback(feedbackJson: String): Result<Unit> = runCatching {
+    // CLAUDE.md Section 23 — THE FLYWHEEL. Document ID is the reportId (one report produces
+    // exactly one feedback row — OutcomeFeedbackEntity's primary key), so SyncWorker re-pushing
+    // the full set on every run overwrites in place instead of duplicating training rows.
+    suspend fun pushOutcomeFeedback(reportId: String, feedbackJson: String): Result<Unit> = runCatching {
         firestore.collection(OUTCOME_FEEDBACK_COLLECTION)
-            .add(mapOf(USER_ID_FIELD to currentUserId, DATA_FIELD to feedbackJson))
+            .document(reportId)
+            .set(mapOf(USER_ID_FIELD to userSession.requireUserId(), DATA_FIELD to feedbackJson))
             .await()
         Unit
     }
@@ -52,6 +49,5 @@ class FirestoreSource @Inject constructor(
         private const val OUTCOME_FEEDBACK_COLLECTION = "outcome_feedback"
         private const val USER_ID_FIELD = "userId"
         private const val DATA_FIELD = "data"
-        private const val ANONYMOUS_USER_ID = "anonymous"
     }
 }

@@ -57,6 +57,9 @@ android {
         buildConfigField("int", "AI_RATE_LIMIT_RPM", "20")
         buildConfigField("int", "SYNC_INTERVAL_MINUTES", "30")
         buildConfigField("boolean", "FLYWHEEL_ENABLED", "true")
+        // CLAUDE.md Section 13 Track 2 / ADR-005 — set to true if the Play Console rejects the
+        // SYSTEM_ALERT_WINDOW bubble; every device then uses the PiP/notification-tile trigger.
+        buildConfigField("boolean", "BUBBLE_FORCE_FALLBACK", "false")
 
         buildConfigField(
             "String",
@@ -84,9 +87,32 @@ android {
         jvmTarget = "17"
     }
 
+    // CLAUDE.md Section 22 — release signing secrets come from local.properties (gitignored).
+    // When they're absent (CI, a fresh clone) the release build is simply left unsigned rather
+    // than failing configuration for every other task.
+    val releaseKeystorePath = localProperties.getProperty("KEYSTORE_PATH")
+    signingConfigs {
+        if (releaseKeystorePath != null) {
+            create("release") {
+                storeFile = rootProject.file(releaseKeystorePath)
+                storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
+                keyAlias = localProperties.getProperty("KEY_ALIAS")
+                keyPassword = localProperties.getProperty("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            if (releaseKeystorePath != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
